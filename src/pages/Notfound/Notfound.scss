@@ -1,0 +1,27 @@
+#notfound-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+  background-color: #e2dbd2;
+  .notfound-children {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .notfound-content {
+      width: 70%;
+      .title-oops {
+        font-size: 110px;
+      }
+      .content-sorry {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  .video-frame {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}

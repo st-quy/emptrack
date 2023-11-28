@@ -1,0 +1,11 @@
+*{
+  font-family: 'Oswald', sans-serif !important;
+}
+.ant-layout {
+  background: #ffffff !important;
+}
+.ant-space-item{
+  line-height: normal !important;
+  align-items: center;
+  display: flex;
+}

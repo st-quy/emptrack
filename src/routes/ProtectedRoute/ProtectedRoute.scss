@@ -1,0 +1,75 @@
+#layout-container {
+  height: 100vh;
+  width: 100vw;
+  .ant-layout-header {
+    height: 75px !important;
+    line-height: 75px !important;
+  }
+  .layout-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff !important;
+    color: black !important;
+    width: 100%;
+    .menu-list {
+      .item-menu {
+        cursor: pointer;
+      }
+      .menu-item-active {
+        font-size: 16px !important;
+        border-radius: 12px;
+        height: 35px;
+        padding: 12px;
+        color: white !important;
+        background: #ee9ca7; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to bottom,
+          #ffdde1,
+          #ee9ca7
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to bottom,
+          #ffdde1,
+          #ee9ca7
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
+    }
+    .title-menu {
+      color: white !important;
+    }
+    .logo-header {
+      font-size: 24px;
+      font-family: 'Shrikhand', serif !important;
+      background: #ee9ca7; /* fallback for old browsers */
+      background: -webkit-linear-gradient(
+        to bottom,
+        #ee9ca7,
+        #ffdde1
+      ); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to bottom,
+        #ee9ca7,
+        #ffdde1
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .topnar {
+      background-color: black !important;
+    }
+  }
+  .layout-content {
+    .ant-card {
+      height: calc(100vh - 83px) !important;
+      border-radius: 50px 50px 0 0;
+      background: #eff3f9 !important;
+    }
+  }
+}
+.ant-menu-item-selected {
+  // background-color: black !important;
+}
+.ant-menu-item {
+  // background-color: #2c2c2c !important;
+}

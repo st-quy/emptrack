@@ -1,0 +1,15 @@
+#main-container {
+  background-color: white;
+  .auth-sidebar {
+    width: 100vw;
+    height: 100vh;
+    .auth-sidebar-content {
+      width: 100%;
+      .auth-sidebar-video {
+        width: 400px;
+        height: 100vh;
+        object-fit: cover;
+      }
+    }
+  }
+}
