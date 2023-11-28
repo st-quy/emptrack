@@ -24,10 +24,6 @@ const PrivateRoute = [
         path: '/projects',
         element: <div>User projects</div>,
       },
-      {
-        path: '/logout',
-        element: <Logout />,
-      },
     ],
   },
 ];

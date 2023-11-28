@@ -11,9 +11,9 @@ const Login = () => {
     navigate('/', { replace: true });
   };
 
-  // setTimeout(() => {
-  //   handleLogin();
-  // }, 3 * 1000);
+  setTimeout(() => {
+    handleLogin();
+  }, 3 * 1000);
 
   return (
     <div id="main-container">
@@ -24,7 +24,7 @@ const Login = () => {
             autoPlay
             loop
             muted
-            src="https://cdn.dribbble.com/users/721278/screenshots/16025317/media/b413473d8b074359831e829ac2508879.mp4"
+            src="https://cdn.dribbble.com/users/721278/screenshots/15322527/media/ed945c1890320c7ca9be231cd7397653.mp4"
           ></video>
         </Col>
       </Row>
