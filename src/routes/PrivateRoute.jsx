@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
-const Logout = lazy(() => import('../pages/Logout.jsx'));
 
 // Define routes accessible only to authenticated users
 const PrivateRoute = [

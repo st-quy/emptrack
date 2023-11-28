@@ -6,8 +6,6 @@ import {
   TeamOutlined,
   HomeOutlined,
   DeploymentUnitOutlined,
-  PaperClipOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 import {
   Layout,
@@ -24,7 +22,6 @@ import './ProtectedRoute.scss';
 const { Header, Sider, Content } = Layout;
 
 export const ProtectedRoute = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
   const { token } = useAuth();
