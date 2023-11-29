@@ -2,34 +2,27 @@ import { HomeOutlined, RightOutlined } from '@ant-design/icons';
 import { Breadcrumb as BreadcrumbAntd } from 'antd';
 import { Link } from 'react-router-dom';
 import './Breadcrumb.scss';
+import { useTranslation } from 'react-i18next';
 
 const { Item } = BreadcrumbAntd;
 
-export const Breadcrumb = ({ items }) => {
+const Breadcrumb = ({ items }) => {
+  const { t } = useTranslation();
   return (
     <BreadcrumbAntd
       style={{ paddingTop: 15, paddingBottom: 10 }}
       separator={<RightOutlined style={{ fontSize: 10 }} />}
     >
       <Item>
-        <Link to="/dashboard">
+        <Link to="/">
           <HomeOutlined />
         </Link>
       </Item>
-
       {items.map(({ key, route, title }, index, items) => {
-        if (index === items.length - 1) {
-          return (
-            <Item key={index}>
-              {key} {title}
-            </Item>
-          );
-        }
-
         return (
           <Item key={index}>
             <Link to={route ?? `/${key}`}>
-              {key} {title}
+              {t(`BREADCRUMB.${key.toUpperCase()}`)} {title}
             </Link>
           </Item>
         );
@@ -37,3 +30,4 @@ export const Breadcrumb = ({ items }) => {
     </BreadcrumbAntd>
   );
 };
+export default Breadcrumb;

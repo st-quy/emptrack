@@ -1,0 +1,169 @@
+{
+  "SYSTEM": {
+    "LOGO_NAME": "EmpTrack"
+  },
+  "LOGIN": {
+    "TEXT": "Đăng nhập",
+    "PASSWORD": "Mật khẩu",
+    "PASSWORD_INPUT": "Nhập mật khẩu",
+    "EMAIL_INPUT": "Nhập email",
+    "EMAIL": "Email",
+    "USERNAME": "Tên đăng nhập",
+    "USERNAME_INPUT": "Nhập tên đăng nhập",
+    "WITH_GOOGLE": "Đăng nhập với google",
+    "WITH_EMAIL": "hoặc đăng nhập với email"
+  },
+  "BUTTON": {
+    "SYNC": "Đồng bộ từ {{name}}",
+    "APPLY": "Áp dụng",
+    "CANCEL": "Hủy",
+    "CONFIG": "Cấu hình",
+    "SAVE": "Lưu",
+    "OK": "Xác nhận",
+    "UPDATE": "Cập nhật",
+    "BACK_TO_HOME": "Quay lại trang chủ"
+  },
+  "TABLE": {
+    "ACTIONS": "Hành động",
+    "EMPTY": "Không có dữ liệu",
+    "TOTAL_PAGE": "Tổng trang: {{total}}",
+    "DISPLAY": "Hiển thị",
+    "ITEM": "Mục",
+    "SEARCH": "Tìm kiếm",
+    "AIRCONDITION_TITLE": "Danh sách máy điều hòa",
+    "ENDPOINT_TITLE": "Danh sách endpoint",
+    "CAMERA_TITLE": "Danh sách camera",
+    "CONFIG_TEMPERATURE": "Cấu hình nhiệt độ",
+    "APPLICATION_TITLE": "Danh sách ứng dụng",
+    "LIGHT_TITLE": "Danh sách đèn",
+    "APPLICATION_CREATE": "Tạo ứng dụng",
+    "DASHBOARD_TITLE": "Trang chủ",
+    "WORKSPACE_CREATE": "Tạo công ty",
+    "WORKSPACE_LIST": "Danh sách công ty",
+    "PROFILE": "Thông tin cá nhân",
+    "GUIDELINE": "Tài liệu"
+  },
+  "BREADCRUMB": {
+    "DASHBOARD": "Trang chủ",
+    "USERS": "Người dùng",
+    "USERS_CREATE": "Tạo người dùng",
+    "USERS_UPDATE": "Cập nhật người dùng",
+    "PROFILE": "Thông tin cá nhân",
+    "EMPLOYEES": "Nhân viên",
+    "PROJECTS": "Dự án"
+  },
+  "MODAL": {
+    "SYNC_INFO": "Đồng bộ thông tin",
+    "CONFIG_TEMPERATURE": "Cấu hình nhiệt độ",
+    "CONFIRM_DELETE": "Bạn có chắc chắn muốn xóa {{name}} không?",
+    "TITLE_DELETE": "Xóa {{name}}",
+    "ACCESS_TOKEN_ENDPOINT": "Tạo access token",
+    "CHOOSE_LOCALTION": "Chọn địa điểm"
+  },
+  "STATUS": {
+    "CREATE": "Tạo",
+    "UPDATE": "Cập nhật",
+    "NEW": "Mới",
+    "DELETE": "Xóa",
+    "ALL": "Tất cả",
+    "ON": "Bật",
+    "OFF": "Tắt"
+  },
+  "VALIDATE": {
+    "PLACEHOLDER": "Nhập {{name}}",
+    "SELECT_OPTION": "Chọn {{name}}",
+    "MIN": "{{field}} phải lớn hơn hoặc bằng {{number}}",
+    "MAX": "{{field}} phải nhỏ hơn hoặc bằng {{number}}",
+    "MIN_CHARACTER": "{{field}} phải có ít nhất {{number}} kí tự",
+    "NUMBER": "{{field}} phải là kí tự số",
+    "MATCH": "{{field}} không khớp",
+    "SPECIAL_CHARACTERS": "{{field}} không được chứa kí tự đặc biệt",
+    "REQUIRED": "{{field}} là bắt buộc",
+    "INVALID": "{{field}} không hợp lệ",
+    "FIELD_MIN_VALUE": "{{name}} phải có ít nhất {{number}} giá trị",
+    "RULE_PASSWORD": "{{field}} phải có ít nhất 8 kí tự và chứa kí tự số, chữ thường, chữ in hoa và kí tự đặc biệt",
+    "AFTER": "{{fieldFirst}} phải lớn hơn {{fieldSecond}}",
+    "CHOOSE": "Chọn {{name}}",
+    "NO_SPECIAL_CHARACTER": "{{field}} không được chứa kí tự đặc biệt hoặc khoảng cách",
+    "ONLY_ALPHABET": "{{field}} không được chứa kí tự số hoặc kí tự đặc biệt",
+    "NOT_ALLOW_NUMBER": "{{field}} không được chứa kí tự số",
+    "SEARCH_CHOOSE": "Chọn {{name}} để tìm kiếm",
+    "SPECIAL_CHARACTER": "{{field}} không được chứa kí tự đặc biệt",
+    "NOT_SPACE": "{{field}} không được chứa kí tự đặc biệt hoặc khoảng cách",
+    "NOT_ALLOW_SPACE": "{{field}} không được chứa khoảng cách",
+    "IMAGE_SIZE": "Kích thước ảnh tối đa là 512Kb",
+    "INVALID_EMAIL": "{{field}} không phải là email hợp lệ",
+    "DUPLICATE_POSITION": "Vị trí bắt đầu và vị trí kết thúc không được trùng nhau",
+    "INVALID_USERNAME": "{{field}} không được để trống",
+    "MINONE": "Trường {{field}} phải có ít nhất 1 mục"
+  },
+  "DROPDOWN_PROFILE": {
+    "HI": "Xin chào",
+    "PROFILE": "Hồ sơ",
+    "SIGN_OUT": "Đăng xuất",
+    "PLACEHOLDER": "Nhập {{name}}",
+    "USER": "Người dùng"
+  },
+  "ACTION": {
+    "UPDATE": "Cập nhật",
+    "DELETE": "Xóa",
+    "DETAILS": "Chi tiết",
+    "GENERATE_TOKEN": "Tạo token",
+    "SAVE": "Lưu",
+    "CREATE": "Tạo",
+    "CANCEL": "Hủy",
+    "GENERATE_PASSWORD": "Tạo mật khẩu",
+    "CHANGE_PASSWORD": "Đổi mật khẩu"
+  },
+  "TITLE": {
+    "BASIC_INFORMATION": "Thông tin cơ bản",
+    "DEVICES": "Thiết bị",
+    "ENDPOINT": "Endpoint",
+    "SCHEDULE": "Lịch trình"
+  },
+  "USERS": {
+    "NAME": "Tên",
+    "EMAIL": "Email",
+    "ROLE": "Vai trò",
+    "ACTIONS": "Hành động",
+    "CREATE": "Tạo người dùng",
+    "FIRST_NAME": "Tên",
+    "LAST_NAME": "Họ",
+    "RESTORE_DESC": "Email này đã được xóa trước đó. Bạn có muốn khôi phục tài khoản này không?",
+    "RESTORE": "Khôi phục {{name}}",
+    "FULL_NAME": "Họ tên",
+    "PASSWORD": "Mật khẩu",
+    "PASSWORD_COPY": "Mật khẩu đã được sao chép vào bảng tạm",
+    "COPY_TO_CLIPBOARD": "Sao chép vào bảng tạm",
+    "CHANGE_PASSWORD": "Đổi mật khẩu",
+    "OLD_PASSWORD": "Mật khẩu cũ",
+    "NEW_PASSWORD": "Mật khẩu mới",
+    "CONFIRM_PASSWORD": "Xác thực mật khẩu",
+    "PLACEHOLDER_CONFIRM_PASSWORD": "Nhập lại mật khẩu mới",
+    "LIST": "Danh sách người dùng"
+  },
+  "ROLE": {
+    "ADMIN": "Quản trị viên",
+    "NORMAL": "Thành viên",
+    "SUPER_ADMIN": "Quản trị cấp cao",
+    "ROLE": "Vai trò"
+  },
+  "CONFIG_TIME": {
+    "MON": "Thứ Hai",
+    "TUE": "Thứ Ba",
+    "WED": "Thứ Tư",
+    "THU": "Thứ Năm",
+    "FRI": "Thứ Sáu",
+    "SAT": "Thứ Bảy",
+    "SUN": "Chủ Nhật",
+    "EVERY_DAY": "Hằng ngày",
+    "DAY_OF_WEEK": "Ngày trong tuần"
+  },
+  "IMAGE": {
+    "PREVIEW": "Xem trước"
+  },
+  "NOTFOUND": {
+    "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
+    "404": "404 - TRANG KHÔNG TÌM THẤY"
+  }
+}

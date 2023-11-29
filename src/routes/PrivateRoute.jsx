@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
+import Dashboard from '../pages/Dashboard/Dashboard.jsx';
 
 // Define routes accessible only to authenticated users
 const PrivateRoute = [
@@ -9,18 +10,18 @@ const PrivateRoute = [
     children: [
       {
         path: '',
-        element: <div>User Home Page</div>,
+        element: <Dashboard />,
       },
       {
-        path: '/dashboard',
-        element: <div>User dashboard</div>,
+        path: 'dashboard',
+        element: <Dashboard />,
       },
       {
-        path: '/employees',
+        path: 'employees',
         element: <div>User employees</div>,
       },
       {
-        path: '/projects',
+        path: 'projects',
         element: <div>User projects</div>,
       },
     ],

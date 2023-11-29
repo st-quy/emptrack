@@ -28,42 +28,51 @@
           #ffdde1,
           #ee9ca7
         ); /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(
-          to bottom,
-          #ffdde1,
-          #ee9ca7
-        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+        @media only screen and (max-width: 455px) {
+          .ant-space-item {
+            line-height: normal !important;
+            align-items: center;
+            display: flex;
+            position: relative;
+            left: 4px;
+          }
+        }
       }
     }
     .title-menu {
       color: white !important;
+      @media only screen and (max-width: 455px) {
+        display: none;
+      }
     }
     .logo-header {
       font-size: 24px;
       font-family: 'Shrikhand', serif !important;
-      background: #ee9ca7; /* fallback for old browsers */
-      background: -webkit-linear-gradient(
-        to bottom,
-        #ee9ca7,
-        #ffdde1
-      ); /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(
-        to bottom,
-        #ee9ca7,
-        #ffdde1
-      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background: #ee9ca7;
+      background: -webkit-linear-gradient(to bottom, #ee9ca7, #ffdde1);
+      background: linear-gradient(to bottom, #ee9ca7, #ffdde1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
+      @media only screen and (min-width: 768px) and (max-width: 979px) {
+        font-size: 18px;
+      }
     }
     .topnar {
       background-color: black !important;
     }
   }
   .layout-content {
-    .ant-card {
+    .ant-card-layout {
       height: calc(100vh - 83px) !important;
       border-radius: 50px 50px 0 0;
       background: #eff3f9 !important;
+      .ant-card-body {
+        padding: 5px 35px;
+      }
     }
   }
 }

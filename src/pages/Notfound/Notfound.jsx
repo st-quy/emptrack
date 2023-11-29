@@ -1,6 +1,13 @@
-import { Button, Col, Row, Space, Typography } from 'antd';
+import { Col, Row, Space, Typography } from 'antd';
+import Button from '../../components/atoms/Button/Button';
+import { useNavigate } from 'react-router-dom';
 import './Notfound.scss';
+import { useTranslation } from 'react-i18next';
+
 const NotFound = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
     <Row id="notfound-container">
       <Col md={12} className="notfound-children">
@@ -13,12 +20,13 @@ const NotFound = () => {
           <Typography.Title level={1} className="title-oops">
             Oops!
           </Typography.Title>
-          <Typography.Paragraph>404 - PAGE NOT FOUND</Typography.Paragraph>
+          <Typography.Paragraph>{t('NOTFOUND.404')}</Typography.Paragraph>
           <Typography.Paragraph className="content-sorry">
-            SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN
-            REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE
+            {t('NOTFOUND.CONTENT_SORRY')}
           </Typography.Paragraph>
-          <Button>Go Back Home</Button>
+          <Button type="primary" onClick={() => navigate('/')}>
+            {t('BUTTON.BACK_TO_HOME')}
+          </Button>
         </Space>
       </Col>
       <Col xs={0} md={12}>

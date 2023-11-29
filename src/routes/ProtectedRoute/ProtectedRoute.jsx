@@ -18,12 +18,15 @@ import {
   Tooltip,
 } from 'antd';
 import './ProtectedRoute.scss';
+import DropProfile from '../../components/molecules/DropProfile/DropProfile';
+import { useTranslation } from 'react-i18next';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 export const ProtectedRoute = () => {
+  const [activeItem, setActiveItem] = useState('dashboard');
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const { token } = useAuth();
 
   if (!token) {
@@ -33,17 +36,17 @@ export const ProtectedRoute = () => {
     {
       key: 'dashboard',
       icon: <HomeOutlined />,
-      label: 'Dashboard',
+      label: t('BREADCRUMB.DASHBOARD'),
     },
     {
       key: 'employees',
       icon: <TeamOutlined />,
-      label: 'Employees',
+      label: t('BREADCRUMB.EMPLOYEES'),
     },
     {
       key: 'projects',
       icon: <AppstoreAddOutlined />,
-      label: 'Projects',
+      label: t('BREADCRUMB.PROJECTS'),
     },
     {
       key: 'devices',
@@ -54,24 +57,23 @@ export const ProtectedRoute = () => {
   return (
     <Layout id="layout-container">
       <Header className="layout-header">
-        <Typography className="logo-header">EmpTrack</Typography>
+        <Typography className="logo-header">{t('SYSTEM.LOGO_NAME')}</Typography>
         <Space className="menu-list" direction="horizontal" size={48}>
           {IMenu.map((item, index) => {
             return (
               <Tooltip title={item.label} key={index} trigger="hover">
                 <Space
+                  key={index}
                   className={`w-100 item-menu ${
-                    window.location.pathname.includes(item.key)
-                      ? 'menu-item-active'
-                      : ''
+                    activeItem === item.key ? 'menu-item-active' : ''
                   }`}
                   direction="horizontal"
                   onClick={() => {
-                    navigate(item.key);
+                    navigate(item.key), setActiveItem(item.key);
                   }}
                 >
                   {item.icon}
-                  {window.location.pathname.includes(item.key) && (
+                  {activeItem === item.key && (
                     <Typography className="title-menu">{item.label}</Typography>
                   )}
                 </Space>
@@ -79,10 +81,10 @@ export const ProtectedRoute = () => {
             );
           })}
         </Space>
-        <Typography className="logo-header">123</Typography>
+        <DropProfile />
       </Header>
       <Content className="layout-content">
-        <Card>
+        <Card className="ant-card-layout">
           <Outlet />
         </Card>
       </Content>

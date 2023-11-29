@@ -2,11 +2,6 @@
   width: 100%;
 
   ol > li:first-child {
-    &::after {
-      content: '|';
-      margin: 0 14px;
-    }
-
     .ant-breadcrumb-separator {
       display: none;
     }
@@ -38,5 +33,8 @@
   .ant-breadcrumb-link {
     color: #000000d9;
     font-size: 12px;
+  }
+  .ant-breadcrumb-link a {
+    text-decoration: none !important;
   }
 }

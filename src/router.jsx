@@ -1,31 +1,16 @@
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { useAuth } from './provider/authProvider';
-import Login from './pages/Login/Login';
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import NotFound from './pages/Notfound/Notfound';
 
 const Routes = () => {
-  const { token } = useAuth();
-
-  // Define routes accessible only to non-authenticated users
-  const routesForNotAuthenticatedOnly = [
-    {
-      path: 'login',
-      element: <Login />,
-    },
-  ];
-
   const router = createBrowserRouter([
     {
       path: '/',
       element: <Outlet />,
       errorElement: <NotFound />,
-      children: [
-        ...PublicRoute,
-        ...(!token ? routesForNotAuthenticatedOnly : []),
-        ...PrivateRoute,
-      ],
+      children: [...PublicRoute, ...PrivateRoute],
     },
   ]);
 

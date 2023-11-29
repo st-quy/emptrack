@@ -5,34 +5,33 @@
   &.ant-btn {
     height: 35px;
     border-radius: 12px;
-    border: none;
     font-size: 14px;
     font-weight: 500;
+    border: #6e6d7a !important;
   }
   &.ant-btn-default {
     border: 1px solid #d9d9d9;
   }
 
   &.ant-btn-primary {
-    background-color: #373063;
+    background-color: #0d0c22;
     &:hover {
-      background-color: #504693 !important;
+      background-color: #565564 !important;
       color: #ffffff !important;
       box-shadow: 0 6px 8px -6px #909090;
     }
     &:focus {
       color: #fff;
-      border-color: #504693 !important;
-      background: #504693 !important;
+      border-color: #565564 !important;
+      background: #565564 !important;
     }
   }
 
-  &.secondary {
-    background-color: #f0eeff;
-    color: #5646ff;
+  &.ant-btn-secondary {
+    background-color: #f0eefe;
+    color: #0d0c22;
     &:hover {
       background-color: #f0eefe;
-      color: #5646ff;
       box-shadow: 0 6px 8px -6px #909090;
     }
     &.reset-password-profile {

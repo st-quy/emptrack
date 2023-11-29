@@ -10,4 +10,4 @@ const Button = ({ children, ...props }) => {
     </ButtonAntd>
   );
 };
-export default Button
+export default Button;

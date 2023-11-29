@@ -6,9 +6,44 @@
     .auth-sidebar-content {
       width: 100%;
       .auth-sidebar-video {
-        width: 400px;
+        width: 100%;
         height: 100vh;
         object-fit: cover;
+      }
+    }
+  }
+  .form-login {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media only screen and (max-width: 500px) {
+      padding: 0 24px;
+    }
+    .form-content {
+      width: 100%;
+      max-width: 400px;
+      .title-login {
+        margin-bottom: 30px;
+        font: bold 24px/29px 'Mona Sans', 'Helvetica Neue', Helvetica, Arial,
+          sans-serif;
+      }
+      .btn-login {
+        height: 56px;
+        border-radius: 30px;
+      }
+      .ant-divider-inner-text {
+        font-size: 14px !important;
+        color: #6e6d7a;
+        font: normal 14px/14px 'Mona Sans', 'Helvetica Neue', Helvetica, Arial,
+          sans-serif;
+      }
+      .ant-input-affix-wrapper {
+        height: 56px;
+        border-radius: 12px;
+        outline: none;
+        color: #0d0c22;
+        font-weight: 400;
       }
     }
   }

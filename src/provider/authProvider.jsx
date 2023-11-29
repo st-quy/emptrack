@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   // State to hold the authentication token
-  const [token, setToken_] = useState(localStorage.getItem("token"));
+  const [token, setToken_] = useState(localStorage.getItem('token'));
 
   // Function to set the authentication token
   const setToken = (newToken) => {
@@ -13,9 +13,9 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem('token', token);
     } else {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
     }
   }, [token]);
 
@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
       token,
       setToken,
     }),
-    [token]
+    [token],
   );
 
   // Provide the authentication context to the children components
