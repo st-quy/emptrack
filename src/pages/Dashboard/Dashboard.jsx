@@ -1,4 +1,3 @@
-import { Card, Col, Row } from 'antd';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
 import './Dashboard.scss';
 const Dashboard = () => {
