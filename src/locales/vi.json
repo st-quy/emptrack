@@ -21,7 +21,8 @@
     "SAVE": "Lưu",
     "OK": "Xác nhận",
     "UPDATE": "Cập nhật",
-    "BACK_TO_HOME": "Quay lại trang chủ"
+    "BACK_TO_HOME": "Quay lại trang chủ",
+    "ADD_MEMBER": "Thêm thành viên"
   },
   "TABLE": {
     "ACTIONS": "Hành động",
@@ -50,7 +51,8 @@
     "USERS_UPDATE": "Cập nhật người dùng",
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
-    "PROJECTS": "Dự án"
+    "PROJECTS": "Dự án",
+    "PROJECTS_CREATE": "Tạo dự án"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -141,6 +143,24 @@
     "CONFIRM_PASSWORD": "Xác thực mật khẩu",
     "PLACEHOLDER_CONFIRM_PASSWORD": "Nhập lại mật khẩu mới",
     "LIST": "Danh sách người dùng"
+  },
+  "PROJECTS": {
+    "NAME": "Tên dự án",
+    "MANAGER": "Quản lý dự án",
+    "SELECT_MANAGER": "Chọn quản lý",
+    "MEMBER": "Thành viên",
+    "SELECT_MEMBER": "Chọn thành viên",
+    "ROLE": "Vị trí",
+    "SELECT_ROLE": "Chọn vị trí",
+    "DESCRIPTION": "Mô tả dự án",
+    "TIME": "Thời gian",
+    "TIME_START": "Ngày bắt đầu",
+    "TIME_END": "Ngày kết thúc",
+    "STATUS": "Trạng thái",
+    "STATUS_ACTIVE": "Đang hoạt động",
+    "STATUS_INACTIVE": "Chưa hoạt động",
+    "TECHNICAL": "Công nghệ",
+    "LIST": "Danh sách dự án"
   },
   "ROLE": {
     "ADMIN": "Quản trị viên",
