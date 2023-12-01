@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 // import { Button, Card, Pagination, Table, Tooltip } from 'antd';
 // // eslint-disable-next-line no-unused-vars
@@ -197,7 +198,16 @@
 // };
 // export default EmployeesList;
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Input, Pagination, Space, Table, Tooltip } from 'antd';
+import {
+  Card,
+  Image,
+  Input,
+  Pagination,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/atoms/Button/Button';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
@@ -253,11 +263,33 @@ const EmployeesList = () => {
       ),
     },
 
+    // {
+    //   title: 'Tên',
+    //   dataIndex: 'names', // 'names' tương ứng với key trong mảng data
+    //   key: 'names',
+    //   render: (names) => (
+    //     <span>
+    //       {names.map((name, index) => (
+    //         <Tag color="blue" key={index}>
+    //           {name}
+    //         </Tag>
+    //       ))}
+    //     </span>
+    //   ),
+    // },
+
     {
       title: 'Avatar',
       dataIndex: 'avatar',
       key: 'avatar',
       width: 150,
+      render: (avatar) => (
+        <span>
+          {avatar.map((avatar, index) => (
+            <Image key={index} src={avatar.url} alt={`Avatar ${index + 1}`} />
+          ))}
+        </span>
+      ),
 
       ellipsis: {
         showTitle: false,
@@ -308,6 +340,11 @@ const EmployeesList = () => {
       dataIndex: 'isManager',
       key: 'isManager',
       width: 150,
+      render: (isManager) => (
+        <Tag color={isManager ? 'green' : 'red'}>
+          {isManager ? 'Yes' : 'No'}
+        </Tag>
+      ),
       ellipsis: {
         showTitle: false,
       },
@@ -345,6 +382,15 @@ const EmployeesList = () => {
       dataIndex: 'skills',
       key: 'skills',
       width: 150,
+      render: (skills) => (
+        <ul>
+          {skills.map((skill, index) => (
+            <li key={index}>
+              <strong>{skill.skillname}</strong>: {skill.exp}
+            </li>
+          ))}
+        </ul>
+      ),
 
       ellipsis: {
         showTitle: false,
