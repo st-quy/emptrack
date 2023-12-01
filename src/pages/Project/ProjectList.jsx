@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
-import { Table, Tooltip, Card, Space, Input } from 'antd';
+import { Table, Tooltip, Card, Space, Input, Pagination } from 'antd';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import Button from '../../components/atoms/Button/Button';
 
@@ -223,6 +223,13 @@ const ProjectList = () => {
             x: 1500,
             y: 300,
           }}
+          pagination ={false}
+        />
+         <Pagination
+          total={25}
+          showSizeChanger
+          showTotal={(total) => `Total ${total} items`}
+          style={{ marginTop: '25px' }}
         />
       </Card>
     </div>
