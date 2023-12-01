@@ -39,7 +39,7 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
     render: (text) => <a>{text}</a>,
-    width: 50,
+    width: 50 ,
     sorter: {
       compare: (a, b) => a.chinese - b.chinese,
       multiple: 3,
@@ -49,7 +49,11 @@ const columns = [
     title: 'Manager',
     dataIndex: 'manager',
     key: 'manager',
-    width: 150,
+    width: 80,
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
     render: (managers) => (
       <span>
         {managers.map((manager, index) => (
@@ -63,6 +67,10 @@ const columns = [
     dataIndex: 'member',
     key: 'member',
     width: 150,
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
     render: (members) => (
       <span>
         {members.map((member, index) => (
@@ -98,15 +106,13 @@ const columns = [
     title: 'Description',
     dataIndex: 'description',
     key: 'description',
-    width: 150, 
-    
-
+    width: 200,
     ellipsis: {
       showTitle: false,
     },
     render: (address) => (
       <Tooltip placement="topLeft" title={address}>
-        {address}
+        <div style={{ whiteSpace: 'pre-line' }}>{address}</div>
       </Tooltip>
     ),
   },
@@ -115,7 +121,10 @@ const columns = [
     dataIndex: 'status',
     key: 'status',
     width: 150, 
-
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
     ellipsis: {
       showTitle: false,
     },
@@ -130,9 +139,17 @@ const columns = [
     dataIndex: 'startDate',
     key: 'startDate',
     width: 150, 
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
 
     ellipsis: {
       showTitle: false,
+    },
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
     },
     render: (address) => (
       <Tooltip placement="topLeft" title={address}>
@@ -145,6 +162,10 @@ const columns = [
     dataIndex: 'endDate',
     key: 'endDate',
     width: 150,
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
     ellipsis: {
       showTitle: false,
     },

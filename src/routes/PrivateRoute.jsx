@@ -1,7 +1,7 @@
 
 
 // PrivateRoute.jsx
-import { lazy } from 'react';
+// import { lazy } from 'react';
 import { Button } from 'antd';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
