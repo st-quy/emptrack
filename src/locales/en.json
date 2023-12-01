@@ -46,7 +46,8 @@
     "USERS": "Users",
     "USERS_CREATE": "Create user",
     "USERS_UPDATE": "Update user",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "PROJECTS_UPDATE": "Project Update"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",

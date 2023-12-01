@@ -1,7 +1,8 @@
 import { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
-
+import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
+import Projects from '../pages/Project/Project List/ProjectList.jsx';
 // Define routes accessible only to authenticated users
 const PrivateRoute = [
   {
@@ -22,7 +23,16 @@ const PrivateRoute = [
       },
       {
         path: 'projects',
-        element: <div>User projects</div>,
+        children: [
+          {
+            path: '',
+            element: <Projects />,
+          },
+          {
+            path: 'update/:projectId', // Thêm parameter projectId vào URL
+            element: <ProjectUpdate />,
+          },
+        ],
       },
     ],
   },

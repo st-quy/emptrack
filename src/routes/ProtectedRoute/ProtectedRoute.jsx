@@ -24,7 +24,10 @@ import { useTranslation } from 'react-i18next';
 const { Header, Content } = Layout;
 
 export const ProtectedRoute = () => {
-  const [activeItem, setActiveItem] = useState('dashboard');
+  const pathname = window.location.pathname.split('/')[1];
+  const [activeItem, setActiveItem] = useState(
+    pathname ? pathname : 'dashboard',
+  );
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
