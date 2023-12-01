@@ -1,15 +1,13 @@
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Card, Pagination, Table, Tooltip } from 'antd';
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
-import { Table, Tooltip, Button } from 'antd';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
-
-
 const columns = [
   {
     title: 'Action',
     key: 'action',
+    width: 150,
     render: (text, record) => (
       <span>
         <Tooltip title="Delete">
@@ -19,11 +17,11 @@ const columns = [
             onClick={() => handleDelete(record.key)}
           />
         </Tooltip>
-        <Tooltip title="Update">
+        <Tooltip title="View">
           <Button
             type="link"
-            icon={<EditOutlined />}
-            onClick={() => handleUpdate(record.key)}
+            icon={<EyeOutlined />}
+            onClick={() => handleView(record.key)}
           />
         </Tooltip>
       </span>
@@ -33,19 +31,17 @@ const columns = [
     title: 'Avatar',
     dataIndex: 'avatar',
     key: 'avatar',
+    width: 150,
+
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
   },
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
+
     render: (text) => <a>{text}</a>,
     width: 150,
   },
@@ -59,139 +55,143 @@ const columns = [
 
   {
     title: 'Phone Number',
-    dataIndex: 'phone_number',
-    key: 'phone_number',
+    dataIndex: 'phone',
+    key: 'phone',
+    width: 150,
+  },
+  {
+    title: 'Adress',
+    dataIndex: 'address',
+    key: 'address',
     width: 150,
   },
   {
     title: 'Date Of Birth',
-    dataIndex: 'date_of_birth',
-    key: 'date_of_birth',
+    dataIndex: 'dob',
+    key: 'dob',
     width: 150,
   },
   {
     title: 'Citizen Identity Card',
-    dataIndex: 'citizen_identity_card',
-    key: 'citizen_identity_card',
+    dataIndex: 'cccd',
+    key: 'cccd',
     width: 150,
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-    with: 150,
+    title: 'Is Manager',
+    dataIndex: 'isManager',
+    key: 'isManager',
+    width: 150,
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
+    title: 'Line Manager',
+    dataIndex: 'lineManager',
+    key: 'lineManager',
+    width: 150,
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
+  },
+  {
+    title: 'Code',
+    dataIndex: 'code',
+    key: 'code',
+    width: 150,
+    ellipsis: {
+      showTitle: false,
+    },
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
+    width: 150,
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
   },
   {
     title: 'Skill',
-    dataIndex: 'skill',
-    key: 'skill',
+    dataIndex: 'skills',
+    key: 'skills',
+    width: 150,
+
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
   },
   {
     title: 'Position',
     dataIndex: 'position',
     key: 'position',
+    width: 150,
+
     ellipsis: {
       showTitle: false,
     },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+    width: 150,
+    ellipsis: {
+      showTitle: false,
+    },
   },
 ];
 const data = [
   {
-    avatar: '1',
-    name: 'John Brown',
-    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-    date_of_birth: '07-12-1290',
+    name: 'tu',
+    skills: 'múa lửa',
+    gender: ' nam',
   },
   {
-    avatar: '2',
-    name: 'John Brown',
-    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-    date_of_birth: '07-12-1290',
+    name: 'tu',
+    skills: 'múa lửa',
+    gender: ' nam',
   },
   {
-    avatar: '10',
-    name: 'John1 Brown',
-    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-    date_of_birth: '07-12-1290',
-  },
-  {
-    avatar: '1',
-    name: 'John Brown',
-    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-    date_of_birth: '07-12-1290',
+    name: 'tu',
+    skills: 'múa lửa',
+    gender: ' nam',
   },
 ];
 const handleDelete = (key) => {
   // Implement delete logic here
   console.log(`Deleting record with key ${key}`);
 };
-
-const handleUpdate = (key) => {
-  // Implement update logic here
-  console.log(`Updating record with key ${key}`);
+const handleView = (key) => {
+  // Implement view logic here
+  console.log(`Viewing record with key ${key}`);
 };
 const EmployeesList = () => {
-  const breadcrumbItems = [{ key: 'employees' } ];
+  const breadcrumbItems = [{ key: 'employees' }];
   return (
     <>
-       <Breadcrumb items={breadcrumbItems} />
-      <Table
-        columns={columns}
-        dataSource={data}
-        scroll={{
-          x: 1500,
-          y: 300,
-        }}
-      />
-      
+      <Breadcrumb items={breadcrumbItems} />
+      <Card title="Danh sách nhân viên">
+        <Table
+          columns={columns}
+          dataSource={data}
+          scroll={{
+            x: 1500,
+            y: 300,
+          }}
+          pagination={false}
+          style={{ marginTop: '20px' }}
+        />
+        <Pagination
+          total={25}
+          showSizeChanger
+          showTotal={(total) => `Total ${total} items`}
+          style={{ marginTop: '20px' }}
+        />
+      </Card>
     </>
-  ); 
+  );
 };
 export default EmployeesList;
