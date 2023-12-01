@@ -4,16 +4,23 @@ import { Table, Tooltip, Card, Space, Input, Pagination } from 'antd';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import Button from '../../components/atoms/Button/Button';
 
+const ProjectList = () => {
+  const [data, setData] = useState([]);
+  // const [searchedText, setSearchedText] = useState('');
 
-const handleView = (key) => {
-  // Implement view logic here
-  console.log(`Viewing record with key ${key}`);
-};
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://api-emptrack.onrender.com/projects');
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-const handleUpdate = (key) => {
-  // Implement update logic here
-  console.log(`Updating record with key ${key}`);
-};
 
 const columns = [
   {
@@ -63,6 +70,17 @@ const columns = [
     ),
   },
   {
+    title: 'Project name',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text) => <a>{text}</a>,
+    width: 150,
+    sorter: {
+      compare: (a, b) => a.chinese - b.chinese,
+      multiple: 3,
+    },
+  },
+  {
     title: 'Members',
     dataIndex: 'member',
     key: 'member',
@@ -81,17 +99,7 @@ const columns = [
       </span>
     ),
   },
-  {
-    title: 'Project name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-    width: 150,
-    sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
-    },
-  },
+  
   {
     title: 'Technical',
     dataIndex: 'technical',
@@ -116,29 +124,12 @@ const columns = [
       </Tooltip>
     ),
   },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    width: 150, 
-    sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
-    },
-    ellipsis: {
-      showTitle: false,
-    },
-    render: (address) => (
-      <Tooltip placement="topLeft" title={address}>
-        {address}
-      </Tooltip>
-    ),
-  },
+  
   {
     title: 'Start date',
     dataIndex: 'startDate',
     key: 'startDate',
-    width: 150, 
+    width: 90, 
     sorter: {
       compare: (a, b) => a.chinese - b.chinese,
       multiple: 3,
@@ -161,7 +152,7 @@ const columns = [
     title: 'End date',
     dataIndex: 'endDate',
     key: 'endDate',
-    width: 150,
+    width: 90,
     sorter: {
       compare: (a, b) => a.chinese - b.chinese,
       multiple: 3,
@@ -175,28 +166,40 @@ const columns = [
       </Tooltip>
     ),
   },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    width: 90,
+    sorter: {
+      compare: (a, b) => a.status.localeCompare(b.status),
+      multiple: 3,
+    },
+    ellipsis: {
+      showTitle: false,
+    },
+    render: (status) => (
+      <Tooltip placement="topLeft" title={status}>
+        <span
+          style={{
+            backgroundColor: status === 'active' ? 'green' : 'red',
+            color: 'white', 
+            padding: '3px 8px', 
+            borderRadius: '4px', 
+            display: 'inline-block', 
+          }}
+        >
+          {status}
+        </span>
+      </Tooltip>
+    ),
+  },
   
 ];
 
 
-const ProjectList = () => {
-  const [data, setData] = useState([]);
-  // const [searchedText, setSearchedText] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://api-emptrack.onrender.com/projects');
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
- 
-  // const breadcrumbItems = [{ key: 'projects' }];
+
   const [searchedText, setSearchedText] = useState("")
 
   return (
@@ -205,7 +208,7 @@ const ProjectList = () => {
         <Breadcrumb items={[{ key: 'projects' }]} />
         <Button>Tạo ứng dụng</Button>
       </Space>
-      <Card title="Danh sách sản phẩm">
+      <Card title="Danh sách dự án">
         <Input.Search
           placeholder="Tìm kiếm..."
           style={{ marginBottom: 8, width: 200 }}
