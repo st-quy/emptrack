@@ -3,6 +3,7 @@ import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
 import { Table, Tooltip, Card, Space, Input, Pagination } from 'antd';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import Button from '../../components/atoms/Button/Button';
+import { debounce } from 'lodash';
 
 const ProjectList = () => {
   const [data, setData] = useState([]);
@@ -201,6 +202,7 @@ const columns = [
 
 
   const [searchedText, setSearchedText] = useState("")
+  const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
   return (
     <div className="project_create">
@@ -215,19 +217,22 @@ const columns = [
           onChange={(e) => setSearchedText(e.target.value)}
         />
 
-        <Table
-          columns={columns}
-          dataSource={data.filter(
-            (item) =>
-              item.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-              item.address.toLowerCase().includes(searchedText.toLowerCase())
-          )}
-          scroll={{
-            x: 1500,
-            y: 300,
-          }}
-          pagination ={false}
-        />
+<Table
+  columns={columns}
+  dataSource={data.filter(
+    (item) =>
+      item.id.toString().includes(searchedText.toLowerCase()) ||
+      (item.manager &&
+        item.manager.some(
+          (manager) => manager.name.toLowerCase().includes(searchedText.toLowerCase())
+        ))
+  )}
+  scroll={{
+    x: 1500,
+    y: 300,
+  }}
+  pagination={false}
+/>
          <Pagination
           total={25}
           showSizeChanger
