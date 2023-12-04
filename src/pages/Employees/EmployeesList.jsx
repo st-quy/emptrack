@@ -44,6 +44,7 @@ const EmployeesList = () => {
     {
       title: 'Action',
       key: 'action',
+      fixed: 'left',
       width: 100,
       render: (text, record) => (
         <span>
@@ -177,7 +178,6 @@ const EmployeesList = () => {
           ))}
         </ul>
       ),
-
       ellipsis: {
         showTitle: false,
       },
@@ -221,8 +221,12 @@ const EmployeesList = () => {
           columns={columns}
           dataSource={data.filter(
             (item) =>
-              item.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-              item.address.toLowerCase().includes(searchedText.toLowerCase()),
+              (item.name &&
+                item.name.toLowerCase().includes(searchedText.toLowerCase())) ||
+              (item.address &&
+                item.address
+                  .toLowerCase()
+                  .includes(searchedText.toLowerCase())),
           )}
           scroll={{
             x: 1500,
@@ -231,7 +235,7 @@ const EmployeesList = () => {
           pagination={false}
         />
         <Pagination
-          total={25}
+          total={data.length}
           showSizeChanger
           showTotal={(total) => `Total ${total} items`}
           style={{ marginTop: '25px' }}
