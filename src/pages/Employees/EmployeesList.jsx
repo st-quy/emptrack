@@ -15,6 +15,8 @@ import Button from '../../components/atoms/Button/Button';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
 
 const EmployeesList = () => {
+  const [currentPage, setCrurentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -34,12 +36,10 @@ const EmployeesList = () => {
     // Implement delete logic here
     console.log(`Deleting record with id ${id}`);
   };
-
   const handleView = (id) => {
     // Implement view logic here
     console.log(`Viewing record with id ${id}`);
   };
-
   const columns = [
     {
       title: 'Action',
@@ -96,8 +96,12 @@ const EmployeesList = () => {
       key: 'gender',
       render: (text) => <a>{text}</a>,
       width: 150,
+      filters: [
+        { text: 'Male', value: 'male' },
+        { text: 'Female', value: 'female' },
+      ],
+      onFilter: (value, record) => record.gender === value,
     },
-
     {
       title: 'Phone Number',
       dataIndex: 'phone',
@@ -135,6 +139,11 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
+      // filters: [
+      //   { text: 'Yes', value: 'yes' },
+      //   { text: 'No', value: 'no' },
+      // ],
+      // onFilter: (value, record) => record.isManager === value,
     },
     {
       title: 'Line Manager',
@@ -163,6 +172,26 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
+      render: (status) => (
+        <Tooltip placement="topLeft" title={status}>
+          <span
+            style={{
+              backgroundColor: status === 'active' ? 'green' : 'red',
+              color: 'white',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              display: 'inline-block',
+            }}
+          >
+            {status}
+          </span>
+        </Tooltip>
+      ),
+      filters: [
+        { text: 'Active', value: 'active' },
+        { text: 'Inactive', value: 'inactive' },
+      ],
+      onFilter: (value, record) => record.status === value,
     },
     {
       title: 'Skill',
@@ -219,15 +248,19 @@ const EmployeesList = () => {
         />
         <Table
           columns={columns}
-          dataSource={data.filter(
-            (item) =>
-              (item.name &&
-                item.name.toLowerCase().includes(searchedText.toLowerCase())) ||
-              (item.address &&
-                item.address
-                  .toLowerCase()
-                  .includes(searchedText.toLowerCase())),
-          )}
+          dataSource={data
+            .filter(
+              (item) =>
+                (item.name &&
+                  item.name
+                    .toLowerCase()
+                    .includes(searchedText.toLowerCase())) ||
+                (item.address &&
+                  item.address
+                    .toLowerCase()
+                    .includes(searchedText.toLowerCase())),
+            )
+            .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
           scroll={{
             x: 1500,
             y: 300,
@@ -236,9 +269,15 @@ const EmployeesList = () => {
         />
         <Pagination
           total={data.length}
+          current={currentPage}
+          pageSize={pageSize}
           showSizeChanger
           showTotal={(total) => `Total ${total} items`}
           style={{ marginTop: '25px' }}
+          onChange={(page, pageSize) => {
+            setCrurentPage(page);
+            setPageSize(pageSize);
+          }}
         />
       </Card>
     </div>
