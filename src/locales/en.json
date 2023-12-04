@@ -115,7 +115,9 @@
     "BASIC_INFORMATION": "Basic Information",
     "DEVICES": "Devices",
     "ENDPOINT": "Endpoint",
-    "SCHEDULE": "Schedule"
+    "SCHEDULE": "Schedule",
+    "Action": "Action",
+    "AVATAR": "Avatar"
   },
   "USERS": {
     "NAME": "Name",
@@ -161,4 +163,5 @@
     "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
     "404": "404 - PAGE NOT FOUND"
   }
+  
 }
