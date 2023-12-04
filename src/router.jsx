@@ -4,6 +4,7 @@ import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import NotFound from './pages/Notfound/Notfound';
 
+
 const Routes = () => {
   const router = createBrowserRouter([
     {
