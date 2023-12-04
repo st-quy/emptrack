@@ -116,6 +116,7 @@
     "CHANGE_PASSWORD": "Đổi mật khẩu"
   },
   "TITLE": {
+  
     "BASIC_INFORMATION": "Thông tin cơ bản",
     "DEVICES": "Thiết bị",
     "ENDPOINT": "Endpoint",
@@ -168,4 +169,5 @@
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
   }
+
 }

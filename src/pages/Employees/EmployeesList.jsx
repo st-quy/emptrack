@@ -163,6 +163,21 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
+      render: (status) => (
+        <Tooltip placement="topLeft" title={status}>
+          <span
+            style={{
+              backgroundColor: status === 'active' ? 'green' : 'red',
+              color: 'white',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              display: 'inline-block',
+            }}
+          >
+            {status}
+          </span>
+        </Tooltip>
+      )
     },
     {
       title: 'Skill',
