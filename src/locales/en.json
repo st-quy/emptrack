@@ -46,7 +46,9 @@
     "USERS": "Users",
     "USERS_CREATE": "Create user",
     "USERS_UPDATE": "Update user",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "EMPLOYEES_CREATE": "Create employees",
+    "EMPLOYEES": "Employees"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -160,5 +162,30 @@
   "NOTFOUND": {
     "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
     "404": "404 - PAGE NOT FOUND"
+  },
+  "EMPLOYEES": {
+    "CREATE": "Create employee",
+    "CODE": "Code employee",
+    "NAME": "Name employee",
+    "PHONE": "Phone number",
+    "BIRTH": "Day of Birth",
+    "AVATAR": "Avatar",
+    "CITIZEN_CARD": "Citizen Indentity Card",
+    "GENDER": "Gender",
+    "STATUS": "Status",
+    "SKILLS": "Skills",
+    "POSITION": "Position",
+    "LINE_MANAGER": "Line Manager",
+    "DESCRIPTION": "Description",
+    "IS_MANAGER": "Is Manager?",
+    "UPLOAD": "Click to Upload",
+    "GENDER_MEN": "Men",
+    "GENDER_WOMEN": "Women",
+    "GENDER_UNKNOWN": "Unknown",
+    "ACTIVE": "Active",
+    "UNACTIVE": "Unactive",
+    "MANAGER": "Yes",
+    "NOT_MANAGER": "No",
+    "DETAILS": "Detail employees"
   }
 }

@@ -50,7 +50,8 @@
     "USERS_UPDATE": "Cập nhật người dùng",
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
-    "PROJECTS": "Dự án"
+    "PROJECTS": "Dự án",
+    "EMPLOYEES_CREATE": "Tạo nhân viên"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -165,5 +166,30 @@
   "NOTFOUND": {
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
+  },
+  "EMPLOYEES": {
+    "CREATE": "Tạo nhân viên",
+    "CODE": "Mã nhân viên",
+    "NAME": "Tên nhân viên",
+    "PHONE": "Số điện thoại",
+    "BIRTH": "Năm sinh",
+    "AVATAR": "Ảnh đại diện",
+    "CITIZEN_CARD": "Căn cước công dân",
+    "GENDER": "Giới tính",
+    "STATUS": "Trạng thái",
+    "SKILLS": "Kĩ năng",
+    "POSITION": "Vị trí",
+    "LINE_MANAGER": "Được ai quản lí?",
+    "DESCRIPTION": "Mô tả",
+    "IS_MANAGER": "Người quản lí?",
+    "UPLOAD": "Bấm để thêm ảnh",
+    "GENDER_MEN": "Nam",
+    "GENDER_WOMEN": "Nữ",
+    "GENDER_UNKNOWN": "Chưa rõ",
+    "ACTIVE": "Hoạt động",
+    "UNACTIVE": "Không hoạt động",
+    "MANAGER": "Có",
+    "NOT_MANAGER": "Không",
+    "DETAILS": "Chi tiết nhân viên"
   }
 }
