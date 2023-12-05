@@ -5,7 +5,7 @@
 import { Button } from 'antd';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
-import ProjectList from "../pages/Project/ProjectList.jsx";
+import ProjectList from "../pages/Project/ProjectList/ProjectList.jsx";
 const PrivateRoute = [
   {
     path: '/',
@@ -27,6 +27,7 @@ const PrivateRoute = [
         path: 'projects',
         element: <ProjectList />
       },
+      
     ],
   },
 ];
