@@ -33,4 +33,5 @@ export const validationSchema = Yup.object({
       exp: Yup.string().required('Vui lòng nhập kinh nghiệm'),
     }),
   ),
+  fileList: Yup.string().required('Vui lòng chọn ảnh đại diện'),
 });
