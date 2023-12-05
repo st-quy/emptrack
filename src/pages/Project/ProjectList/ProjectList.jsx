@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Table, Tooltip, Card, Space, Input, Pagination } from 'antd';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import Button from '../../components/atoms/Button/Button';
+import Button from '../../../components/atoms/Button/Button';
+import { debounce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
 
 const ProjectList = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   // const [searchedText, setSearchedText] = useState('');
 
@@ -24,10 +28,10 @@ const ProjectList = () => {
 
 const columns = [
   {
-    title: 'Action',
+    title: t('TABLE.ACTIONS'),
     key: 'action',
-    width: 100,
-    
+    width: 70,
+    fixed: 'left',
     render: (text, record) => (
       <span>
         <Tooltip title="Delete">
@@ -40,20 +44,8 @@ const columns = [
     ),
   },
   
-  
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    render: (text) => <a>{text}</a>,
-    width: 50 ,
-    sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
-    },
-  },
-  {
-    title: 'Manager',
+    title: t('TABLE.MANAGER'),
     dataIndex: 'manager',
     key: 'manager',
     width: 80,
@@ -70,18 +62,18 @@ const columns = [
     ),
   },
   {
-    title: 'Project name',
+    title: t('BREADCRUMB.PROJECTS'),
     dataIndex: 'name',
     key: 'name',
     render: (text) => <a>{text}</a>,
-    width: 150,
+    width: 100,
     sorter: {
       compare: (a, b) => a.chinese - b.chinese,
       multiple: 3,
     },
   },
   {
-    title: 'Members',
+    title: t('TABLE.MEMBERS'),
     dataIndex: 'member',
     key: 'member',
     width: 150,
@@ -101,7 +93,7 @@ const columns = [
   },
   
   {
-    title: 'Technical',
+    title: t('TABLE.TECHNICAL'),
     dataIndex: 'technical',
     key: 'technical',
     width: 150, 
@@ -111,7 +103,7 @@ const columns = [
     },
   },
   {
-    title: 'Description',
+    title: t('TABLE.DESCRIPTION'),
     dataIndex: 'description',
     key: 'description',
     width: 200,
@@ -126,7 +118,7 @@ const columns = [
   },
   
   {
-    title: 'Start date',
+    title: t('TABLE.START DATE'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 90, 
@@ -149,7 +141,7 @@ const columns = [
     ),
   },
   {
-    title: 'End date',
+    title: t('TABLE.END DATE'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 90,
@@ -167,7 +159,7 @@ const columns = [
     ),
   },
   {
-    title: 'Status',
+    title: t('STATUS.STATUS'),
     dataIndex: 'status',
     key: 'status',
     width: 90,
@@ -199,39 +191,53 @@ const columns = [
 
 
 
-
   const [searchedText, setSearchedText] = useState("")
+  const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
   return (
-    <div className="project_create">
+    <div className="project_create" style={{height:100.}}>
       <Space className="w-100 justify-content-between">
         <Breadcrumb items={[{ key: 'projects' }]} />
-        <Button>Tạo ứng dụng</Button>
+        <Button>Tạo dự án </Button>
       </Space>
-      <Card title="Danh sách dự án">
+      <Card title={"Danh sách dự án".toUpperCase()} style={{   border: '1px solid #d9d9d9', borderRadius: '30px' }}>
         <Input.Search
           placeholder="Tìm kiếm..."
-          style={{ marginBottom: 8, width: 200 }}
+          style={{ marginBottom: 8, width: 300, marginTop: 8 }}
           onChange={(e) => setSearchedText(e.target.value)}
+          
         />
-
-        <Table
-          columns={columns}
-          dataSource={data.filter(
-            (item) =>
-              item.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-              item.address.toLowerCase().includes(searchedText.toLowerCase())
-          )}
-          scroll={{
-            x: 1500,
-            y: 300,
-          }}
-          pagination ={false}
-        />
+<Table
+  columns={columns}
+  dataSource={data.filter((item) =>
+    // item.id.toString().includes(searchedText.toLowerCase()) ||
+      (item.manager &&
+        item.manager.some(
+        (manager) => manager.name.toLowerCase().includes(searchedText.toLowerCase())
+      )) ||
+    (item.member &&
+      item.member.some(
+        (member) =>
+          member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
+          member.role.toLowerCase().includes(searchedText.toLowerCase())
+      )) ||
+    item.technical.toLowerCase().includes(searchedText.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
+    item.startDate.toLowerCase().includes(searchedText.toLowerCase()) ||
+    item.endDate.toLowerCase().includes(searchedText.toLowerCase()) ||
+    item.status.toLowerCase().includes(searchedText.toLowerCase()) ||
+    item.name.toLowerCase().includes(searchedText.toLowerCase())  // Thêm điều kiện kiểm tra tên dự án
+  )}
+  scroll={{
+    x: 1500,
+    y: 'calc(100vh - 400px)',
+  }}
+  pagination={false}
+/>
          <Pagination
           total={25}
           showSizeChanger
-          showTotal={(total) => `Total ${total} items`}
+          showTotal={(total) => t('TABLE.TOTAL', { total })}
           style={{ marginTop: '25px' }}
         />
       </Card>
