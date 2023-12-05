@@ -39,14 +39,21 @@
     "WORKSPACE_CREATE": "Create Workspace",
     "WORKSPACE_LIST": "List Workspace",
     "PROFILE": "Profile",
-    "GUIDELINE": "Documents"
+    "GUIDELINE": "Documents",
+    "MANAGER":"Manager",
+    "MEMBERS" :"Members",
+    "TECHNICAL":"Technical",
+    "DESCRIPTION": "DESCRIPTION",
+    "START DATE":"Start date",
+    "END DATE":"End date"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
     "USERS": "Users",
     "USERS_CREATE": "Create user",
     "USERS_UPDATE": "Update user",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "PROJECTS": "Projects"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -63,7 +70,8 @@
     "DELETE": "Delete",
     "ALL": "All",
     "ON": "On",
-    "OFF": "Off"
+    "OFF": "Off",
+    "STATUS": "Status"
   },
   "VALIDATE": {
     "PLACEHOLDER": "Enter {{name}}",

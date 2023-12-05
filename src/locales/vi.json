@@ -41,7 +41,14 @@
     "WORKSPACE_CREATE": "Tạo công ty",
     "WORKSPACE_LIST": "Danh sách công ty",
     "PROFILE": "Thông tin cá nhân",
-    "GUIDELINE": "Tài liệu"
+    "GUIDELINE": "Tài liệu",
+    "MANAGER": "Quản lí",
+    "MEMBERS": "Thành viên",
+    "TECHNICAL":"Kỹ thuật",
+    "DESCRIPTION": "Mô tả",
+    "START DATE":"Ngày bắt đầu",
+    "END DATE":"Ngày kết thúc",
+    "TOTAL": "Tổng: {{total}} nhân viên" 
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -67,7 +74,8 @@
     "DELETE": "Xóa",
     "ALL": "Tất cả",
     "ON": "Bật",
-    "OFF": "Tắt"
+    "OFF": "Tắt",
+    "STATUS": "Trạng thái"
   },
   "VALIDATE": {
     "PLACEHOLDER": "Nhập {{name}}",
