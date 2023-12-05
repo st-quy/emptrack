@@ -1,5 +1,5 @@
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
-import CreateProject from '../pages/Project/CreateProject/createProject.jsx';
+import CreateProject from '../pages/Project/CreateProject/CreateProject.jsx';
 import ProjectList from '../pages/Project/ProjectList/ProjectList';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
