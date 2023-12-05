@@ -128,7 +128,9 @@
     "BASIC_INFORMATION": "Thông tin cơ bản",
     "DEVICES": "Thiết bị",
     "ENDPOINT": "Endpoint",
-    "SCHEDULE": "Lịch trình"
+    "SCHEDULE": "Lịch trình",
+    "Action": "Tuỳ chỉnh",
+    "AVATAR": "ảnh"
   },
   "USERS": {
     "NAME": "Tên",

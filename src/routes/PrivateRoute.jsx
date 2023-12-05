@@ -6,6 +6,10 @@ import { Button } from 'antd';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
 import ProjectList from "../pages/Project/ProjectList/ProjectList.jsx";
+import EmployeesList from '../pages/Employees/EmployeesList';
+
+// Define routes accessible only to authenticated users
+
 const PrivateRoute = [
   {
     path: '/',
@@ -21,7 +25,10 @@ const PrivateRoute = [
       },
       {
         path: 'employees',
-        element: <div>User employees</div>,
+        element: (
+          <> <EmployeesList/>
+          </>
+        )
       },
       {
         path: 'projects',
