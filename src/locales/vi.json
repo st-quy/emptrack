@@ -42,7 +42,14 @@
     "WORKSPACE_CREATE": "Tạo công ty",
     "WORKSPACE_LIST": "Danh sách công ty",
     "PROFILE": "Thông tin cá nhân",
-    "GUIDELINE": "Tài liệu"
+    "GUIDELINE": "Tài liệu",
+    "MANAGER": "Quản lí",
+    "MEMBERS": "Thành viên",
+    "TECHNICAL":"Kỹ thuật",
+    "DESCRIPTION": "Mô tả",
+    "START DATE":"Ngày bắt đầu",
+    "END DATE":"Ngày kết thúc",
+    "TOTAL": "Tổng: {{total}} nhân viên" 
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -69,7 +76,8 @@
     "DELETE": "Xóa",
     "ALL": "Tất cả",
     "ON": "Bật",
-    "OFF": "Tắt"
+    "OFF": "Tắt",
+    "STATUS": "Trạng thái"
   },
   "VALIDATE": {
     "PLACEHOLDER": "Nhập {{name}}",
@@ -118,10 +126,13 @@
     "CHANGE_PASSWORD": "Đổi mật khẩu"
   },
   "TITLE": {
+  
     "BASIC_INFORMATION": "Thông tin cơ bản",
     "DEVICES": "Thiết bị",
     "ENDPOINT": "Endpoint",
-    "SCHEDULE": "Lịch trình"
+    "SCHEDULE": "Lịch trình",
+    "Action": "Tuỳ chỉnh",
+    "AVATAR": "ảnh"
   },
   "USERS": {
     "NAME": "Tên",
@@ -186,4 +197,5 @@
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
   }
+
 }

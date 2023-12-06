@@ -1,13 +1,17 @@
+// PrivateRoute.jsx
+// import Dashboard from '../pages/Dashboard/Dashboard.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
+import EmployeesList from '../pages/Employees/EmployeesList';
 import CreateProject from '../pages/Project/CreateProject/CreateProject.jsx';
 import ProjectList from '../pages/Project/ProjectList/ProjectList';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
 // Define routes accessible only to authenticated users
+
 const PrivateRoute = [
   {
     path: '/',
-    element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
+    element: <ProtectedRoute />,
     children: [
       {
         path: '',
@@ -19,7 +23,12 @@ const PrivateRoute = [
       },
       {
         path: 'employees',
-        element: <div>User employees</div>,
+        element: (
+          <>
+            {' '}
+            <EmployeesList />
+          </>
+        ),
       },
       {
         path: 'projects',
