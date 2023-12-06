@@ -19,7 +19,8 @@
     "SAVE": "Save",
     "OK": "Confirm",
     "UPDATE": "Update",
-    "BACK_TO_HOME": "Back to home"
+    "BACK_TO_HOME": "Back to home",
+    "ADD_MEMBER": "Add member"
   },
   "TABLE": {
     "ACTIONS": "Actions",
@@ -40,12 +41,12 @@
     "WORKSPACE_LIST": "List Workspace",
     "PROFILE": "Profile",
     "GUIDELINE": "Documents",
-    "MANAGER":"Manager",
-    "MEMBERS" :"Members",
-    "TECHNICAL":"Technical",
+    "MANAGER": "Manager",
+    "MEMBERS": "Members",
+    "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
-    "START DATE":"Start date",
-    "END DATE":"End date"
+    "START DATE": "Start date",
+    "END DATE": "End date"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -53,6 +54,7 @@
     "USERS_CREATE": "Create user",
     "USERS_UPDATE": "Update user",
     "PROFILE": "Profile",
+    "PROJECTS_CREATE": "Create project",
     "PROJECTS": "Projects"
   },
   "MODAL": {
@@ -147,6 +149,23 @@
     "CONFIRM_PASSWORD": "Confirm password",
     "LIST": "List users"
   },
+  "PROJECTS": {
+    "NAME": "Project name",
+    "MANAGER": "Project manager",
+    "SELECT_MANAGER": "Select manager",
+    "MEMBER": "Project member",
+    "SELECT_MEMBER": "Select member",
+    "SELECT_ROLE": "Select role",
+    "DESCRIPTION": "Description",
+    "TIME": "Time",
+    "TIME_START": "Date Start",
+    "TIME_END": "Date End",
+    "STATUS": "Status",
+    "STATUS_ACTIVE": "Active",
+    "STATUS_INACTIVE": "Inactive",
+    "TECHNICAL": "Technical",
+    "LIST": "List projects"
+  },
   "ROLE": {
     "ADMIN": "Admin",
     "NORMAL": "Normal",
@@ -171,5 +190,4 @@
     "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
     "404": "404 - PAGE NOT FOUND"
   }
-  
 }
