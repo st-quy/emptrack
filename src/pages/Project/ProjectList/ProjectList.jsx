@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { Table, Tooltip, Card, Space, Input, Pagination } from 'antd';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import Button from '../../../components/atoms/Button/Button';
+import { Card, Input, Pagination, Space, Table, Tooltip } from 'antd';
 import { debounce } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../ProjectList/ProjectList.scss'
 
 
 const ProjectList = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [data, setData] = useState([]);
   // const [searchedText, setSearchedText] = useState('');
@@ -16,7 +15,9 @@ const ProjectList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://api-emptrack.onrender.com/projects');
+        const response = await fetch(
+          'https://api-emptrack.onrender.com/projects',
+        );
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -184,23 +185,22 @@ const columns = [
   
 ];
 
-
-
-  const [searchedText, setSearchedText] = useState("")
+  const [searchedText, setSearchedText] = useState('');
   const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
   return (
-    <div className="project_create" style={{height:100.}}>
+    <div className="project_create" style={{ height: 100 }}>
       <Space className="w-100 justify-content-between">
         <Breadcrumb items={[{ key: 'projects' }]} />
-        <Button>Tạo dự án </Button>
+        <Button onClick={() => navigate('/projects/create')}>
+          {t('BREADCRUMB.PROJECTS_CREATE')}
+        </Button>
       </Space>
       <Card title={"Danh sách dự án".toUpperCase()} style={{borderRadius: '30px' }}>
         <Input.Search
           placeholder="Tìm kiếm..."
           style={{ marginBottom: 8, width: 300, marginTop: 8 }}
           onChange={(e) => setSearchedText(e.target.value)}
-          
         />
 <Table
   columns={columns}
