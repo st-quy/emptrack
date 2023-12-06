@@ -3,6 +3,8 @@
 // PrivateRoute.jsx
 // import { lazy } from 'react';
 import { Button } from 'antd';
+// PrivateRoute.jsx
+// import { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
 import EmployeesList from '../pages/Employees/EmployeesList';
