@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ImgCrop from 'antd-img-crop';
+import Toast from '../../components/toast/Toast';
 import {
   Button,
   Col,
@@ -19,7 +20,7 @@ import {
 import './Employees.scss';
 import Card from 'antd/es/card/Card';
 import axios from 'axios';
-import { validationSchema } from './ValidationSchema';
+import ValidationSchema from './ValidationSchema';
 import 'react-toastify/dist/ReactToastify.css';
 import CryptoJS from 'crypto-js';
 const { Item } = Form;
@@ -42,27 +43,29 @@ const Employees = () => {
       status: '',
       position: '',
       line_manager: '',
+      address: '',
       skills: [{ skillname: '', exp: '' }],
     },
-    validationSchema: validationSchema,
+    validationSchema: ValidationSchema(),
     onSubmit: (values) => {
       console.log(values);
       console.log(fileImg);
-      // axios
-      //   .post('https://api-emptrack.onrender.com/employees', {
-      //     ...values,
-      //     skills,
-      //     avatar: fileImg,
-      //   })
-      //   .then((response) => {
-      //     console.log('Gửi dữ liệu thành công!');
-      //     console.log(response.data);
-      //     toast.success('Tạo nhân viên thành công!');
-      //   })
-      //   .catch((error) => {
-      //     toast.error(error.message);
-      //     console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
-      //   });
+      fileList.length > 0 &&
+        axios
+          .post('http://localhost:4000/employees', {
+            ...values,
+            avatar: fileImg,
+          })
+          .then((response) => {
+            console.log('Gửi dữ liệu thành công!');
+            console.log(response.data);
+            <Toast type="success" message="Gửi dữ liệu thành công!!!" />;
+          })
+          .catch((error) => {
+            <Toast type="error" message="Gửi dữ liệu thất bại!!!" />;
+            console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+          });
+
       formik.resetForm();
     },
   });
@@ -407,9 +410,88 @@ const Employees = () => {
                   />
                 </Item>
               </Col>
-              {/* DESCRIPTION EMPLOYEE */}
               <Col span={12}>
-                <Item
+                {/* ADDRESS EMPLOYEE*/}
+                <Col span={24}>
+                  <Form.Item
+                    label={t('EMPLOYEES.ADDRESS')}
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter the address',
+                      },
+                    ]}
+                    hasFeedback
+                    validateStatus={
+                      formik.errors.address && formik.touched.address
+                        ? 'error'
+                        : formik.touched.address
+                        ? 'success'
+                        : ''
+                    }
+                    help={
+                      formik.errors.address &&
+                      formik.touched.address &&
+                      formik.errors.address
+                    }
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
+                  >
+                    <Input
+                      size="large"
+                      value={formik.values.address}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder={t('EMPLOYEES.ADDRESS')}
+                    />
+                  </Form.Item>
+                </Col>
+                {/* AVATAR EMPLOYEE */}
+                <Col span={24}>
+                  <Form.Item
+                    label={t('EMPLOYEES.AVATAR')}
+                    validateStatus={fileList.length === 0 && 'error'}
+                    help={
+                      fileList.length === 0 && t('EMPLOYEE_VALIDATION.AVATAR')
+                    }
+                    required
+                    hasFeedback
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
+                  >
+                    <div>
+                      <ImgCrop rotationSlider>
+                        <Upload
+                          listType="picture-card"
+                          fileList={fileList}
+                          onChange={handlePic}
+                          onPreview={handlePreview}
+                          onRemove={handleRemove}
+                        >
+                          {fileList.length === 0 && '+ Upload'}
+                        </Upload>
+                      </ImgCrop>
+                      {previewImage && (
+                        <Modal
+                          open={showModal}
+                          footer={null}
+                          onCancel={handlePreviewCancel}
+                        >
+                          <img
+                            src={previewImage}
+                            alt="Preview"
+                            style={{ width: '100%', maxHeight: '550px' }}
+                          />
+                        </Modal>
+                      )}
+                    </div>
+                  </Form.Item>
+                </Col>
+              </Col>
+              {/* DESCRIPTION EMPLOYEE*/}
+              <Col span={12}>
+                <Form.Item
                   label={t('EMPLOYEES.DESCRIPTION')}
                   name="description"
                   rules={[
@@ -439,49 +521,10 @@ const Employees = () => {
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    rows={4}
+                    rows={8}
                     style={{ resize: 'none' }}
                     placeholder={t('EMPLOYEES.DESCRIPTION')}
                   />
-                </Item>
-              </Col>
-              {/* AVATAR EMPLOYEE */}
-              <Col span={12}>
-                <Form.Item
-                  label={t('EMPLOYEES.AVATAR')}
-                  validateStatus={fileList.length === 0 && 'error'}
-                  help={fileList.length === 0 && 'Please upload the avatar'}
-                  required
-                  hasFeedback
-                  labelCol={{ span: 24 }}
-                  wrapperCol={{ span: 24 }}
-                >
-                  <div>
-                    <ImgCrop rotationSlider>
-                      <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        onChange={handlePic}
-                        onPreview={handlePreview}
-                        onRemove={handleRemove}
-                      >
-                        {fileList.length === 0 && '+ Upload'}
-                      </Upload>
-                    </ImgCrop>
-                    {previewImage && (
-                      <Modal
-                        open={showModal}
-                        footer={null}
-                        onCancel={handlePreviewCancel}
-                      >
-                        <img
-                          src={previewImage}
-                          alt="Preview"
-                          style={{ width: '100%', maxHeight: '550px' }}
-                        />
-                      </Modal>
-                    )}
-                  </div>
                 </Form.Item>
               </Col>
             </Row>
@@ -641,7 +684,8 @@ const Employees = () => {
                   />
                 </Item>
               </Col>
-              <Col span={24} style={{ paddingBottom: '12px' }}>
+              {/* SKILLS EMPLOYEE */}
+              <Col span={24}>
                 <Form.Item
                   label={t('EMPLOYEES.SKILLS')}
                   required
@@ -671,7 +715,7 @@ const Employees = () => {
                       >
                         <Input
                           size="large"
-                          placeholder="Tên kỹ năng"
+                          placeholder={t('EMPLOYEES.SKILL_NAME')}
                           name={`skills[${index}].skillname`}
                           value={formik.values.skills[index].skillname}
                           onChange={formik.handleChange}
@@ -700,18 +744,20 @@ const Employees = () => {
                       >
                         <Input
                           size="large"
-                          placeholder="Kinh nghiệm"
+                          placeholder={t('EMPLOYEES.EXP')}
                           name={`skills[${index}].exp`}
                           value={formik.values.skills[index].exp}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
                       </Form.Item>
-                      <Button onClick={() => removeSkill(index)}>Xóa</Button>
+                      <Button onClick={() => removeSkill(index)}>
+                        {t('EMPLOYEES.REMOVE_SKILL')}
+                      </Button>
                     </div>
                   ))}
                 </Form.Item>
-                <Button onClick={addSkill}>Thêm kỹ năng</Button>
+                <Button onClick={addSkill}>{t('EMPLOYEES.ADD_SKILL')}</Button>
               </Col>
             </Row>
           </Form>
