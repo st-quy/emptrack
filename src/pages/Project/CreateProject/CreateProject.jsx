@@ -171,6 +171,7 @@ const CreateProject = () => {
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
+        style={{borderRadius: '30px' }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
           {({ values, errors }) => (
