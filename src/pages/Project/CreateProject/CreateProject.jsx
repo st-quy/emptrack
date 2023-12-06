@@ -1,5 +1,4 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-// import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Card,
   Col,
@@ -103,7 +102,7 @@ const CreateProject = () => {
       ).name;
 
       let member = [];
-      value.members.map((mem) => {
+      members.map((mem) => {
         const memberName = employeesSelection.find(
           (e) => e.id === mem.member,
         ).name;
@@ -162,9 +161,6 @@ const CreateProject = () => {
   //   employeesSelection.filter(
   //     (option) => !members.some((m) => m.member === option.value),
   //   );
-  // const handleRemoveMember = (index) => {
-  //   setMembers;
-  // };
   return (
     <div id="project_create">
       <Space className="w-100 justify-content-between">
@@ -448,19 +444,13 @@ const CreateProject = () => {
                                 className="dynamic-delete-button pt-2"
                                 onClick={() => {
                                   arrayHelpers.remove(index);
-                                  // setMembers((prev) => {
-                                  //   const updatedMembers = [...prev];
-                                  //   updatedMembers.splice(index, 1);
-                                  //   return updatedMembers;
-                                  // });
-                                  setMembers(
-                                    members.filter(
-                                      (item) => item.id !== member.member,
-                                    ),
-                                  );
-                                  formik.setFieldValue(`members`, [
-                                    ...values.members,
-                                  ]);
+                                  setMembers((prev) => {
+                                    const updatedMembers = [...prev];
+                                    updatedMembers.splice(index, 1);
+                                    return updatedMembers;
+                                  });
+
+                                  formik.setFieldValue(`members`, [...members]);
                                 }}
                               />
                             ) : null}
