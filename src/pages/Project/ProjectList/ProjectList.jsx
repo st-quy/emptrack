@@ -210,17 +210,17 @@ const columns = [
         item.manager.some(
         (manager) => manager.name.toLowerCase().includes(searchedText.toLowerCase())
       )) ||
-    (item.member &&
-      item.member.some(
-        (member) =>
-          member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-          member.role.toLowerCase().includes(searchedText.toLowerCase())
-      )) ||
-      item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
+    // (item.member &&
+    //   item.member.some(
+    //     (member) =>
+    //       member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
+    //       member.role.toLowerCase().includes(searchedText.toLowerCase())
+    //   )) ||
+      // item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
     item.startDate.toLowerCase().includes(searchedText.toLowerCase()) ||
     item.endDate.toLowerCase().includes(searchedText.toLowerCase()) ||
     item.status.toLowerCase().includes(searchedText.toLowerCase()) ||
-    item.name.toLowerCase().includes(searchedText.toLowerCase())  // Thêm điều kiện kiểm tra tên dự án
+    item.name.toLowerCase().includes(searchedText.toLowerCase())  
   )}
   scroll={{ y: 'calc(100vh - 400px)' }}
   pagination={false}
