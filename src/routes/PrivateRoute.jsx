@@ -3,10 +3,8 @@
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
 import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
-import EmployeesList from '../pages/Employees/EmployeesList';
+import EmployeesList from '../pages/Employees/EmployeesList/EmployeesList';
 import CreateProject from '../pages/Project/CreateProject/CreateProject.jsx';
-import ProjectList from '../pages/Project/ProjectList/ProjectList';
-import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
 // Define routes accessible only to authenticated users
 const PrivateRoute = [

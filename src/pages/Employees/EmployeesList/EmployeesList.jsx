@@ -11,8 +11,9 @@ import {
   Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import Button from '../../components/atoms/Button/Button';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import Button from '../../../components/atoms/Button/Button';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { axiosInstance } from '../../../config/axios';
 
 const EmployeesList = () => {
   const [currentPage, setCrurentPage] = useState(1);
@@ -21,11 +22,9 @@ const EmployeesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          'https://api-emptrack.onrender.com/employees',
-        );
-        const result = await response.json();
-        setData(result);
+        await axiosInstance.get('employees').then((response) => {
+          setData(response.data);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -263,8 +262,7 @@ const EmployeesList = () => {
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
           scroll={{
             x: 1500,
-      y: 'calc(100vh - 400px)',
-
+            y: 'calc(100vh - 400px)',
           }}
           pagination={false}
         />
