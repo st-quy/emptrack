@@ -155,12 +155,16 @@ const CreateProject = () => {
     });
   }, []);
 
-  // console.log(formik.errors);
+  const getAvailableOptions = () => {
+    const selectedOptions = members?.map((member) => member.member);
 
-  // const filterSelectedMembers = () =>
-  //   employeesSelection.filter(
-  //     (option) => !members.some((m) => m.member === option.value),
-  //   );
+    return employeesSelection?.filter(
+      (option) => !selectedOptions.includes(option.id),
+    );
+
+    // return abc;
+  };
+  // getAvailableOptions();
   return (
     <div id="project_create">
       <Space className="w-100 justify-content-between">
@@ -171,10 +175,10 @@ const CreateProject = () => {
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-        style={{borderRadius: '30px' }}
+        style={{ borderRadius: '30px' }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
-          {({ values, errors }) => (
+          {({ values }) => (
             <Form
               labelCol={{
                 sm: { span: 24 },
@@ -365,13 +369,18 @@ const CreateProject = () => {
                                 );
                               }}
                               className="w-100 members-select"
-                              placeholder="Email"
                             >
-                              <option defaultValue>Select Member</option>
+                              <option defaultValue>
+                                {members[index]?.member
+                                  ? employeesSelection.find(
+                                      (e) => e.id === members[index].member,
+                                    ).name
+                                  : 'Select member'}
+                              </option>
                               {employeesSelection &&
-                                employeesSelection.map((e, index) => {
+                                getAvailableOptions(index).map((e, i) => {
                                   return (
-                                    <option key={index} value={e.id}>
+                                    <option key={i} value={e.id}>
                                       {e.name}
                                     </option>
                                   );
