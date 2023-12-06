@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ImgCrop from 'antd-img-crop';
-import Toast from '../../components/toast/Toast';
+import Toast from '../../../components/toast/Toast';
 import {
-  Button,
   Col,
   DatePicker,
   Form,
@@ -17,7 +16,8 @@ import {
   Select,
   Modal,
 } from 'antd';
-import './Employees.scss';
+import Button from '../../../components/atoms/Button/Button';
+import './CreateEmployees.scss';
 import Card from 'antd/es/card/Card';
 import axios from 'axios';
 import ValidationSchema from './ValidationSchema';
@@ -26,7 +26,7 @@ import CryptoJS from 'crypto-js';
 const { Item } = Form;
 const { Option } = Select;
 
-const Employees = () => {
+const CreateEmployee = () => {
   const { TextArea } = Input;
   const { t } = useTranslation();
 
@@ -167,9 +167,7 @@ const Employees = () => {
         style={{ justifyContent: 'space-between', width: '100%' }}
       >
         <Breadcrumb items={breadcrumbItems} />
-        <Button className="button__create" onClick={formik.handleSubmit}>
-          {t('EMPLOYEES.CREATE')}
-        </Button>
+        <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
       </Space>
       <div
         style={{
@@ -410,7 +408,7 @@ const Employees = () => {
                   />
                 </Item>
               </Col>
-              <Col span={12}>
+              <Col span={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
                 {/* ADDRESS EMPLOYEE*/}
                 <Col span={24}>
                   <Form.Item
@@ -767,4 +765,4 @@ const Employees = () => {
   );
 };
 
-export default Employees;
+export default CreateEmployee;

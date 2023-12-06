@@ -1,34 +1,28 @@
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../provider/authProvider';
-import React, { useState } from 'react';
 import {
   AppstoreAddOutlined,
-  TeamOutlined,
-  HomeOutlined,
   DeploymentUnitOutlined,
+  HomeOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
-import {
-  Layout,
-  Menu,
-  Button,
-  Typography,
-  Row,
-  Space,
-  Card,
-  Tooltip,
-} from 'antd';
-import './ProtectedRoute.scss';
-import DropProfile from '../../components/molecules/DropProfile/DropProfile';
+import { Card, Layout, Space, Tooltip, Typography } from 'antd';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import DropProfile from '../../components/molecules/DropProfile/DropProfile';
+import { useAuth } from '../../provider/authProvider';
+import './ProtectedRoute.scss';
 
 const { Header, Content } = Layout;
 
 export const ProtectedRoute = () => {
-  const [activeItem, setActiveItem] = useState('dashboard');
+  const pathname = window.location.pathname.split('/')[1];
+
+  const [activeItem, setActiveItem] = useState(
+    pathname ? pathname : 'dashboard',
+  );
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
-
   if (!token) {
     return <Navigate to="/login" />;
   }
