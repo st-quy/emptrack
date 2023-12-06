@@ -4,7 +4,6 @@ import './Dashboard.scss';
 import LineChart from '../../components/charts/LineChart/LineChart';
 import WorkingPieChart from '../../components/charts/PieChart/WorkingPieChart';
 import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
-import TimeLineHistory from '../../components/charts/TimeLine/TimelineHistory';
 
 const Dashboard = () => {
   const breadcrumbItems = [{ key: 'dashboard' }];
@@ -45,9 +44,10 @@ const Dashboard = () => {
           </Space>
         </Col>
         <Col xs={24} sm={24} md={10}>
-          <Card className="card-timeline w-100" title="Biến động công ty">
-            <TimeLineHistory />
-          </Card>
+          <Card
+            className="card-timeline w-100"
+            title="Biến động công ty"
+          ></Card>
         </Col>
       </Row>
     </div>
