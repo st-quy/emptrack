@@ -49,7 +49,7 @@
     "DESCRIPTION": "Mô tả",
     "START DATE":"Ngày bắt đầu",
     "END DATE":"Ngày kết thúc",
-    "TOTAL": "Tổng: {{total}} nhân viên" 
+    "TOTAL": "Tổng: {{total}} dự án" 
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",

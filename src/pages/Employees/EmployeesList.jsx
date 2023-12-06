@@ -263,7 +263,8 @@ const EmployeesList = () => {
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
           scroll={{
             x: 1500,
-            y: 300,
+      y: 'calc(100vh - 400px)',
+
           }}
           pagination={false}
         />
