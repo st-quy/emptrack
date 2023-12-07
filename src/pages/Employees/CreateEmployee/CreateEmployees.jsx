@@ -27,8 +27,11 @@ const { Item } = Form;
 const { Option } = Select;
 import { axiosInstance } from '../../../config/axios';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CreateEmployee = () => {
+  const navigate = useNavigate();
+
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
   const { TextArea } = Input;
@@ -70,6 +73,7 @@ const CreateEmployee = () => {
         formik.resetForm();
         form.resetFields();
         form2.resetFields();
+        navigate('/employees');
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
