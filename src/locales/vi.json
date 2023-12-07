@@ -231,7 +231,7 @@
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
     "CODE_REQUIRED": "Vui lòng nhập mã nhân viên",
     "NAME_REQUIRED": "Vui lòng nhập tên nhân viên",
-    "NAME_MATCH_SPACE": "Tên nhân viên được chứa 1 khoảng trắng",
+    "NAME_MATCH_SPACE": "Tên nhân viên chứa ít nhất 1 khoảng trắng",
     "NAME_MATCH_CAPITAL_LETTER": "Họ tên phải bắt đầu bằng chữ hoa và cách nhau bằng một khoảng trắng",
     "NAME_MATCH_SPECIAL_CHARACTER": "Tên nhân viên không được chứa số và kí tự đặc biệt",
     "PHONE_MATCH": "Số điện thoại không hợp lệ",

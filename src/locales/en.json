@@ -226,7 +226,7 @@
     "CODE_MATCH": "Employee code must start with DL and 3 digits",
     "CODE_REQUIRED": "Please enter employee code",
     "NAME_REQUIRED": "Please enter employee name",
-    "NAME_MATCH_SPACE": "Name employee must contain only 1 space",
+    "NAME_MATCH_SPACE": "Employee name contains at least 1 space",
     "NAME_MATCH_CAPITAL_LETTER": "Name employee must begin with a capital letter and be separated by a space",
     "NAME_MATCH_SPECIAL_CHARACTER": "Name employee cannot contain numbers or special characters",
     "PHONE_MATCH": "Invalid phone number",

@@ -5,30 +5,23 @@ const ValidationSchema = () => {
   const { t } = useTranslation();
 
   return Yup.object({
-    code: Yup.string()
-      .matches(/^DL\d{3}$/, t('EMPLOYEE_VALIDATION.CODE_MATCH'))
-      .required(t('EMPLOYEE_VALIDATION.CODE_REQUIRED')),
-    nameEmployee: Yup.string()
+    name: Yup.string()
       .required(t('EMPLOYEE_VALIDATION.NAME_REQUIRED'))
       .matches(
-        /^[A-Z][a-z]*(\s+[A-Z][a-z]*)*$/,
+        /^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹý]+( [A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹý]+)*$/,
         t('EMPLOYEE_VALIDATION.NAME_MATCH_CAPITAL_LETTER'),
       )
-      .matches(/^([^ ]* [^ ]*)$/, t('EMPLOYEE_VALIDATION.NAME_MATCH_SPACE'))
-      .matches(
-        /^[A-Za-z\sÀ-ÿ]+$/,
-        t('EMPLOYEE_VALIDATION.NAME_MATCH_SPECIAL_CHARACTER'),
-      ),
+      .matches(/\s/, t('EMPLOYEE_VALIDATION.NAME_MATCH_SPACE')),
     phone: Yup.string()
       .matches(/^0\d{9}$/, t('EMPLOYEE_VALIDATION.PHONE_MATCH'))
       .required(t('EMPLOYEE_VALIDATION.PHONE_REQUIRED')),
     gender: Yup.string().required(t('EMPLOYEE_VALIDATION.GENDER_REQUIRED')),
     status: Yup.string().required(t('EMPLOYEE_VALIDATION.STATUS_REQUIRED')),
-    is_manager: Yup.boolean().required(
+    isManager: Yup.boolean().required(
       t('EMPLOYEE_VALIDATION.IS_MANAGER_REQUIRED'),
     ),
     position: Yup.string().required(t('EMPLOYEE_VALIDATION.POSITION_REQUIRED')),
-    line_manager: Yup.string().required(
+    lineManager: Yup.string().required(
       t('EMPLOYEE_VALIDATION.LINE_MANAGER_REQUIRED'),
     ),
     birth: Yup.date()

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ImgCrop from 'antd-img-crop';
-import Toast from '../../../components/toast/Toast';
+import { Toast } from '../../../components/toast/Toast';
 import {
   Col,
   DatePicker,
@@ -25,6 +25,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import CryptoJS from 'crypto-js';
 const { Item } = Form;
 const { Option } = Select;
+import { axiosInstance } from '../../../config/axios';
+import { useEffect } from 'react';
 
 const CreateEmployee = () => {
   const { TextArea } = Input;
@@ -32,17 +34,16 @@ const CreateEmployee = () => {
 
   const formik = useFormik({
     initialValues: {
-      code: '',
-      nameEmployee: '',
+      name: '',
       phone: '',
       gender: '',
       birth: null,
       description: '',
       citizen_card: '',
-      is_manager: null,
+      isManager: null,
       status: '',
       position: '',
-      line_manager: '',
+      lineManager: '',
       address: '',
       skills: [{ skillname: '', exp: '' }],
     },
@@ -50,22 +51,23 @@ const CreateEmployee = () => {
     onSubmit: (values) => {
       console.log(values);
       console.log(fileImg);
-      fileList.length > 0 &&
-        axios
-          .post('http://localhost:4000/employees', {
+      console.log(code);
+      if (fileList.length > 0) {
+        axiosInstance
+          .post('employees', {
             ...values,
+            code,
             avatar: fileImg,
           })
           .then((response) => {
-            console.log('Gửi dữ liệu thành công!');
-            console.log(response.data);
-            <Toast type="success" message="Gửi dữ liệu thành công!!!" />;
+            Toast('success', 'Gửi dữ liệu thành công!');
           })
           .catch((error) => {
-            <Toast type="error" message="Gửi dữ liệu thất bại!!!" />;
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
-
+      } else {
+        Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
+      }
       formik.resetForm();
     },
   });
@@ -78,6 +80,7 @@ const CreateEmployee = () => {
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [code, setCode] = useState('');
 
   const handlePic = async ({ fileList }) => {
     try {
@@ -159,6 +162,21 @@ const CreateEmployee = () => {
     newSkills.splice(index, 1);
     formik.setFieldValue('skills', newSkills);
   };
+  useEffect(() => {
+    const generateCode = async () => {
+      try {
+        const response = await axiosInstance.get('employees');
+        const employees = response.data;
+        const dl = 'DL2023';
+        const newCode = dl + (employees.length + 1).toString().padStart(2, '0');
+        setCode(newCode);
+      } catch (error) {
+        console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+      }
+    };
+
+    generateCode();
+  }, []);
 
   return (
     <div id="employees">
@@ -182,35 +200,15 @@ const CreateEmployee = () => {
               <Col span={12}>
                 <Item
                   label={t('EMPLOYEES.CODE')}
-                  name="code"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter the code',
-                    },
-                  ]}
-                  hasFeedback
-                  validateStatus={
-                    formik.errors.code && formik.touched.code
-                      ? 'error'
-                      : formik.touched.code
-                      ? 'success'
-                      : ''
-                  }
-                  help={
-                    formik.errors.code &&
-                    formik.touched.code &&
-                    formik.errors.code
-                  }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
                   <Input
                     size="large"
                     placeholder={t('EMPLOYEES.CODE')}
-                    value={formik.values.code}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    value={code}
+                    readOnly
+                    disabled
                   />
                 </Item>
               </Col>
@@ -218,25 +216,25 @@ const CreateEmployee = () => {
               <Col span={12}>
                 <Item
                   label={t('EMPLOYEES.NAME')}
-                  name="nameEmployee"
+                  name="name"
                   rules={[
                     {
                       required: true,
-                      message: 'Please enter the nameEmployee',
+                      message: 'Please enter the name',
                     },
                   ]}
                   hasFeedback
                   validateStatus={
-                    formik.errors.nameEmployee && formik.touched.nameEmployee
+                    formik.errors.name && formik.touched.name
                       ? 'error'
-                      : formik.touched.nameEmployee
+                      : formik.touched.name
                       ? 'success'
                       : ''
                   }
                   help={
-                    formik.errors.nameEmployee &&
-                    formik.touched.nameEmployee &&
-                    formik.errors.nameEmployee
+                    formik.errors.name &&
+                    formik.touched.name &&
+                    formik.errors.name
                   }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
@@ -244,7 +242,7 @@ const CreateEmployee = () => {
                   <Input
                     size="large"
                     placeholder={t('EMPLOYEES.NAME')}
-                    value={formik.values.nameEmployee}
+                    value={formik.values.name}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -535,7 +533,7 @@ const CreateEmployee = () => {
               <Col span={12}>
                 <Item
                   label={t('EMPLOYEES.IS_MANAGER')}
-                  name="is_manager"
+                  name="isManager"
                   rules={[
                     {
                       required: true,
@@ -543,16 +541,16 @@ const CreateEmployee = () => {
                     },
                   ]}
                   validateStatus={
-                    formik.errors.is_manager && formik.touched.is_manager
+                    formik.errors.isManager && formik.touched.isManager
                       ? 'error'
-                      : formik.touched.is_manager
+                      : formik.touched.isManager
                       ? 'success'
                       : ''
                   }
                   help={
-                    formik.errors.is_manager &&
-                    formik.touched.is_manager &&
-                    formik.errors.is_manager
+                    formik.errors.isManager &&
+                    formik.touched.isManager &&
+                    formik.errors.isManager
                   }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
@@ -560,9 +558,9 @@ const CreateEmployee = () => {
                 >
                   <Select
                     size="large"
-                    value={formik.values.is_manager}
+                    value={formik.values.isManager}
                     onChange={(value) => {
-                      formik.setFieldValue('is_manager', value);
+                      formik.setFieldValue('isManager', value);
                     }}
                     onBlur={formik.handleBlur}
                     placeholder={t('EMPLOYEES.IS_MANAGER')}
@@ -655,20 +653,20 @@ const CreateEmployee = () => {
               <Col span={12}>
                 <Item
                   label={t('EMPLOYEES.LINE_MANAGER')}
-                  name="line_manager"
+                  name="lineManager"
                   required
                   hasFeedback
                   validateStatus={
-                    formik.errors.line_manager && formik.touched.line_manager
+                    formik.errors.lineManager && formik.touched.lineManager
                       ? 'error'
-                      : formik.touched.line_manager
+                      : formik.touched.lineManager
                       ? 'success'
                       : ''
                   }
                   help={
-                    formik.errors.line_manager &&
-                    formik.touched.line_manager &&
-                    formik.errors.line_manager
+                    formik.errors.lineManager &&
+                    formik.touched.lineManager &&
+                    formik.errors.lineManager
                   }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
@@ -676,7 +674,7 @@ const CreateEmployee = () => {
                   <Input
                     size="large"
                     placeholder={t('EMPLOYEES.LINE_MANAGER')}
-                    value={formik.values.line_manager}
+                    value={formik.values.lineManager}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
