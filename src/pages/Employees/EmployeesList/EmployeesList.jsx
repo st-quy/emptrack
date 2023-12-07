@@ -11,11 +11,16 @@ import {
   Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
 
 const EmployeesList = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [currentPage, setCrurentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState([]);
@@ -43,7 +48,6 @@ const EmployeesList = () => {
     {
       title: 'Action',
       key: 'action',
-      fixed: 'left',
       width: 100,
       render: (text, record) => (
         <span>
@@ -65,18 +69,10 @@ const EmployeesList = () => {
       ),
     },
     {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 150,
-      render: (avatar) => (
-        <span>
-          {avatar.map((avatar, index) => (
-            <Image key={index} src={avatar.url} alt={`Avatar ${index + 1}`} />
-          ))}
-        </span>
-      ),
-
+      title: 'Code',
+      dataIndex: 'code',
+      key: 'code',
+      width: 100,
       ellipsis: {
         showTitle: false,
       },
@@ -85,89 +81,53 @@ const EmployeesList = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-
       render: (text) => <a>{text}</a>,
-      width: 150,
+      width: 120,
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
-      render: (text) => <a>{text}</a>,
-      width: 150,
-      filters: [
-        { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' },
-      ],
-      onFilter: (value, record) => record.gender === value,
-    },
-    {
-      title: 'Phone Number',
-      dataIndex: 'phone',
-      key: 'phone',
-      width: 150,
-    },
-    {
-      title: 'Adress',
-      dataIndex: 'address',
-      key: 'address',
-      width: 150,
-    },
-    {
-      title: 'Date Of Birth',
-      dataIndex: 'dob',
-      key: 'dob',
-      width: 150,
-    },
-    {
-      title: 'Citizen Identity Card',
-      dataIndex: 'cccd',
-      key: 'cccd',
-      width: 150,
-    },
-    {
-      title: 'Is Manager',
-      dataIndex: 'isManager',
-      key: 'isManager',
-      width: 150,
-      render: (isManager) => (
-        <Tag color={isManager ? 'green' : 'red'}>
-          {isManager ? 'Yes' : 'No'}
-        </Tag>
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      width: 120,
+      render: (avatar) => (
+        <span>
+          {avatar.map((avatar, index) => (
+            <Image key={index} src={avatar.url} alt={`Avatar ${index + 1}`} />
+          ))}
+        </span>
       ),
       ellipsis: {
         showTitle: false,
       },
-      // filters: [
-      //   { text: 'Yes', value: 'yes' },
-      //   { text: 'No', value: 'no' },
-      // ],
-      // onFilter: (value, record) => record.isManager === value,
     },
     {
-      title: 'Line Manager',
-      dataIndex: 'lineManager',
-      key: 'lineManager',
-      width: 150,
+      title: 'Citizen Indentity Card',
+      dataIndex: 'citizen_card',
+      key: 'citizen_card',
+      width: 120,
+    },
+    {
+      title: 'Manager',
+      dataIndex: 'isManager',
+      key: 'isManager',
+      width: 100,
+      render: (isManager) => (
+        <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
+      ),
       ellipsis: {
         showTitle: false,
       },
-    },
-    {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-      width: 150,
-      ellipsis: {
-        showTitle: false,
-      },
+      filters: [
+        { text: 'Manager', value: true },
+        { text: 'Non-Manager', value: false },
+      ],
+      onFilter: (value, record) => record.isManager === value,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      width: 150,
-
+      width: 100,
       ellipsis: {
         showTitle: false,
       },
@@ -193,38 +153,10 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.status === value,
     },
     {
-      title: 'Skill',
-      dataIndex: 'skills',
-      key: 'skills',
-      width: 150,
-      render: (skills) => (
-        <ul>
-          {skills.map((skill, index) => (
-            <li key={index}>
-              <strong>{skill.skillname}</strong>: {skill.exp}
-            </li>
-          ))}
-        </ul>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
       title: 'Position',
       dataIndex: 'position',
       key: 'position',
-      width: 150,
-
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      width: 150,
+      width: 110,
       ellipsis: {
         showTitle: false,
       },
@@ -235,50 +167,69 @@ const EmployeesList = () => {
 
   return (
     <div className="project_create">
-      <Space className="w-100 justify-content-between">
-        <Breadcrumb items={[{ key: 'employees' }]} />
-        <Button>Tạo ứng dụng</Button>
-      </Space>
-      <Card title="Danh sách người dùng">
-        <Input.Search
-          placeholder="Tìm kiếm..."
-          style={{ marginBottom: 8, width: 200 }}
-          onChange={(e) => setSearchedText(e.target.value)}
-        />
-        <Table
-          columns={columns}
-          dataSource={data
-            .filter(
-              (item) =>
-                (item.name &&
-                  item.name
-                    .toLowerCase()
-                    .includes(searchedText.toLowerCase())) ||
-                (item.address &&
-                  item.address
-                    .toLowerCase()
-                    .includes(searchedText.toLowerCase())),
-            )
-            .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-          scroll={{
-            x: 1500,
-            y: 'calc(100vh - 400px)',
-          }}
-          pagination={false}
-        />
-        <Pagination
-          total={data.length}
-          current={currentPage}
-          pageSize={pageSize}
-          showSizeChanger
-          showTotal={(total) => `Total ${total} items`}
-          style={{ marginTop: '25px' }}
-          onChange={(page, pageSize) => {
-            setCrurentPage(page);
-            setPageSize(pageSize);
-          }}
-        />
-      </Card>
+      {data.length > 0 ? (
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb items={[{ key: 'employees' }]} />
+            <Button onClick={() => navigate('/employees/create')}>
+              {t('BREADCRUMB.EMPLOYEES_CREATE')}
+            </Button>
+          </Space>
+          <Card
+            title={'Danh sách nhân viên'.toUpperCase()}
+            style={{
+              width: '100%',
+              margin: 'auto',
+              border: '1px solid #d9d9d9',
+              borderRadius: '30px',
+            }}
+          >
+            <Input.Search
+              placeholder="Tìm kiếm..."
+              style={{ marginTop: 8, marginBottom: 8, width: 300 }}
+              onChange={(e) => setSearchedText(e.target.value)}
+            />
+            <Table
+              columns={columns}
+              dataSource={data
+                .filter((item) => {
+                  return Object.values(item)
+                    .filter(
+                      (value) =>
+                        typeof value === 'string' || typeof value === 'number',
+                    )
+                    .some((value) =>
+                      value
+                        .toString()
+                        .toLowerCase()
+                        .includes(searchedText.toLowerCase()),
+                    );
+                })
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+              scroll={{
+                x: true,
+                y: 'calc(100vh - 330px)',
+              }}
+              pagination={false}
+              size="small"
+            />
+            <Pagination
+              total={data.length}
+              current={currentPage}
+              pageSize={pageSize}
+              showSizeChanger
+              showTotal={(total) => `Total ${total} items`}
+              className="my-3"
+              onChange={(page, pageSize) => {
+                setCrurentPage(page);
+                setPageSize(pageSize);
+              }}
+            />
+          </Card>
+        </>
+      ) : (
+        <SpinLoading />
+      )}
     </div>
   );
 };

@@ -202,61 +202,63 @@ const ProjectList = () => {
 
   return (
     <div className="project_create" style={{ height: 100 }}>
-      <Space className="w-100 justify-content-between">
-        <Breadcrumb items={[{ key: 'projects' }]} />
-        <Button onClick={() => navigate('/projects/create')}>
-          {t('BREADCRUMB.PROJECTS_CREATE')}
-        </Button>
-      </Space>
       {data.length > 0 ? (
-        <Card
-          title={'Danh sách dự án'.toUpperCase()}
-          style={{ borderRadius: '30px' }}
-        >
-          <Input.Search
-            placeholder="Tìm kiếm..."
-            style={{ marginBottom: 8, width: 300, marginTop: 8 }}
-            onChange={(e) => setSearchedText(e.target.value)}
-          />
-          <Table
-            columns={columns}
-            dataSource={data.filter(
-              (item) =>
-                // item.id.toString().includes(searchedText.toLowerCase()) ||
-                (item.manager &&
-                  item.manager.some((manager) =>
-                    manager.name
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()),
-                  )) ||
-                // (item.member &&
-                //   item.member.some(
-                //     (member) =>
-                //       member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-                //       member.role.toLowerCase().includes(searchedText.toLowerCase())
-                //   )) ||
-                // item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.startDate
-                  .toLowerCase()
-                  .includes(searchedText.toLowerCase()) ||
-                item.endDate
-                  .toLowerCase()
-                  .includes(searchedText.toLowerCase()) ||
-                item.status
-                  .toLowerCase()
-                  .includes(searchedText.toLowerCase()) ||
-                item.name.toLowerCase().includes(searchedText.toLowerCase()),
-            )}
-            scroll={{ y: 'calc(100vh - 400px)' }}
-            pagination={false}
-          />
-          <Pagination
-            total={data.length}
-            showSizeChanger
-            showTotal={(total) => t('TABLE.TOTAL', { total })}
-            className="my-3"
-          />
-        </Card>
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb items={[{ key: 'projects' }]} />
+            <Button onClick={() => navigate('/projects/create')}>
+              {t('BREADCRUMB.PROJECTS_CREATE')}
+            </Button>
+          </Space>
+          <Card
+            title={t('PROJECTS.LIST').toUpperCase()}
+            style={{ borderRadius: '30px' }}
+          >
+            <Input.Search
+              placeholder={t('TABLE.SEARCH') + '...'}
+              style={{ marginBottom: 8, width: 300, marginTop: 8 }}
+              onChange={(e) => setSearchedText(e.target.value)}
+            />
+            <Table
+              columns={columns}
+              dataSource={data.filter(
+                (item) =>
+                  // item.id.toString().includes(searchedText.toLowerCase()) ||
+                  (item.manager &&
+                    item.manager.some((manager) =>
+                      manager.name
+                        .toLowerCase()
+                        .includes(searchedText.toLowerCase()),
+                    )) ||
+                  // (item.member &&
+                  //   item.member.some(
+                  //     (member) =>
+                  //       member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
+                  //       member.role.toLowerCase().includes(searchedText.toLowerCase())
+                  //   )) ||
+                  // item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
+                  item.startDate
+                    .toLowerCase()
+                    .includes(searchedText.toLowerCase()) ||
+                  item.endDate
+                    .toLowerCase()
+                    .includes(searchedText.toLowerCase()) ||
+                  item.status
+                    .toLowerCase()
+                    .includes(searchedText.toLowerCase()) ||
+                  item.name.toLowerCase().includes(searchedText.toLowerCase()),
+              )}
+              scroll={{ y: 'calc(100vh - 400px)' }}
+              pagination={false}
+            />
+            <Pagination
+              total={data.length}
+              showSizeChanger
+              showTotal={(total) => t('TABLE.TOTAL', { total })}
+              className="my-3"
+            />
+          </Card>
+        </>
       ) : (
         <SpinLoading />
       )}
