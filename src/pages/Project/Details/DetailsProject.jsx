@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
 import './DetailsProject.scss';
@@ -54,12 +55,12 @@ const DetailsProject = () => {
         </Button>
       </Space>
 
-      <Card
-        className="card-create-project"
-        title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
-        style={{ borderRadius: '30px' }}
-      >
-        {project && (
+      {project ? (
+        <Card
+          className="card-create-project"
+          title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
+          style={{ borderRadius: '30px' }}
+        >
           <Form
             labelCol={{
               sm: { span: 24 },
@@ -150,8 +151,10 @@ const DetailsProject = () => {
               </Row>
             ))}
           </Form>
-        )}
-      </Card>
+        </Card>
+      ) : (
+        <SpinLoading />
+      )}
     </div>
   );
 };
