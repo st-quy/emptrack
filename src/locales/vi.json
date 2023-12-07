@@ -59,7 +59,8 @@
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
     "PROJECTS": "Dự án",
-    "PROJECTS_CREATE": "Tạo dự án"
+    "PROJECTS_CREATE": "Tạo dự án",
+    "DETAILS":"Chi tiết"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",

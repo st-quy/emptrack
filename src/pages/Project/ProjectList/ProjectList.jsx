@@ -40,14 +40,14 @@ const ProjectList = () => {
             <Button
               type="link"
               icon={<DeleteOutlined />}
-              onClick={() => handleDelete(record.key)}
+              // onClick={() => handleDelete(record.key)}
             />
           </Tooltip>
           <Tooltip title="View">
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.key)}
+              // onClick={() => handleView(record.key)}
             />
           </Tooltip>
         </span>
@@ -58,7 +58,7 @@ const ProjectList = () => {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
       key: 'manager',
-      width: 80, // Giảm kích thước của cột "Manager"
+      width: 80,
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
@@ -75,7 +75,7 @@ const ProjectList = () => {
       title: t('BREADCRUMB.PROJECTS'),
       dataIndex: 'name',
       key: 'name',
-      width: 80, // Giảm kích thước của cột "Projects"
+      width: 80,
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
@@ -130,7 +130,7 @@ const ProjectList = () => {
       title: t('TABLE.START DATE'),
       dataIndex: 'startDate',
       key: 'startDate',
-      width: 80, // Giảm kích thước của cột "Start Date"
+      width: 80,
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
@@ -148,7 +148,7 @@ const ProjectList = () => {
       title: t('TABLE.END DATE'),
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 80, // Giảm kích thước của cột "End Date"
+      width: 80,
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
@@ -166,7 +166,8 @@ const ProjectList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 60, // Giảm kích thước của cột "Status"
+      width: 60, 
+      
       sorter: {
         compare: (a, b) => a.status.localeCompare(b.status),
         multiple: 3,
@@ -244,7 +245,7 @@ const ProjectList = () => {
           total={25}
           showSizeChanger
           showTotal={(total) => t('TABLE.TOTAL', { total })}
-          style={{ marginTop: '5px' }}
+          style={{ marginTop: '20px', marginBottom: '10px' }}
         />
       </Card>
     </div>
