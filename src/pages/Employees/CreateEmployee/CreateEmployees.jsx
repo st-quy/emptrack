@@ -29,6 +29,8 @@ import { axiosInstance } from '../../../config/axios';
 import { useEffect } from 'react';
 
 const CreateEmployee = () => {
+  const [form] = Form.useForm();
+  const [form2] = Form.useForm();
   const { TextArea } = Input;
   const { t } = useTranslation();
 
@@ -65,10 +67,12 @@ const CreateEmployee = () => {
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
+        formik.resetForm();
+        form.resetFields();
+        form2.resetFields();
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
-      formik.resetForm();
     },
   });
 
@@ -194,7 +198,7 @@ const CreateEmployee = () => {
         }}
       >
         <Card title={t('EMPLOYEES.CODE')} className="first-card">
-          <Form>
+          <Form form={form}>
             <Row gutter={[16, 0]}>
               {/* CODE EMPLOYEE */}
               <Col span={12}>
@@ -527,7 +531,7 @@ const CreateEmployee = () => {
           </Form>
         </Card>
         <Card title={t('EMPLOYEES.DETAILS')} className="second-card">
-          <Form>
+          <Form form={form2}>
             <Row gutter={[16, 0]}>
               {/* IS_MANAGER EMPLOYEE */}
               <Col span={12}>
