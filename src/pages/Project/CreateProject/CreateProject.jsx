@@ -84,11 +84,10 @@ const CreateProject = () => {
       let name = value.name.trim().replace(/  +/g, ' ');
       let description = value.description.trim().replace(/  +/g, ' ');
       let status = value.status;
-      let technical = value.technical;
+      let technical = value.technical.replace(/[ ]+/g, ' ').trim();
       let startDate = value.dateRange.startDate;
       let endDate = value.dateRange.endDate;
       let manager = [{ name: managerName, id: value.manager }];
-
       try {
         await axiosInstance.post('projects', {
           member,
@@ -100,12 +99,10 @@ const CreateProject = () => {
           endDate,
           manager,
         });
-
         //show notif
         //Clear form
         formik.resetForm();
         form.resetFields();
-
         //Redirect to details page
         navigate(`/projects`);
       } catch (error) {
