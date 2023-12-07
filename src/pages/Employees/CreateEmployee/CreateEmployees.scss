@@ -1,0 +1,31 @@
+#employees {
+  .button__create {
+    font-size: 16px !important;
+    border-radius: 12px;
+    height: 35px;
+    color: white !important;
+    background: #ee9ca7; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to bottom,
+      #ffdde1,
+      #ee9ca7
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    justify-items: end;
+  }
+  .button__create:hover {
+    border-color: #fb8494 !important;
+  }
+  .first-card {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .second-card {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+}

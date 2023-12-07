@@ -15,8 +15,10 @@ import Button from '../../../components/atoms/Button/Button';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeesList = () => {
+  const navigate = useNavigate();
   const [currentPage, setCrurentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState([]);
@@ -167,7 +169,9 @@ const EmployeesList = () => {
     <div className="project_create">
       <Space className="w-100 justify-content-between">
         <Breadcrumb items={[{ key: 'employees' }]} />
-        <Button>Thêm Nhân Viên</Button>
+        <Button onClick={() => navigate('/employees/create')}>
+          Thêm nhân viên
+        </Button>
       </Space>
       {data.length > 0 ? (
         <Card
