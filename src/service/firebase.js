@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 import {getAuth,GoogleAuthProvider} from "firebase/auth";
 const firebaseConfig = {
-  apiKey: "AIzaSyCwLYrz6YLaG746djdUbE4WAisKxgP1t2s",
-  authDomain: "zerot-api.firebaseapp.com",
-  databaseURL: "https://zerot-api-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "zerot-api",
-  storageBucket: "zerot-api.appspot.com",
-  messagingSenderId: "1001253828680",
-  appId: "1:1001253828680:web:e4696ec4a2456bcbb4807d",
-  measurementId: "G-HR2Z9H9G81"
+  apiKey: "AIzaSyCgCzZQkejjqADT_2gJhPXQ9RDsWOsj4Y4",
+  authDomain: "zero-api-a307a.firebaseapp.com",
+  databaseURL: "https://zero-api-a307a-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "zero-api-a307a",
+  storageBucket: "zero-api-a307a.appspot.com",
+  messagingSenderId: "332366664231",
+  appId: "1:332366664231:web:6e2018d35d1595b55cf402",
+  measurementId: "G-22Z3HN0S4Q"
 };
 
 // Initialize Firebase

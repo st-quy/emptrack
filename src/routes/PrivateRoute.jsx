@@ -1,14 +1,11 @@
-
-
-// PrivateRoute.jsx
 // import { lazy } from 'react';
-import { Button } from 'antd';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
-import EmployeesList from '../pages/Employees/EmployeesList';
+import EmployeesList from '../pages/Employees/EmployeesList/EmployeesList';
+import CreateProject from '../pages/Project/CreateProject/CreateProject';
 
 // Define routes accessible only to authenticated users
-import ProjectList from "../pages/Project/ProjectList.jsx";
+import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
 const PrivateRoute = [
   {
     path: '/',
@@ -24,14 +21,29 @@ const PrivateRoute = [
       },
       {
         path: 'employees',
-        element: (
-          <> <EmployeesList/>
-          </>
-        )
+        children: [
+          {
+            path: '',
+            element: <EmployeesList />,
+          },
+          {
+            path: 'create',
+            element: <EmployeesList />,
+          },
+        ],
       },
       {
         path: 'projects',
-        element: <ProjectList />
+        children: [
+          {
+            path: '',
+            element: <ProjectList />,
+          },
+          {
+            path: 'create',
+            element: <CreateProject />,
+          },
+        ],
       },
     ],
   },
