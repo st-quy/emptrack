@@ -63,7 +63,7 @@ const CreateProject = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: schema,
-    onSubmit: (value) => {
+    onSubmit: async (value) => {
       const managerName = employeesSelection.find(
         (e) => e.id === value.manager,
       ).name;
@@ -90,7 +90,7 @@ const CreateProject = () => {
       let manager = [{ name: managerName, id: value.manager }];
 
       try {
-        axiosInstance.post('projects', {
+        await axiosInstance.post('projects', {
           member,
           name,
           description,
@@ -115,11 +115,14 @@ const CreateProject = () => {
   });
 
   useEffect(() => {
-    axiosInstance.get('employees').then((res) => {
-      const employeesSelection = res.data;
+    const fetchData = async () => {
+      await axiosInstance.get('employees').then((res) => {
+        const employeesSelection = res.data;
 
-      setEmployeesSelection(employeesSelection);
-    });
+        setEmployeesSelection(employeesSelection);
+      });
+    };
+    fetchData();
   }, []);
 
   const getAvailableOptions = () => {
