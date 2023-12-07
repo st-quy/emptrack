@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
 
@@ -114,6 +115,11 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
+      filters: [
+        { text: 'Manager', value: true },
+        { text: 'Non-Manager', value: false },
+      ],
+      onFilter: (value, record) => record.isManager === value,
     },
     {
       title: 'Status',
@@ -163,57 +169,61 @@ const EmployeesList = () => {
         <Breadcrumb items={[{ key: 'employees' }]} />
         <Button>Thêm Nhân Viên</Button>
       </Space>
-      <Card
-        title={'Danh sách nhân viên'.toUpperCase()}
-        style={{
-          width: '100%',
-          margin: 'auto',
-          border: '1px solid #d9d9d9',
-          borderRadius: '30px',
-        }}
-      >
-        <Input.Search
-          placeholder="Tìm kiếm..."
-          style={{ marginTop: 8, marginBottom: 8, width: 300 }}
-          onChange={(e) => setSearchedText(e.target.value)}
-        />
-        <Table
-          columns={columns}
-          dataSource={data
-            .filter((item) => {
-              return Object.values(item)
-                .filter(
-                  (value) =>
-                    typeof value === 'string' || typeof value === 'number',
-                )
-                .some((value) =>
-                  value
-                    .toString()
-                    .toLowerCase()
-                    .includes(searchedText.toLowerCase()),
-                );
-            })
-            .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-          scroll={{
-            x: true,
-            y: 'calc(100vh - 330px)',
+      {data.length > 0 ? (
+        <Card
+          title={'Danh sách nhân viên'.toUpperCase()}
+          style={{
+            width: '100%',
+            margin: 'auto',
+            border: '1px solid #d9d9d9',
+            borderRadius: '30px',
           }}
-          pagination={false}
-          size="small"
-        />
-        <Pagination
-          total={data.length}
-          current={currentPage}
-          pageSize={pageSize}
-          showSizeChanger
-          showTotal={(total) => `Total ${total} items`}
-          style={{ marginTop: '10px', marginBottom: '10px' }}
-          onChange={(page, pageSize) => {
-            setCrurentPage(page);
-            setPageSize(pageSize);
-          }}
-        />
-      </Card>
+        >
+          <Input.Search
+            placeholder="Tìm kiếm..."
+            style={{ marginTop: 8, marginBottom: 8, width: 300 }}
+            onChange={(e) => setSearchedText(e.target.value)}
+          />
+          <Table
+            columns={columns}
+            dataSource={data
+              .filter((item) => {
+                return Object.values(item)
+                  .filter(
+                    (value) =>
+                      typeof value === 'string' || typeof value === 'number',
+                  )
+                  .some((value) =>
+                    value
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()),
+                  );
+              })
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+            scroll={{
+              x: true,
+              y: 'calc(100vh - 330px)',
+            }}
+            pagination={false}
+            size="small"
+          />
+          <Pagination
+            total={data.length}
+            current={currentPage}
+            pageSize={pageSize}
+            showSizeChanger
+            showTotal={(total) => `Total ${total} items`}
+            style={{ marginTop: '10px', marginBottom: '10px' }}
+            onChange={(page, pageSize) => {
+              setCrurentPage(page);
+              setPageSize(pageSize);
+            }}
+          />
+        </Card>
+      ) : (
+        <SpinLoading />
+      )}
     </div>
   );
 };
