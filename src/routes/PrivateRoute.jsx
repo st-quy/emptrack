@@ -6,6 +6,8 @@ import CreateProject from '../pages/Project/CreateProject/CreateProject';
 
 // Define routes accessible only to authenticated users
 import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
+import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
+import ViewProject from '../pages/Project/ViewProject/ViewProject.jsx';
 const PrivateRoute = [
   {
     path: '/',
@@ -42,6 +44,14 @@ const PrivateRoute = [
           {
             path: 'create',
             element: <CreateProject />,
+          },
+          {
+            path: 'update/:projectId', // Thêm parameter projectId vào URL
+            element: <ProjectUpdate />,
+          },
+          {
+            path: 'view/:projectId', // Thêm parameter projectId vào URL
+            element: <ViewProject />,
           },
         ],
       },

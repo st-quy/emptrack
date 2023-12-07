@@ -28,6 +28,11 @@ const ProjectList = () => {
     fetchData();
   }, []);
 
+  const handleView = (projectId) => {
+    // window.location.href = `/projects/view/${projectId}`;
+    navigate(`/projects/view/${projectId}`);
+  };
+
   const columns = [
     {
       title: t('TABLE.ACTIONS'),
@@ -47,7 +52,7 @@ const ProjectList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.key)}
+              onClick={() => handleView(record.id)}
             />
           </Tooltip>
         </span>
