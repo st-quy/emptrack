@@ -3,11 +3,11 @@ import { Card, Input, Pagination, Space, Table, Tooltip } from 'antd';
 import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import '../ProjectList/ProjectList.scss';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
+import '../ProjectList/ProjectList.scss';
 
 const ProjectList = () => {
   const navigate = useNavigate();
@@ -28,6 +28,10 @@ const ProjectList = () => {
     fetchData();
   }, []);
 
+  const handleView = (id) => {
+    navigate(`details/${id}`);
+  };
+
   const columns = [
     {
       title: t('TABLE.ACTIONS'),
@@ -40,14 +44,14 @@ const ProjectList = () => {
             <Button
               type="link"
               icon={<DeleteOutlined />}
-              onClick={() => handleDelete(record.key)}
+              // onClick={() => handleDelete(record.key)}
             />
           </Tooltip>
           <Tooltip title="View">
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.key)}
+              onClick={() => handleView(record.id)}
             />
           </Tooltip>
         </span>

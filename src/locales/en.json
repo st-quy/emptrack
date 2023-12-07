@@ -55,7 +55,9 @@
     "USERS_UPDATE": "Update user",
     "PROFILE": "Profile",
     "PROJECTS_CREATE": "Create project",
-    "PROJECTS": "Projects"
+    "PROJECTS_UPDATE": "Update project",
+    "PROJECTS": "Projects",
+    "PROJECTS_DETAILS": "Project details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -190,5 +192,4 @@
     "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
     "404": "404 - PAGE NOT FOUND"
   }
-  
 }

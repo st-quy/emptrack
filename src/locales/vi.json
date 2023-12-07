@@ -45,11 +45,11 @@
     "GUIDELINE": "Tài liệu",
     "MANAGER": "Quản lí",
     "MEMBERS": "Thành viên",
-    "TECHNICAL":"Kỹ thuật",
+    "TECHNICAL": "Kỹ thuật",
     "DESCRIPTION": "Mô tả",
-    "START DATE":"Ngày bắt đầu",
-    "END DATE":"Ngày kết thúc",
-    "TOTAL": "Tổng: {{total}} dự án" 
+    "START DATE": "Ngày bắt đầu",
+    "END DATE": "Ngày kết thúc",
+    "TOTAL": "Tổng: {{total}} dự án"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -59,7 +59,9 @@
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
     "PROJECTS": "Dự án",
-    "PROJECTS_CREATE": "Tạo dự án"
+    "PROJECTS_CREATE": "Tạo dự án",
+    "PROJECTS_UPDATE": "Cập nhật dự án",
+    "PROJECTS_DETAILS": "Chi tiết dự án"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -126,7 +128,6 @@
     "CHANGE_PASSWORD": "Đổi mật khẩu"
   },
   "TITLE": {
-  
     "BASIC_INFORMATION": "Thông tin cơ bản",
     "DEVICES": "Thiết bị",
     "ENDPOINT": "Endpoint",
@@ -197,5 +198,4 @@
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
   }
-
 }
