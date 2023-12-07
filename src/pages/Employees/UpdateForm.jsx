@@ -121,7 +121,7 @@ const formik = useFormik({
     //     console.error('Error updating data:', error);
     //   }); 
   };
-
+console.log(employeesData)
  const initialValues = employeesData && { 
   code:employeesData ? employeesData.code : '',
   name: employeesData ? employeesData.name : '',

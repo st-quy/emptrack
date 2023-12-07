@@ -35,7 +35,6 @@ const EmployeesList = () => {
     fetchData();
   }, []);
   const handleDelete = (id) => {
-    // Implement delete logic here
     console.log(`Deleting record with id ${id}`);
   };
   const handleView = (id) => {
