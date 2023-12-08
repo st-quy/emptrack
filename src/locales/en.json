@@ -196,7 +196,8 @@
   },
   "TOAST": {
     "CREATED_SUCCESS": "Created {{field}} successfully",
-    "CREATED_ERROR": "{{field}} could not be created"
+    "CREATED_ERROR": "{{field}} could not be created",
+    "DELETED_SUCCESS": "Deleted {{field}} successfully"
   },
   "EMPLOYEES": {
     "CREATE": "Create employee",
