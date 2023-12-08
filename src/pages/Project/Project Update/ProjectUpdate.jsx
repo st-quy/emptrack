@@ -80,9 +80,9 @@ const ProjectUpdate = () => {
     startDate: project?.startDate || null,
     endDate: project?.endDate || null,
     status: project?.status || '',
-    member: project?.member.map((member) => ({
-      name: member.name,
-      role: member.role,
+    members: project?.member.map((members) => ({
+      name: members.name,
+      role: members.role,
     })),
   };
   const yupSync = {
@@ -92,7 +92,7 @@ const ProjectUpdate = () => {
   };
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: schema,
+    // validationSchema: schema,
     onSubmit: async (value) => {
       const managerName = employees.find((e) => e.id === value.manager).name;
 
@@ -115,16 +115,16 @@ const ProjectUpdate = () => {
       let endDate = value.dateRange.endDate;
       let manager = [{ name: managerName, id: value.manager }];
       try {
-        axiosInstance.patch(`projects/${projectId}`, {
-          member,
-          name,
-          description,
-          status,
-          technical,
-          startDate,
-          endDate,
-          manager,
-        });
+        // axiosInstance.patch(`projects/${projectId}`, {
+        //   member,
+        //   name,
+        //   description,
+        //   status,
+        //   technical,
+        //   startDate,
+        //   endDate,
+        //   manager,
+        // });
         Toast(
           'success',
           t('TOAST.CREATED_SUCCESS', {
@@ -132,10 +132,10 @@ const ProjectUpdate = () => {
           }),
           2,
         );
-        //Clear form
+
         formik.resetForm();
         form.resetFields();
-        //Redirect to details page
+    
         setTimeout(() => {
           navigate(`/projects`);
         }, 2000);
@@ -158,6 +158,7 @@ const ProjectUpdate = () => {
   if (!project) {
     return <div>Project not found</div>;
   }
+  
 
   const breadcrumbItems = [
     { key: 'projects' },
@@ -176,19 +177,23 @@ const ProjectUpdate = () => {
         style={{ borderRadius: '30px' }}
         title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
       >
-        <Formik Formik initialValues={initialValues} validationSchema={schema}>
+        <Formik Formik initialValues={initialValues} 
+        // validationSchema={schema}
+        >
           {(values, errors) => (
             <Form
-              labelCol={{
-                span: 4,
-              }}
-              wrapperCol={{
-                span: 20,
-              }}
-              layout="horizontal"
-              className="p-4"
-              name="projectUpdateForm"
-              onFinish={formik.handleSubmit}
+            labelCol={{
+              sm: { span: 24 },
+              md: { span: 24 },
+              lg: { span: 5 },
+            }}
+            wrapperCol={{
+              sm: { span: 24 },
+              md: { span: 24 },
+              lg: { span: 19 },
+            }}
+            className="p-2"
+            form={form}
             >
               <Row className="w-100" gutter={16}>
                 <Col span={12}>
@@ -229,9 +234,7 @@ const ProjectUpdate = () => {
                     validateFirst
                     rules={[yupSync]}
                     hasFeedback
-                    initialValue={project?.manager?.map(
-                      (manager) => manager.id,
-                    )}
+                    initialValue={project?.manager[0].name}
                   >
                     <Select
                       mode="single"
@@ -363,22 +366,26 @@ const ProjectUpdate = () => {
                         <Row gutter={16}>
                           <Col span={12}>
                             <Form.Item
-                              name={`member[${index}].name`}
+                              name={`members[${index}].name`}
                               id={`members[${index}].member`}
                               initialValue={member.name}
                               onChange={(value) => {
                                 arrayHelpers.replace(index, {
                                   ...members[index],
-                                  name: value.target.value,
+                                  member: value.target.value,
                                 });
                                 setMembers((prevMembers) => {
                                   const updatedMembers = [...prevMembers];
                                   updatedMembers[index] = {
                                     ...updatedMembers[index],
-                                    name: value.target.value,
+                                    member: value.target.value,
                                   };
                                   return updatedMembers;
                                 });
+                                formik.setFieldValue(
+                                  `members.${index}.member`,
+                                  value.target.value,
+                                );
                               }}
                             >
                               <Select
