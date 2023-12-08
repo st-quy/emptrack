@@ -21,4 +21,13 @@
     > input[disabled] {
     color: black;
   }
+
+  .ant-radio.ant-wave-target.ant-radio-checked,
+  .ant-radio-input,
+  .ant-radio-wrapper.ant-radio-wrapper-in-form-item {
+    cursor: context-menu !important;
+  }
+  .ant-radio-wrapper .ant-radio-inner {
+    border-color: #d9d9d9;
+  }
 }
