@@ -64,7 +64,7 @@ const ProjectList = () => {
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 100,
+      width: 60,
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
@@ -100,7 +100,7 @@ const ProjectList = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
-      width: 150,
+      width: 80,
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     // {
@@ -152,7 +152,7 @@ const ProjectList = () => {
       title: t('TABLE.START DATE'),
       dataIndex: 'startDate',
       key: 'startDate',
-      width: 90,
+      width: 80,
       sorter: {
         compare: (a, b) => new Date(a.startDate) - new Date(b.startDate),
         multiple: 3,
@@ -170,7 +170,7 @@ const ProjectList = () => {
       title: t('TABLE.END DATE'),
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 90,
+      width: 80,
       sorter: {
         compare: (a, b) => new Date(a.endDate) - new Date(b.endDate),
         multiple: 3,
@@ -188,7 +188,7 @@ const ProjectList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 90,
+      width: 60,
       ellipsis: {
         showTitle: false,
       },
@@ -261,8 +261,7 @@ const ProjectList = () => {
             )
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
           scroll={{
-            x: 1500,
-            y: 'calc(100vh - 400px)',
+            y: 'calc(100vh - 400px)'
           }}
           pagination={false}
         />

@@ -26,7 +26,7 @@ const EmployeesList = () => {
     const fetchData = async () => {
       try {
         await axiosInstance
-          .get('http://127.0.0.1:5501/employees.json')
+          .get('employees')
           .then((response) => {
             setData(response.data);
           });
@@ -34,7 +34,7 @@ const EmployeesList = () => {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
+    fetchData();  
   }, []);
   const handleDelete = (id) => {
     // Implement delete logic here
