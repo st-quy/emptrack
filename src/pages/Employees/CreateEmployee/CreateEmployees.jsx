@@ -1,33 +1,31 @@
-import React, { useState } from 'react';
-import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { useTranslation } from 'react-i18next';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import ImgCrop from 'antd-img-crop';
-import { Toast } from '../../../components/toast/Toast';
 import {
   Col,
   DatePicker,
   Form,
   Input,
+  Modal,
   Row,
+  Select,
   Space,
   Upload,
-  Select,
-  Modal,
 } from 'antd';
-import Button from '../../../components/atoms/Button/Button';
-import './CreateEmployees.scss';
+import ImgCrop from 'antd-img-crop';
 import Card from 'antd/es/card/Card';
 import axios from 'axios';
-import ValidationSchema from './ValidationSchema';
-import 'react-toastify/dist/ReactToastify.css';
 import CryptoJS from 'crypto-js';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import Button from '../../../components/atoms/Button/Button';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
+import './CreateEmployees.scss';
+import ValidationSchema from './ValidationSchema';
 const { Item } = Form;
 const { Option } = Select;
-import { axiosInstance } from '../../../config/axios';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -65,7 +63,13 @@ const CreateEmployee = () => {
             avatar: fileImg,
           })
           .then((response) => {
-            Toast('success', 'Gửi dữ liệu thành công!');
+            Toast(
+              'success',
+              t('TOAST.CREATED_SUCCESS', {
+                field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
+              }),
+              2,
+            );
           })
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -73,7 +77,9 @@ const CreateEmployee = () => {
         formik.resetForm();
         form.resetFields();
         form2.resetFields();
-        navigate('/employees');
+        setTimeout(() => {
+          navigate('/employees');
+        }, 2000);
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }

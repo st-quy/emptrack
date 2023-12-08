@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import './CreateProject.scss';
 import './rolelist';
@@ -100,13 +101,28 @@ const CreateProject = () => {
           manager,
         });
         //show notif
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+          }),
+          2,
+        );
         //Clear form
         formik.resetForm();
         form.resetFields();
         //Redirect to details page
-        navigate(`/projects`);
+        setTimeout(() => {
+          navigate(`/projects`);
+        }, 2000);
       } catch (error) {
-        console.log(error);
+        Toast(
+          'error',
+          t('TOAST.CREATED_ERROR', {
+            field: t('BREADCRUMB.PROJECTS'),
+          }),
+          2,
+        );
       }
     },
   });
