@@ -60,8 +60,9 @@
     "EMPLOYEES": "Nhân viên",
     "PROJECTS": "Dự án",
     "EMPLOYEES_CREATE": "Thêm nhân viên",
-    "PROJECTS_CREATE": "Tạo dự án",
-    "DETAILS":"Chi tiết"
+    "PROJECTS_CREATE": "Thêm dự án",
+    "PROJECTS_UPDATE": "Cập nhật dự án",
+    "PROJECTS_DETAILS": "Chi tiết dự án"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -197,6 +198,11 @@
   "NOTFOUND": {
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
+  },
+  "TOAST": {
+    "CREATED_SUCCESS": "Thêm {{field}} thành công",
+    "CREATED_ERROR": "{{field}} thêm không thành công",
+    "DELETED_SUCCESS": "Xóa {{field}} thành công"
   },
   "EMPLOYEES": {
     "CREATE": "Tạo nhân viên",

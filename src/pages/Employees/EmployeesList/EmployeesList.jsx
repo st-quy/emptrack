@@ -11,15 +11,15 @@ import {
   Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
-import { useNavigate } from 'react-router-dom';
-
 
 const EmployeesList = () => {
-  // const navigate = useNavigate();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [currentPage, setCrurentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -27,11 +27,9 @@ const EmployeesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await axiosInstance
-          .get('employees')
-          .then((response) => {
-            setData(response.data);
-          });
+        await axiosInstance.get('employees').then((response) => {
+          setData(response.data);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -171,64 +169,66 @@ const EmployeesList = () => {
 
   return (
     <div className="project_create">
-      <Space className="w-100 justify-content-between">
-        <Breadcrumb items={[{ key: 'employees' }]} />
-        <Button onClick={() => navigate('/employees/create')}>
-          Thêm nhân viên
-        </Button>
-      </Space>
       {data.length > 0 ? (
-        <Card
-          title={'Danh sách nhân viên'.toUpperCase()}
-          style={{
-            width: '100%',
-            margin: 'auto',
-            border: '1px solid #d9d9d9',
-            borderRadius: '30px',
-          }}
-        >
-          <Input.Search
-            placeholder="Tìm kiếm..."
-            style={{ marginTop: 8, marginBottom: 8, width: 300 }}
-            onChange={(e) => setSearchedText(e.target.value)}
-          />
-          <Table
-            columns={columns}
-            dataSource={data
-              .filter((item) => {
-                return Object.values(item)
-                  .filter(
-                    (value) =>
-                      typeof value === 'string' || typeof value === 'number',
-                  )
-                  .some((value) =>
-                    value
-                      .toString()
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()),
-                  );
-              })
-              .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-            scroll={{
-              x: true,
-              y: 'calc(100vh - 330px)',
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb items={[{ key: 'employees' }]} />
+            <Button onClick={() => navigate('/employees/create')}>
+              {t('BREADCRUMB.EMPLOYEES_CREATE')}
+            </Button>
+          </Space>
+          <Card
+            title={'Danh sách nhân viên'.toUpperCase()}
+            style={{
+              width: '100%',
+              margin: 'auto',
+              border: '1px solid #d9d9d9',
+              borderRadius: '30px',
             }}
-            pagination={false}
-            size="small"
-          />
-          <Pagination
-            total={data.length}
-            current={currentPage}
-            pageSize={pageSize}
-            showSizeChanger
-            showTotal={(total) => `Total ${total} items`}
-            style={{ marginTop: '10px', marginBottom: '10px' }}
-            onChange={(page, pageSize) => {
-              setCrurentPage(page);
-              setPageSize(pageSize);
-            }}
-          />
-        </Card>
+          >
+            <Input.Search
+              placeholder="Tìm kiếm..."
+              style={{ marginTop: 8, marginBottom: 8, width: 300 }}
+              onChange={(e) => setSearchedText(e.target.value)}
+            />
+            <Table
+              columns={columns}
+              dataSource={data
+                .filter((item) => {
+                  return Object.values(item)
+                    .filter(
+                      (value) =>
+                        typeof value === 'string' || typeof value === 'number',
+                    )
+                    .some((value) =>
+                      value
+                        .toString()
+                        .toLowerCase()
+                        .includes(searchedText.toLowerCase()),
+                    );
+                })
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+              scroll={{
+                x: true,
+                y: 'calc(100vh - 330px)',
+              }}
+              pagination={false}
+              size="small"
+            />
+            <Pagination
+              total={data.length}
+              current={currentPage}
+              pageSize={pageSize}
+              showSizeChanger
+              showTotal={(total) => `Total ${total} items`}
+              className="my-3"
+              onChange={(page, pageSize) => {
+                setCrurentPage(page);
+                setPageSize(pageSize);
+              }}
+            />
+          </Card>
+        </>
       ) : (
         <SpinLoading />
       )}
