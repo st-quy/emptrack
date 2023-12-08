@@ -1,34 +1,218 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import Button from '../../../components/atoms/Button/Button';
-import { useTranslation } from 'react-i18next';
-import { Space } from 'antd';
-import Card from 'antd/es/card/Card';
+  import React, { useState } from 'react';
+  import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+  import { useTranslation } from 'react-i18next';
+  import { useFormik } from 'formik';
+  import * as Yup from 'yup';
+  import ImgCrop from 'antd-img-crop';
+  import { Toast } from '../../../components/toast/Toast';
+  import {
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    Row,
+    Space,
+    Upload,
+    Select,
+    Modal,
+  } from 'antd';
+  import Button from '../../../components/atoms/Button/Button';
+  import './CreateEmployees.scss';
+  import Card from 'antd/es/card/Card';
+  import axios from 'axios';
+  import ValidationSchema from './ValidationSchema';
+  import 'react-toastify/dist/ReactToastify.css';
+  import CryptoJS from 'crypto-js';
+  const { Item } = Form;
+  const { Option } = Select;
+  import { axiosInstance } from '../../../config/axios';
+  import { useEffect } from 'react';
+  import { useNavigate } from 'react-router-dom';
 
-function DetailEmployees() {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const { code } = useParams();
+  const CreateEmployee = () => {
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch data based on the 'code' parameter
-    // You can use this data to populate your DetailEmployees component
-    // For example, you can make an API call using the 'code' parameter
-    // and store the result in state
-  }, [code]);
-  
+    const [form] = Form.useForm();
+    const [form2] = Form.useForm();
+    const { TextArea } = Input;
+    const { t } = useTranslation();
 
-  return (
-    <>
-      <div className="employees_update" style={{ height: 100 }}>
-        <Space className="w-100 justify-content-between">
-          <Breadcrumb items={[{ key: 'employees' }]} />
-          <Button onClick={() => navigate('/employees/update')}>
-            {t('BREADCRUMB.USERS_UPDATE')}
-          </Button>
+    const formik = useFormik({
+      initialValues: {
+        name: '',
+        phone: '',
+        gender: '',
+        birth: null,
+        description: '',
+        citizen_card: '',
+        isManager: null,
+        status: '',
+        position: '',
+        lineManager: '',
+        address: '',
+        skills: [{ skillname: '', exp: '' }],
+      },
+      validationSchema: ValidationSchema(),
+      onSubmit: (values) => {
+        console.log(values);
+        console.log(fileImg);
+        console.log(code);
+        if (fileList.length > 0) {
+          axiosInstance
+            .post('employees', {
+              ...values,
+              code,
+              avatar: fileImg,
+            })
+            .then((response) => {
+              Toast('success', 'Gửi dữ liệu thành công!');
+            })
+            .catch((error) => {
+              console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+            });
+          formik.resetForm();
+          form.resetFields();
+          form2.resetFields();
+          navigate('/employees');
+        } else {
+          Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
+        }
+      },
+    });
+
+    const breadcrumbItems = [
+      { key: 'EMPLOYEES', route: '/employees' },
+      { key: 'EMPLOYEES_CREATE', route: '/employees/create' },
+    ];
+
+    const [fileList, setFileList] = useState([]);
+    const [previewImage, setPreviewImage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [code, setCode] = useState('');
+
+    const handlePic = async ({ fileList }) => {
+      try {
+        const formData = new FormData();
+        formData.append('file', fileList[0].originFileObj);
+        formData.append('upload_preset', 'hvmlst6p');
+        formData.append('cloud_name', 'do32v7ajg');
+
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
+          formData,
+        );
+        const imageUrl = response.data.secure_url;
+
+        const updatedFileList = fileList.map((file) => {
+          if (file.uid === fileList[0].uid) {
+            return {
+              ...file,
+              status: 'done',
+              url: imageUrl,
+              public_id: response.data.public_id,
+            };
+          }
+          return file;
+        });
+
+        setFileList(updatedFileList);
+      } catch (error) {
+        console.error('Lỗi khi tải lên ảnh:', error);
+      }
+    };
+
+    const handlePreview = async (file) => {
+      setPreviewImage(file.url);
+      setShowModal(true);
+    };
+
+    const handlePreviewCancel = () => {
+      setPreviewImage(null);
+      setShowModal(false);
+    };
+
+    const apiKey = '722147886179251';
+    const apiSecret = 'xYvEodr_5WS06SyphifPtymGRio';
+    const deleteUrl = 'https://api.cloudinary.com/v1_1/do32v7ajg/image/destroy';
+
+    const handleRemove = async (file) => {
+      try {
+        const publicId = file.public_id;
+        const timestamp = new Date().getTime();
+        const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
+        const signature = CryptoJS.SHA1(string).toString();
+        const formData = new FormData();
+        formData.append('public_id', publicId);
+        formData.append('api_key', apiKey);
+        formData.append('signature', signature);
+        formData.append('timestamp', timestamp);
+        axios.post(deleteUrl, formData);
+        setFileList([]);
+      } catch (error) {
+        console.log('Error deleting image from Cloudinary:', error);
+      }
+    };
+
+    const fileImg = fileList.map((file) => ({
+      url: file.url,
+      public_id: file.public_id,
+    }));
+
+    const addSkill = () => {
+      formik.setFieldValue('skills', [
+        ...formik.values.skills,
+        { skillname: '', exp: '' },
+      ]);
+    };
+
+    const removeSkill = (index) => {
+      const newSkills = [...formik.values.skills];
+      newSkills.splice(index, 1);
+      formik.setFieldValue('skills', newSkills);
+    };
+    useEffect(() => {
+      const generateCode = async () => {
+        try {
+          const response = await axiosInstance.get('employees');
+          const employees = response.data;
+          const dl = 'DL2023';
+          const newCode = dl + (employees.length + 1).toString().padStart(2, '0');
+          setCode(newCode);
+        } catch (error) {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        }
+      };
+
+      generateCode();
+    }, []);
+    const [detailVisible, setDetailVisible] = useState(false);
+    const [selectedDetail, setSelectedDetail] = useState(null);
+
+    const showDetailModal = (detail) => {
+      setSelectedDetail(detail);
+      setDetailVisible(true);
+    };
+
+    const hideDetailModal = () => {
+      setDetailVisible(false);
+    };
+
+    return (
+      <div id="employees">
+        <Space
+          direction="horizontal"
+          style={{ justifyContent: 'space-between', width: '100%' }}
+        >
+          <Breadcrumb items={breadcrumbItems} />
+          <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
         </Space>
-         <Card title={t('EMPLOYEES.CODE')} className="first-card">
+        <div
+          style={{
+            maxHeight: '600px',
+            overflowY: 'auto',
+          }}
+        >
+          <Card title={t('EMPLOYEES.CODE')} className="first-card">
             <Form form={form}>
               <Row gutter={[16, 0]}>
                 {/* CODE EMPLOYEE */}
@@ -593,9 +777,9 @@ function DetailEmployees() {
               </Row>
             </Form>
           </Card> 
+        </div>
       </div>
-    </>
-  );
-}
+    );
+  };
 
-export default DetailEmployees;
+  export default CreateEmployee;

@@ -45,11 +45,11 @@
     "GUIDELINE": "Tài liệu",
     "MANAGER": "Quản lí",
     "MEMBERS": "Thành viên",
-    "TECHNICAL":"Kỹ thuật",
+    "TECHNICAL": "Kỹ thuật",
     "DESCRIPTION": "Mô tả",
-    "START DATE":"Ngày bắt đầu",
-    "END DATE":"Ngày kết thúc",
-    "TOTAL": "Tổng: {{total}} dự án" 
+    "START DATE": "Ngày bắt đầu",
+    "END DATE": "Ngày kết thúc",
+    "TOTAL": "Tổng: {{total}} dự án"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -59,6 +59,7 @@
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
     "PROJECTS": "Dự án",
+    "EMPLOYEES_CREATE": "Thêm nhân viên",
     "PROJECTS_CREATE": "Tạo dự án",
     "DETAILS":"Chi tiết"
   },
@@ -127,7 +128,6 @@
     "CHANGE_PASSWORD": "Đổi mật khẩu"
   },
   "TITLE": {
-  
     "BASIC_INFORMATION": "Thông tin cơ bản",
     "DEVICES": "Thiết bị",
     "ENDPOINT": "Endpoint",
@@ -197,6 +197,59 @@
   "NOTFOUND": {
     "CONTENT_SORRY": "XIN LỖI NHƯNG TRANG BẠN ĐANG TÌM KIẾM KHÔNG TỒN TẠI, ĐÃ BỊ XÓA. TÊN ĐỔI HOẶC TẠM THỜI KHÔNG CÓ",
     "404": "404 - TRANG KHÔNG TÌM THẤY"
+  },
+  "EMPLOYEES": {
+    "CREATE": "Tạo nhân viên",
+    "CODE": "Mã nhân viên",
+    "NAME": "Tên nhân viên",
+    "PHONE": "Số điện thoại",
+    "BIRTH": "Năm sinh",
+    "AVATAR": "Ảnh đại diện",
+    "CITIZEN_CARD": "Căn cước công dân",
+    "GENDER": "Giới tính",
+    "STATUS": "Trạng thái",
+    "SKILLS": "Kĩ năng",
+    "POSITION": "Vị trí",
+    "LINE_MANAGER": "Được ai quản lí?",
+    "DESCRIPTION": "Mô tả",
+    "IS_MANAGER": "Người quản lí?",
+    "UPLOAD": "Bấm để thêm ảnh",
+    "GENDER_MEN": "Nam",
+    "GENDER_WOMEN": "Nữ",
+    "GENDER_UNKNOWN": "Chưa rõ",
+    "ACTIVE": "Hoạt động",
+    "UNACTIVE": "Không hoạt động",
+    "MANAGER": "Có",
+    "NOT_MANAGER": "Không",
+    "DETAILS": "Chi tiết nhân viên",
+    "SKILL_NAME": "Tên kĩ năng",
+    "EXP": "Năm kinh nghiệm",
+    "ADD_SKILL": "Thêm kĩ năng",
+    "REMOVE_SKILL": "Xóa kĩ năng",
+    "ADDRESS": "Địa chỉ"
+  },
+  "EMPLOYEE_VALIDATION": {
+    "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
+    "CODE_REQUIRED": "Vui lòng nhập mã nhân viên",
+    "NAME_REQUIRED": "Vui lòng nhập tên nhân viên",
+    "NAME_MATCH_SPACE": "Tên nhân viên chứa ít nhất 1 khoảng trắng",
+    "NAME_MATCH_CAPITAL_LETTER": "Họ tên phải bắt đầu bằng chữ hoa và cách nhau bằng một khoảng trắng",
+    "NAME_MATCH_SPECIAL_CHARACTER": "Tên nhân viên không được chứa số và kí tự đặc biệt",
+    "PHONE_MATCH": "Số điện thoại không hợp lệ",
+    "PHONE_REQUIRED": "Vui lòng nhập số điện thoại",
+    "GENDER_REQUIRED": "Vui lòng chọn giới tính",
+    "STATUS_REQUIRED": "Vui lòng chọn trạng thái",
+    "IS_MANAGER_REQUIRED": "Bạn có phải người quản lí không?",
+    "POSITION_REQUIRED": "Vui lòng chọn vị trí",
+    "LINE_MANAGER_REQUIRED": "Vui lòng nhập tên người quản lí",
+    "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
+    "BIRTH_REQUIRED": "Vui lòng chọn năm sinh",
+    "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
+    "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
+    "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
+    "AVATAR": "Vui lòng chọn ảnh đại diện",
+    "SKILL_REQUIRED": "Vui lòng nhập tên kĩ năng",
+    "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
+    "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ"
   }
-
 }

@@ -1,11 +1,13 @@
 // import { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
-import EmployeesList from '../pages/Employees/EmployeesList/EmployeesList.jsx';
+import CreateEmployees from '../pages/Employees/CreateEmployee/CreateEmployees.jsx';
+import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
+import EmployeesList from '../pages/Employees/EmployeesList/EmployeesList';
 import CreateProject from '../pages/Project/CreateProject/CreateProject';
 
 // Define routes accessible only to authenticated users
-import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
+// import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
 import DetailEmployees from '../pages/Employees/Detail/DetailEmployees.jsx';
 const PrivateRoute = [
   {
@@ -26,6 +28,10 @@ const PrivateRoute = [
           {
             path: '',
             element: <EmployeesList />,
+          },
+          {
+            path: 'create',
+            element: <CreateEmployees />,
           },
           {
             path: 'details/:id',
