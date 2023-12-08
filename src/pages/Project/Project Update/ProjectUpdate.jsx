@@ -20,13 +20,19 @@ import { Formik, FieldArray, Field, useFormik } from 'formik';
 import * as Yup from 'yup';
 import './rolelist';
 import roleSelection from './rolelist';
-
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
+const emptyMember = {
+  member: '',
+  role: '',
+};
 const ProjectUpdate = () => {
   const [managerOptions, setManagerOptions] = useState([]);
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState([emptyMember]);
   const { t } = useTranslation();
   const dateFormat = 'DD-MM-YYYY';
   const { RangePicker } = DatePicker;
@@ -39,74 +45,109 @@ const ProjectUpdate = () => {
   }, [employees]);
 
   useEffect(() => {
-    Promise.all([
-      fetch(`https://api-emptrack.onrender.com/projects/${projectId}`).then(
-        (response) => response.json(),
-      ),
-      fetch('https://api-emptrack.onrender.com/employees').then((response) =>
-        response.json(),
-      ),
-    ])
-      .then(([projectData, employeeData]) => {
+    const fetchData = async () => {
+      try {
+        const projectResponse = await axios.get(
+          `https://api-emptrack.onrender.com/projects/${projectId}`,
+        );
+        const employeeResponse = await axios.get(
+          'https://api-emptrack.onrender.com/employees',
+        );
+
+        const projectData = projectResponse.data;
+        const employeeData = employeeResponse.data;
+
         setProject(projectData);
         setEmployees(employeeData);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, [projectId]);
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Project name is required'),
-    manager: Yup.array().min(1, 'At least one manager is required'),
-    description: Yup.string().required('Project description is required'),
-    status: Yup.string().required('Project status is required'),
-    technical: Yup.string().required('Technical details are required'),
-    member: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string().required('Member name is required'),
-        role: Yup.string().required('Member role is required'),
-      }),
-    ),
+  let schema = Yup.object().shape({
+    name: Yup.string()
+      .trim()
+      .max(60, t('VALIDATE.MAX', { field: t('PROJECTS.NAME'), number: '60' }))
+      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.NAME') })),
+    description: Yup.string()
+      .trim()
+      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
+    technical: Yup.string()
+      .trim()
+      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),
+    dateRange: Yup.object().shape({
+      startDate: Yup.string().required(
+        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_START') }),
+      ),
+      endDate: Yup.string().required(
+        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_END') }),
+      ),
+    }),
+    manager: Yup.string()
+      .trim()
+      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.MANAGER') })),
+    member: Yup.array()
+      .of(
+        Yup.object().shape({
+          member: Yup.string().required(
+            t('VALIDATE.REQUIRED', { field: t('PROJECTS.MEMBER') }),
+          ),
+          role: Yup.string().required(
+            t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }),
+          ),
+        }),
+      )
+      .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.MEMBER') })),
   });
-
-  const formik = useFormik({
-    initialValues: {
-      name: project?.name || '',
-      manager: project?.manager?.map((manager) => manager.id) || [],
-      description: project?.description || '',
-      technical: project?.technical || '',
-      startDate: project?.startDate || null,
-      endDate: project?.endDate || null,
-      status: project?.status || '',
-      member: project?.member.map((member) => ({
-        name: member.name,
-        role: member.role,
-      })),
+  const initialValues = {
+    name: project?.name || '',
+    manager: project?.manager?.map((manager) => manager.id) || [],
+    description: project?.description || '',
+    technical: project?.technical || '',
+    startDate: project?.startDate || null,
+    endDate: project?.endDate || null,
+    status: project?.status || '',
+    member: project?.member.map((member) => ({
+      name: member.name,
+      role: member.role,
+    })),
+  };
+  const yupSync = {
+    async validator({ field }, value) {
+      await schema.validateSyncAt(field, { [field]: value });
     },
-    validationSchema,
-    onSubmit: async (values) => {
+  };
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: schema,
+    onSubmit: async (value) => {
+      let name = value.name.trim().replace(/  +/g, ' ');
+      let description = value.description.trim().replace(/  +/g, ' ');
+      let status = value.status;
+      let technical = value.technical;
+      let startDate = value.dateRange.startDate;
+      let endDate = value.dateRange.endDate;
+      let manager = [{ name: managerName, id: value.manager }];
       try {
-        const response = await fetch(
-          `https://api-emptrack.onrender.com/projects/${projectId}`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-          },
-        );
-  
-        if (!response.ok) {
-          throw new Error('Failed to update project');
-        }
-  
-        const responseData = await response.json();
-        console.log('Project updated successfully!', responseData);
-        // Optionally, you can redirect or show a success message to the user
+        axios.patch(`https://api-emptrack.onrender.com/projects/${projectId}`, {
+          member,
+          name,
+          description,
+          status,
+          technical,
+          startDate,
+          endDate,
+          manager,
+        });
+        formik.resetForm();
+        form.resetFields();
+
+        //Redirect to details page
+        navigate(`/projects`);
       } catch (error) {
         console.error('Error updating project:', error);
         // Handle error, e.g., show an error message to the user
@@ -140,11 +181,8 @@ const ProjectUpdate = () => {
         style={{ borderRadius: '30px' }}
         title={t('BREADCRUMB.PROJECTS_UPDATE')}
       >
-        <Formik
-          initialValues={formik.initialValues}
-          validationSchema={validationSchema}
-        >
-          {(formikProps) => (
+        <Formik Formik initialValues={initialValues} validationSchema={schema}>
+          {(values, errors) => (
             <Form
               labelCol={{
                 span: 4,
@@ -163,17 +201,51 @@ const ProjectUpdate = () => {
                     name="name"
                     label={t('PROJECTS.NAME')}
                     initialValue={project?.name}
+                    help={
+                      formik.errors.name &&
+                      formik.touched.name && (
+                        <div className="text-danger">{formik.errors.name}</div>
+                      )
+                    }
+                    validateFirst
+                    rules={[yupSync]}
+                    hasFeedback
                   >
-                    <Input placeholder={t('PROJECTS.NAME')} />
+                    <Input
+                      placeholder={t('PROJECTS.NAME')}
+                      value={formik.name}
+                      onChange={() => {
+                        formik.handleChange;
+                      }}
+                      autoFocus
+                    />
                   </Form.Item>
                   <Form.Item
                     name="manager"
                     label={t('PROJECTS.MANAGER')}
+                    help={
+                      formik.errors.manager &&
+                      formik.touched.manager && (
+                        <div className="text-danger">
+                          {formik.errors.manager}
+                        </div>
+                      )
+                    }
+                    validateFirst
+                    rules={[yupSync]}
+                    hasFeedback
                     initialValue={project?.manager?.map(
                       (manager) => manager.id,
                     )}
                   >
-                    <Select mode="multiple" placeholder={t('PROJECTS.MANAGER')}>
+                    <Select
+                      mode="single"
+                      placeholder={t('PROJECTS.MANAGER')}
+                      onChange={(value) => {
+                        formik.setFieldValue('manager', value);
+                      }}
+                      allowClear
+                    >
                       {managerOptions.map((employee) => (
                         <Select.Option key={employee.id} value={employee.id}>
                           {employee.name}
@@ -185,17 +257,47 @@ const ProjectUpdate = () => {
                     name="description"
                     label={t('PROJECTS.DESCRIPTION')}
                     initialValue={project?.description}
+                    help={
+                      formik.errors.description &&
+                      formik.touched.description && (
+                        <div className="text-danger">
+                          {formik.errors.description}
+                        </div>
+                      )
+                    }
+                    validateFirst
+                    rules={[yupSync]}
+                    hasFeedback
                   >
                     <Input.TextArea
                       rows={4}
                       placeholder={t('PROJECTS.DESCRIPTION')}
+                      onChange={() => {
+                        formik.handleChange;
+                      }}
                       style={{ resize: 'none' }}
                     />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label={t('PROJECTS.TIME')}>
+                  <Form.Item
+                    label={t('PROJECTS.TIME')}
+                    name="dateRange"
+                    help={
+                      formik.errors.dateRange &&
+                      formik.touched.dateRange && (
+                        <div className="text-danger">
+                          {formik.errors.dateRange.startDate}
+                        </div>
+                      )
+                    }
+                  >
                     <RangePicker
+                      status={
+                        formik.errors.dateRange &&
+                        formik.touched.dateRange &&
+                        'error'
+                      }
                       placeholder={[
                         t('PROJECTS.TIME_START'),
                         t('PROJECTS.TIME_END'),
@@ -205,6 +307,13 @@ const ProjectUpdate = () => {
                         dayjs(project?.endDate, dateFormat),
                       ]}
                       format={dateFormat}
+                      onChange={(date, dateString) => {
+                        formik.setFieldValue('dateRange', {
+                          startDate: dateString[0],
+                          endDate: dateString[1],
+                        });
+                      }}
+                      className="w-100"
                     />
                   </Form.Item>
                   <Form.Item
@@ -212,7 +321,12 @@ const ProjectUpdate = () => {
                     label={t('PROJECTS.STATUS')}
                     initialValue={project?.status}
                   >
-                    <Radio.Group>
+                    <Radio.Group
+                      value={formik.values.status}
+                      onChange={(e) =>
+                        formik.setFieldValue('status', e.target.value)
+                      }
+                    >
                       <Radio value="active">
                         {t('PROJECTS.STATUS_ACTIVE')}
                       </Radio>
@@ -225,84 +339,170 @@ const ProjectUpdate = () => {
                     name="technical"
                     label={t('PROJECTS.TECHNICAL')}
                     initialValue={project?.technical}
+                    help={
+                      formik.errors.technical &&
+                      formik.touched.technical && (
+                        <div className="text-danger">
+                          {formik.errors.technical}
+                        </div>
+                      )
+                    }
+                    validateFirst
+                    rules={[yupSync]}
+                    hasFeedback
                   >
-                    <Input placeholder={t('PROJECTS.TECHNICAL')} />
+                    <Input
+                      placeholder={t('PROJECTS.TECHNICAL')}
+                      onChange={() => {
+                        formik.handleChange;
+                      }}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
 
               <FieldArray name="member">
                 {(arrayHelpers) => (
-                  <>
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        arrayHelpers.push({ id: '', name: '', role: '' });
-                        project.member.push({ id: '', name: '', role: '' });
-                      }}
-                      style={{ marginBottom: '20px' }}
-                    >
-                      Add Member
-                    </Button>
+                  <div>
                     {project.member.map((member, index) => (
-                      <Row gutter={16} key={index} className="mb-2">
-                        <Col span={12}>
-                          <Form.Item
-                            name={`member[${index}].name`}
-                            label={t('PROJECTS.SELECT_MEMBER')}
-                            initialValue={member.name}
-                          >
-                            <Select
-                              showSearch
-                              placeholder={t('PROJECTS.SELECT_MEMBER')}
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                option.children
-                                  .toLowerCase()
-                                  .indexOf(input.toLowerCase()) >= 0
-                              }
+                      <div key={index}>
+                        <Row gutter={16} key={index} className="mb-2">
+                          <Col span={12}>
+                            <Form.Item
+                              name={`member[${index}].name`}
+                              id={`members[${index}].member`}
+                              label={t('PROJECTS.SELECT_MEMBER')}
+                              initialValue={member.name}
+                              onChange={(value) => {
+                                arrayHelpers.replace(index, {
+                                  ...members[index],
+                                  member: value.target.value,
+                                });
+                                setMembers((prevMembers) => {
+                                  const updatedMembers = [...prevMembers];
+                                  updatedMembers[index] = {
+                                    ...updatedMembers[index],
+                                    member: value.target.value,
+                                  };
+                                  return updatedMembers;
+                                });
+                                formik.setFieldValue(
+                                  `members.${index}.member`,
+                                  value.target.value,
+                                );
+                              }}
                             >
-                              {employees.map((employee) => (
-                                <Select.Option
-                                  key={employee.id}
-                                  value={employee.name}
-                                >
-                                  {employee.name}
-                                </Select.Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                          <Form.Item
-                            name={`member[${index}].role`}
-                            label={t('PROJECTS.SELECT_ROLE')}
-                            initialValue={member.role}
-                          >
-                            <Select
-                              showSearch
-                              placeholder={t('PROJECTS.SELECT_ROLE')}
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                option.children
-                                  .toLowerCase()
-                                  .indexOf(input.toLowerCase()) >= 0
-                              }
+                              <Select
+                                showSearch
+                                placeholder={t('PROJECTS.SELECT_MEMBER')}
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                  option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                                }
+                              >
+                                {employees.map((employee) => (
+                                  <Select.Option
+                                    key={employee.id}
+                                    value={employee.name}
+                                  >
+                                    {employee.name}
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+                            {formik.errors.member &&
+                            formik.touched.member &&
+                            {
+                              /* formik.touched.member[index]?.member */
+                            } &&
+                            formik.errors.member[index]?.member ? (
+                              <div className="text-danger">
+                                {formik.errors.member[index]?.member}
+                              </div>
+                            ) : (
+                              <div style={{ height: 22 }}></div>
+                            )}
+                          </Col>
+                          <Col span={11}>
+                            <Form.Item
+                              name={`member[${index}].role`}
+                              id={`members[${index}].role`}
+                              label={t('PROJECTS.SELECT_ROLE')}
+                              initialValue={member.role}
                             >
-                              {roleSelection.map((role) => (
-                                <Select.Option
-                                  key={role.value}
-                                  value={role.value}
-                                >
-                                  {role.label}
-                                </Select.Option>
-                              ))}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                      </Row>
+                              <Select
+                                showSearch
+                                placeholder={t('PROJECTS.SELECT_ROLE')}
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                  option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                                }
+                              >
+                                {roleSelection.map((role) => (
+                                  <Select.Option
+                                    key={role.value}
+                                    value={role.value}
+                                  >
+                                    {role.label}
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                            </Form.Item>
+                            {formik.errors.member &&
+                            formik.touched.member &&
+                            {
+                              /* formik.touched.member[index]?.role */
+                            } &&
+                            formik.errors.member[index]?.role ? (
+                              <div className="text-danger">
+                                {formik.errors.member[index]?.role}
+                              </div>
+                            ) : (
+                              <div style={{ height: 22 }}></div>
+                            )}
+                          </Col>
+                          <Col span={1}>
+                            {project.member.length > 1 ? (
+                              <MinusCircleOutlined
+                                className="dynamic-delete-button pt-2"
+                                onClick={() => {
+                                  arrayHelpers.remove(index);
+                                  setMembers((prev) => {
+                                    const updatedMembers = [...prev];
+                                    updatedMembers.splice(index, 1);
+                                    return updatedMembers;
+                                  });
+
+                                  formik.setFieldValue(`members`, [...members]);
+                                }}
+                              />
+                            ) : null}
+                          </Col>
+                        </Row>
+                      </div>
                     ))}
-                  </>
+                    {typeof formik.errors.member === 'string' && (
+                      <div className="text-danger">{formik.errors.member}</div>
+                    )}
+                    <Form.Item>
+                      <Button
+                        onClick={() => {
+                          arrayHelpers.push({ id: '', name: '', role: '' });
+                          project.member.push({ id: '', name: '', role: '' });
+                          setMembers((prev) => [...prev, emptyMember]);
+                          formik.setFieldValue(`members`, [...members]);
+                        }}
+                        icon={<PlusOutlined />}
+                        className="button ant-btn-primary my-3"
+                      >
+                        {t('BUTTON.ADD_MEMBER')}
+                      </Button>
+                    </Form.Item>
+                  </div>
                 )}
               </FieldArray>
             </Form>
