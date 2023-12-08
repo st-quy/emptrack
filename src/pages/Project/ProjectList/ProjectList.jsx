@@ -1,13 +1,16 @@
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Input, Pagination, Space, Table, Tooltip, Modal,message  } from 'antd';
 import { debounce } from 'lodash';
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import '../ProjectList/ProjectList.scss';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
+import '../ProjectList/ProjectList.scss';
 
 const ProjectList = () => {
   const [data, setData] = useState([]);
@@ -23,8 +26,10 @@ const ProjectList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axiosInstance.get('projects').then((response) =>  response.data);
-        const filterDeleted = result.filter(item => !item.deletedAt)
+        const result = await axiosInstance
+          .get('projects')
+          .then((response) => response.data);
+        const filterDeleted = result.filter((item) => !item.deletedAt);
         setData(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,8 +46,14 @@ const ProjectList = () => {
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance.delete(`projects/${selectedProjectId}`).then(() => {
-
-        message.success('Dự án đã được xóa thành công!');
+        //  message.success('Dự án đã được xóa thành công!');
+        Toast(
+          'success',
+          t('TOAST.DELETED_SUCCESS', {
+            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+          }),
+          2,
+        );
         // Loại bỏ dự án đã bị xóa khỏi mảng data
         setData(data.filter((item) => item.id !== selectedProjectId));
 
@@ -59,6 +70,9 @@ const ProjectList = () => {
     setShowDeleteModal(false);
   };
 
+  const handleView = (id) => {
+    navigate(`details/${id}`);
+  };
 
   const columns = [
     {
@@ -68,10 +82,18 @@ const ProjectList = () => {
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
-            <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
+            <Button
+              type="link"
+              icon={<DeleteOutlined />}
+              onClick={() => handleDelete(record.id)}
+            />
           </Tooltip>
           <Tooltip title="View">
-            <Button type="link" icon={<EyeOutlined />} onClick={() => handleView(record.id)} />
+            <Button
+              type="link"
+              icon={<EyeOutlined />}
+              onClick={() => handleView(record.id)}
+            />
           </Tooltip>
         </span>
       ),
@@ -103,51 +125,6 @@ const ProjectList = () => {
       width: 80,
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
-    // {
-    //   title: t('TABLE.MEMBERS'),
-    //   dataIndex: 'member',
-    //   key: 'member',
-    //   width: 150,
-    //   sorter: {
-    //     compare: (a, b) => a.chinese - b.chinese,
-    //     multiple: 3,
-    //   },
-    //   render: (members) => (
-    //     <span>
-    //       {members.map((member, index) => (
-    //         <div key={index}>
-    //           {member.name} - {member.role}
-    //         </div>
-    //       ))}
-    //     </span>
-    //   ),
-    // },
-
-    // {
-    //   title: t('TABLE.TECHNICAL'),
-    //   dataIndex: 'technical',
-    //   key: 'technical',
-    //   width: 150,
-    //   sorter: {
-    //     compare: (a, b) => a.chinese - b.chinese,
-    //     multiple: 3,
-    //   },
-    // },
-    // {
-    //   title: t('TABLE.DESCRIPTION'),
-    //   dataIndex: 'description',
-    //   key: 'description',
-    //   width: 40,
-    //   ellipsis: {
-    //     showTitle: false,
-    //   },
-    //   render: (address) => (
-    //     <Tooltip placement="topLeft" title={address}>
-    //       <div style={{ whiteSpace: 'pre-line' }}>{address}</div>
-    //     </Tooltip>
-    //   ),
-    // },
-
     {
       title: t('TABLE.START DATE'),
       dataIndex: 'startDate',
@@ -220,73 +197,94 @@ const ProjectList = () => {
 
   return (
     <div className="project_create" style={{ height: 100 }}>
-      <Space className="w-100 justify-content-between">
-        <Breadcrumb items={[{ key: 'projects' }]} />
-        <Button onClick={() => navigate('/projects/create')}>
-          {t('BREADCRUMB.PROJECTS_CREATE')}
-        </Button>
-      </Space>
-      <Card
-        title={'Danh sách dự án'.toUpperCase()}
-        style={{ borderRadius: '30px' }}
-      >
-        <Input.Search
-          placeholder="Tìm kiếm..."
-          style={{ marginBottom: 8, width: 300, marginTop: 8 }}
-          onChange={(e) => setSearchedText(e.target.value)}
-        />
-         <Table
-          columns={columns}
-          dataSource={data
-            .filter(
-              (item) =>
-                // !item.deletedAt &&
-                // Chỉ hiển thị các dự án chưa bị xóa
-                (item.manager &&
-                  item.manager.some(
-                    (manager) => manager.name.toLowerCase().includes(searchedText.toLowerCase())
-                  )) ||
-                (item.member &&
-                  item.member.some(
-                    (member) =>
-                      member.name.toLowerCase().includes(searchedText.toLowerCase()) ||
-                      member.role.toLowerCase().includes(searchedText.toLowerCase())
-                  )) ||
-                item.technical.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.description.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.startDate.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.endDate.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.status.toLowerCase().includes(searchedText.toLowerCase()) ||
-                item.name.toLowerCase().includes(searchedText.toLowerCase())
-            )
-            .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-          scroll={{
-            y: 'calc(100vh - 400px)'
-          }}
-          pagination={false}
-        />
-        <Pagination
-          total={data.filter((item) => !item.deletedAt).length}
-          current={currentPage}
-          pageSize={pageSize}
-          showSizeChanger
-          showTotal={(total) => `Total ${total} items`}
-          style={{ marginTop: '25px' }}
-          onChange={(page, pageSize) => {
-            setCurrentPage(page);
-            setPageSize(pageSize);
-          }}
-        />
-
-      </Card>
-      <Modal
-        title="Confirm Delete"
-        visible={showDeleteModal}
-        onOk={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      >
-        <p>Are you sure you want to delete this project?</p>
-      </Modal>
+      {data.length > 0 ? (
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb items={[{ key: 'projects' }]} />
+            <Button onClick={() => navigate('/projects/create')}>
+              {t('BREADCRUMB.PROJECTS_CREATE')}
+            </Button>
+          </Space>
+          <Card
+            title={t('PROJECTS.LIST').toUpperCase()}
+            style={{ borderRadius: '30px' }}
+          >
+            <Input.Search
+              placeholder={t('TABLE.SEARCH') + '...'}
+              style={{ marginBottom: 8, width: 300, marginTop: 8 }}
+              onChange={(e) => setSearchedText(e.target.value)}
+            />
+            <Table
+              columns={columns}
+              dataSource={data
+                .filter(
+                  (item) =>
+                    // !item.deletedAt &&
+                    // Chỉ hiển thị các dự án chưa bị xóa
+                    (item.manager &&
+                      item.manager.some((manager) =>
+                        manager.name
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()),
+                      )) ||
+                    (item.member &&
+                      item.member.some(
+                        (member) =>
+                          member.name
+                            .toLowerCase()
+                            .includes(searchedText.toLowerCase()) ||
+                          member.role
+                            .toLowerCase()
+                            .includes(searchedText.toLowerCase()),
+                      )) ||
+                    item.technical
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()) ||
+                    item.description
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()) ||
+                    item.startDate
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()) ||
+                    item.endDate
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()) ||
+                    item.status
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()) ||
+                    item.name
+                      .toLowerCase()
+                      .includes(searchedText.toLowerCase()),
+                )
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+              scroll={{ y: 'calc(100vh - 400px)' }}
+              pagination={false}
+            />
+            <Pagination
+              total={data.filter((item) => !item.deletedAt).length}
+              current={currentPage}
+              pageSize={pageSize}
+              showSizeChanger
+              showTotal={(total) => t('TABLE.TOTAL', { total })}
+              className="my-3"
+              onChange={(page, pageSize) => {
+                setCurrentPage(page);
+                setPageSize(pageSize);
+              }}
+            />
+          </Card>
+          <Modal
+            title="Confirm Delete"
+            visible={showDeleteModal}
+            onOk={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          >
+            <p>Are you sure you want to delete this project?</p>
+          </Modal>
+        </>
+      ) : (
+        <SpinLoading />
+      )}
     </div>
   );
 };

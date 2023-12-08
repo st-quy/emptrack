@@ -46,7 +46,9 @@
     "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
     "START DATE": "Start date",
-    "END DATE": "End date"
+    "END DATE": "End date",
+    "TOTAL": "Sum: {{total}} project",
+    "TOTAL_EMPLOYEES": "Sum: {{total}} employees"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -57,7 +59,9 @@
     "EMPLOYEES_CREATE": "Create employees",
     "EMPLOYEES": "Employees",
     "PROJECTS_CREATE": "Create project",
-    "PROJECTS": "Projects"
+    "PROJECTS_UPDATE": "Update project",
+    "PROJECTS": "Projects",
+    "PROJECTS_DETAILS": "Project details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -191,6 +195,11 @@
   "NOTFOUND": {
     "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
     "404": "404 - PAGE NOT FOUND"
+  },
+  "TOAST": {
+    "CREATED_SUCCESS": "Created {{field}} successfully",
+    "CREATED_ERROR": "{{field}} could not be created",
+    "DELETED_SUCCESS": "Deleted {{field}} successfully"
   },
   "EMPLOYEES": {
     "CREATE": "Create employee",
