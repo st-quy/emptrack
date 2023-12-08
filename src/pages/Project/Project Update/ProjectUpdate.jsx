@@ -10,18 +10,22 @@ import {
   Select,
   DatePicker,
   Space,
+  Typography,
 } from 'antd';
 import { useTranslation } from 'react-i18next';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import Button from '../../../components/atoms/Button/Button';
+import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 import './ProjectUpdate.scss';
 import dayjs from 'dayjs';
 import { Formik, FieldArray, Field, useFormik } from 'formik';
-import * as Yup from 'yup';
 import './rolelist';
 import roleSelection from './rolelist';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import Schema from './schema';
+const { Text } = Typography;
 const emptyMember = {
   member: '',
   role: '',
@@ -34,8 +38,10 @@ const ProjectUpdate = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([emptyMember]);
   const { t } = useTranslation();
-  const dateFormat = 'DD-MM-YYYY';
+  const dateFormat = 'DD/MM/YYYY';
   const { RangePicker } = DatePicker;
+  const schema = Schema();
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const managerEmployees = employees.filter(
@@ -47,12 +53,10 @@ const ProjectUpdate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const projectResponse = await axios.get(
-          `https://api-emptrack.onrender.com/projects/${projectId}`,
+        const projectResponse = await axiosInstance.get(
+          `projects/${projectId}`,
         );
-        const employeeResponse = await axios.get(
-          'https://api-emptrack.onrender.com/employees',
-        );
+        const employeeResponse = await axiosInstance.get('employees');
 
         const projectData = projectResponse.data;
         const employeeData = employeeResponse.data;
@@ -68,41 +72,6 @@ const ProjectUpdate = () => {
     fetchData();
   }, [projectId]);
 
-  let schema = Yup.object().shape({
-    name: Yup.string()
-      .trim()
-      .max(60, t('VALIDATE.MAX', { field: t('PROJECTS.NAME'), number: '60' }))
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.NAME') })),
-    description: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
-    technical: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),
-    dateRange: Yup.object().shape({
-      startDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_START') }),
-      ),
-      endDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_END') }),
-      ),
-    }),
-    manager: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.MANAGER') })),
-    member: Yup.array()
-      .of(
-        Yup.object().shape({
-          member: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('PROJECTS.MEMBER') }),
-          ),
-          role: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }),
-          ),
-        }),
-      )
-      .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.MEMBER') })),
-  });
   const initialValues = {
     name: project?.name || '',
     manager: project?.manager?.map((manager) => manager.id) || [],
@@ -125,6 +94,19 @@ const ProjectUpdate = () => {
     initialValues: initialValues,
     validationSchema: schema,
     onSubmit: async (value) => {
+      const managerName = employees.find((e) => e.id === value.manager).name;
+
+      let member = [];
+      members.map((mem) => {
+        const memberName = employees.find((e) => e.id === mem.member).name;
+
+        member.push({
+          role: mem.role,
+          name: memberName,
+          id: mem.member,
+        });
+      });
+
       let name = value.name.trim().replace(/  +/g, ' ');
       let description = value.description.trim().replace(/  +/g, ' ');
       let status = value.status;
@@ -133,7 +115,7 @@ const ProjectUpdate = () => {
       let endDate = value.dateRange.endDate;
       let manager = [{ name: managerName, id: value.manager }];
       try {
-        axios.patch(`https://api-emptrack.onrender.com/projects/${projectId}`, {
+        axiosInstance.patch(`projects/${projectId}`, {
           member,
           name,
           description,
@@ -143,14 +125,28 @@ const ProjectUpdate = () => {
           endDate,
           manager,
         });
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+          }),
+          2,
+        );
+        //Clear form
         formik.resetForm();
         form.resetFields();
-
         //Redirect to details page
-        navigate(`/projects`);
+        setTimeout(() => {
+          navigate(`/projects`);
+        }, 2000);
       } catch (error) {
-        console.error('Error updating project:', error);
-        // Handle error, e.g., show an error message to the user
+        Toast(
+          'error',
+          t('TOAST.CREATED_ERROR', {
+            field: t('BREADCRUMB.PROJECTS'),
+          }),
+          2,
+        );
       }
     },
   });
@@ -167,7 +163,6 @@ const ProjectUpdate = () => {
     { key: 'projects' },
     { key: 'projects_update', route: `/projects/update/${projectId}` },
   ];
-
   return (
     <div id="project_update">
       <Space className="w-100 justify-content-between">
@@ -179,7 +174,7 @@ const ProjectUpdate = () => {
       <Card
         className="card-update-project"
         style={{ borderRadius: '30px' }}
-        title={t('BREADCRUMB.PROJECTS_UPDATE')}
+        title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
       >
         <Formik Formik initialValues={initialValues} validationSchema={schema}>
           {(values, errors) => (
@@ -293,10 +288,10 @@ const ProjectUpdate = () => {
                     }
                   >
                     <RangePicker
-                      status={
-                        formik.errors.dateRange &&
-                        formik.touched.dateRange &&
-                        'error'
+                      className={
+                        formik.errors.dateRange && formik.touched.dateRange
+                          ? 'ant-form-item-has-error'
+                          : ''
                       }
                       placeholder={[
                         t('PROJECTS.TIME_START'),
@@ -313,7 +308,6 @@ const ProjectUpdate = () => {
                           endDate: dateString[1],
                         });
                       }}
-                      className="w-100"
                     />
                   </Form.Item>
                   <Form.Item
@@ -360,36 +354,31 @@ const ProjectUpdate = () => {
                   </Form.Item>
                 </Col>
               </Row>
-
-              <FieldArray name="member">
+              <Text>{t('PROJECTS.MEMBER')}:</Text>
+              <FieldArray name="members">
                 {(arrayHelpers) => (
                   <div>
                     {project.member.map((member, index) => (
                       <div key={index}>
-                        <Row gutter={16} key={index} className="mb-2">
+                        <Row gutter={16}>
                           <Col span={12}>
                             <Form.Item
                               name={`member[${index}].name`}
                               id={`members[${index}].member`}
-                              label={t('PROJECTS.SELECT_MEMBER')}
                               initialValue={member.name}
                               onChange={(value) => {
                                 arrayHelpers.replace(index, {
                                   ...members[index],
-                                  member: value.target.value,
+                                  name: value.target.value,
                                 });
                                 setMembers((prevMembers) => {
                                   const updatedMembers = [...prevMembers];
                                   updatedMembers[index] = {
                                     ...updatedMembers[index],
-                                    member: value.target.value,
+                                    name: value.target.value,
                                   };
                                   return updatedMembers;
                                 });
-                                formik.setFieldValue(
-                                  `members.${index}.member`,
-                                  value.target.value,
-                                );
                               }}
                             >
                               <Select
@@ -414,12 +403,9 @@ const ProjectUpdate = () => {
                             </Form.Item>
                             {formik.errors.member &&
                             formik.touched.member &&
-                            {
-                              /* formik.touched.member[index]?.member */
-                            } &&
-                            formik.errors.member[index]?.member ? (
+                            formik.errors.member[index]?.name ? (
                               <div className="text-danger">
-                                {formik.errors.member[index]?.member}
+                                {formik.errors.member[index]?.name}
                               </div>
                             ) : (
                               <div style={{ height: 22 }}></div>
@@ -429,8 +415,25 @@ const ProjectUpdate = () => {
                             <Form.Item
                               name={`member[${index}].role`}
                               id={`members[${index}].role`}
-                              label={t('PROJECTS.SELECT_ROLE')}
                               initialValue={member.role}
+                              onChange={(value) => {
+                                arrayHelpers.replace(index, {
+                                  ...members[index],
+                                  role: value.target.value,
+                                });
+                                setMembers((prevMembers) => {
+                                  const updatedMembers = [...prevMembers];
+                                  updatedMembers[index] = {
+                                    ...updatedMembers[index],
+                                    role: value.target.value,
+                                  };
+                                  return updatedMembers;
+                                });
+                                formik.setFieldValue(
+                                  `members.${index}.role`,
+                                  value.target.value,
+                                );
+                              }}
                             >
                               <Select
                                 showSearch
@@ -491,10 +494,9 @@ const ProjectUpdate = () => {
                     <Form.Item>
                       <Button
                         onClick={() => {
-                          arrayHelpers.push({ id: '', name: '', role: '' });
-                          project.member.push({ id: '', name: '', role: '' });
+                          arrayHelpers.push(emptyMember);
+                          project.member.push(emptyMember);
                           setMembers((prev) => [...prev, emptyMember]);
-                          formik.setFieldValue(`members`, [...members]);
                         }}
                         icon={<PlusOutlined />}
                         className="button ant-btn-primary my-3"

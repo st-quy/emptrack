@@ -1508,20 +1508,29 @@ ansicolors@~0.3.2:
   resolved "https://registry.npmjs.org/ansicolors/-/ansicolors-0.3.2.tgz"
   integrity sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==
 
-antd@^5.12.1:
-  version "5.12.1"
-  resolved "https://registry.npmjs.org/antd/-/antd-5.12.1.tgz"
-  integrity sha512-lDTg4U/4MxDD4OK0sLM3D0ge+5nHKj27dUj4ufF1FhQKPcRkVnkCWJ43gb1Cn+S3ybvz7yfsiEv0v+QqWJgPlA==
+antd-img-crop@^4.18.0:
+  version "4.18.0"
+  resolved "https://registry.yarnpkg.com/antd-img-crop/-/antd-img-crop-4.18.0.tgz#851c75f26cc71bdc8a33e10e3b206c222e551102"
+  integrity sha512-K9GJYg0F1tE9Q+TWuHX8QOeH52Z8OA+WAXAUWjJkPHeHAWlnIh538RpuHYgogP7LN4U1qU7TQKRCwkrUPNMdGA==
+  dependencies:
+    compare-versions "6.1.0"
+    react-easy-crop "^5.0.2"
+    tslib "^2.6.2"
+
+antd@^5.11.3:
+  version "5.11.3"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-5.11.3.tgz#fe00b4609ab4a491e39407901e451ac5ebc391c5"
+  integrity sha512-+aXlytJCsp8Thag+MAMCDsDciwTl7w3bexHiojGgFOaSJPuIktN5yrLb9GCLar3fkTyGVAaxnkJm4JLGbAz3Xg==
   dependencies:
     "@ant-design/colors" "^7.0.0"
-    "@ant-design/cssinjs" "^1.18.0"
+    "@ant-design/cssinjs" "^1.17.5"
     "@ant-design/icons" "^5.2.6"
     "@ant-design/react-slick" "~1.0.2"
-    "@babel/runtime" "^7.23.4"
+    "@babel/runtime" "^7.18.3"
     "@ctrl/tinycolor" "^3.6.1"
     "@rc-component/color-picker" "~1.4.1"
     "@rc-component/mutate-observer" "^1.1.0"
-    "@rc-component/tour" "~1.11.0"
+    "@rc-component/tour" "~1.10.0"
     "@rc-component/trigger" "^1.18.2"
     classnames "^2.3.2"
     copy-to-clipboard "^3.3.3"
@@ -1529,30 +1538,30 @@ antd@^5.12.1:
     qrcode.react "^3.1.0"
     rc-cascader "~3.20.0"
     rc-checkbox "~3.1.0"
-    rc-collapse "~3.7.2"
+    rc-collapse "~3.7.1"
     rc-dialog "~9.3.4"
     rc-drawer "~6.5.2"
     rc-dropdown "~4.1.0"
-    rc-field-form "~1.41.0"
-    rc-image "~7.5.1"
+    rc-field-form "~1.40.0"
+    rc-image "~7.5.0"
     rc-input "~1.3.6"
     rc-input-number "~8.4.0"
     rc-mentions "~2.9.1"
     rc-menu "~9.12.2"
     rc-motion "^2.9.0"
     rc-notification "~5.3.0"
-    rc-pagination "~4.0.1"
+    rc-pagination "~3.7.0"
     rc-picker "~3.14.6"
     rc-progress "~3.5.1"
     rc-rate "~2.12.0"
     rc-resize-observer "^1.4.0"
     rc-segmented "~2.2.2"
     rc-select "~14.10.0"
-    rc-slider "~10.5.0"
+    rc-slider "~10.4.0"
     rc-steps "~6.0.1"
     rc-switch "~4.1.0"
     rc-table "~7.36.0"
-    rc-tabs "~12.14.1"
+    rc-tabs "~12.13.1"
     rc-textarea "~1.5.3"
     rc-tooltip "~6.1.2"
     rc-tree "~5.8.2"
@@ -1776,7 +1785,7 @@ aws4@^1.8.0:
   resolved "https://registry.npmjs.org/aws4/-/aws4-1.12.0.tgz"
   integrity sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==
 
-axios@^1.6.2:
+axios@^1.4.0:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
   integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
@@ -2216,6 +2225,24 @@ clone@^1.0.2:
   resolved "https://registry.npmjs.org/clone/-/clone-1.0.4.tgz"
   integrity sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==
 
+cloudinary-core@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/cloudinary-core/-/cloudinary-core-2.13.0.tgz#b59f90871b6c708c3d0735b9be47ac08181c57fb"
+  integrity sha512-Nt0Q5I2FtenmJghtC4YZ3MZZbGg1wLm84SsxcuVwZ83OyJqG9CNIGp86CiI6iDv3QobaqBUpOT7vg+HqY5HxEA==
+
+cloudinary-react@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/cloudinary-react/-/cloudinary-react-1.8.1.tgz#8d017d959776be5e80717918412504aa6f35214f"
+  integrity sha512-90LHbUPfB8Uj5tKY08+ladN8ONyfak8zjnlAgVc39vlxKCx3b9G0/+I5C1QQGDwBRqHKzxyXterfugbWUrCQhA==
+  dependencies:
+    cloudinary-core "^2.13.0"
+    prop-types "^15.8.1"
+
+clsx@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
 color-convert@^1.9.0, color-convert@^1.9.3:
   version "1.9.3"
   resolved "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz"
@@ -2295,6 +2322,11 @@ commander@^4.0.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+
+compare-versions@6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-6.1.0.tgz#3f2131e3ae93577df111dba133e6db876ffe127a"
+  integrity sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==
 
 compress-commons@^4.1.2:
   version "4.1.2"
@@ -2464,6 +2496,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -5400,6 +5437,11 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
+normalize-wheel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/normalize-wheel/-/normalize-wheel-1.0.1.tgz#aec886affdb045070d856447df62ecf86146ec45"
+  integrity sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA==
+
 npmlog@^6.0.0:
   version "6.0.2"
   resolved "https://registry.npmjs.org/npmlog/-/npmlog-6.0.2.tgz"
@@ -6371,6 +6413,14 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-easy-crop@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/react-easy-crop/-/react-easy-crop-5.0.2.tgz#59883a471db5ecbd91ecbbff5da3fca9c6492399"
+  integrity sha512-j4A/0s0v/Gx5YGXvw3SOFIMmRk5YCdob2ABL5cD00Q9HQPKIz6tkCYLdj0RMO0REPtCAOsZ2ZZLI6fUofiDP6w==
+  dependencies:
+    normalize-wheel "^1.0.1"
+    tslib "2.0.1"
+
 react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz"
@@ -6399,9 +6449,9 @@ react-refresh@^0.14.0:
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.14.0.tgz"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
-react-router-dom@^6.20.1:
+react-router-dom@^6.11.2:
   version "6.20.1"
-  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.20.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.20.1.tgz#e34f8075b9304221420de3609e072bb349824984"
   integrity sha512-npzfPWcxfQN35psS7rJgi/EW0Gx6EsNjfdJSAk73U/HqMEJZ2k/8puxfwHFgDQhBGmS3+sjnGbMdMSV45axPQw==
   dependencies:
     "@remix-run/router" "1.13.1"
@@ -6413,6 +6463,13 @@ react-router@6.20.1:
   integrity sha512-ccvLrB4QeT5DlaxSFFYi/KR8UMQ4fcD8zBcR71Zp1kaYTC5oJKYAp1cbavzGrogwxca+ubjkd7XjFZKBW8CxPA==
   dependencies:
     "@remix-run/router" "1.13.1"
+
+react-toastify@^9.1.3:
+  version "9.1.3"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.3.tgz#1e798d260d606f50e0fab5ee31daaae1d628c5ff"
+  integrity sha512-fPfb8ghtn/XMxw3LkxQBk3IyagNpF/LIKjOBflbexr2AWxAH1MJgvnESwEwBn9liLFXgTKWgBSdZpw9m4OTHTg==
+  dependencies:
+    clsx "^1.1.1"
 
 react@^18.2.0:
   version "18.2.0"
@@ -7322,10 +7379,20 @@ triple-beam@^1.3.0:
   resolved "https://registry.npmjs.org/true-case-path/-/true-case-path-2.2.1.tgz"
   integrity sha512-0z3j8R7MCjy10kc/g+qg7Ln3alJTodw9aDuVWZa3uiWqfuBMKeAeP2ocWcxoyM3D73yz3Jt/Pu4qPr4wHSdB/Q==
 
-tslib@2.3.0, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0:
+tslib@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
+  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+
+tslib@2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz"
   integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
+
+tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
 tunnel-agent@^0.6.0:
   version "0.6.0"

@@ -1,11 +1,13 @@
 // import { lazy } from 'react';
-import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 import Dashboard from '../pages/Dashboard/Dashboard.jsx';
+import CreateEmployees from '../pages/Employees/CreateEmployee/CreateEmployees.jsx';
 import EmployeesList from '../pages/Employees/EmployeesList/EmployeesList';
 import CreateProject from '../pages/Project/CreateProject/CreateProject';
+import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
+import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
 // Define routes accessible only to authenticated users
-import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
+import DetailsProject from '../pages/Project/Details/DetailsProject';
 import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
 import ViewProject from '../pages/Project/ViewProject/ViewProject.jsx';
 const PrivateRoute = [
@@ -30,7 +32,7 @@ const PrivateRoute = [
           },
           {
             path: 'create',
-            element: <EmployeesList />,
+            element: <CreateEmployees />,
           },
         ],
       },
@@ -46,12 +48,12 @@ const PrivateRoute = [
             element: <CreateProject />,
           },
           {
-            path: 'update/:projectId', // Thêm parameter projectId vào URL
-            element: <ProjectUpdate />,
+            path: 'details/:id',
+            element: <DetailsProject />,
           },
           {
-            path: 'view/:projectId', // Thêm parameter projectId vào URL
-            element: <ViewProject />,
+            path: 'update/:projectId', // Thêm parameter projectId vào URL
+            element: <ProjectUpdate />,
           },
         ],
       },
