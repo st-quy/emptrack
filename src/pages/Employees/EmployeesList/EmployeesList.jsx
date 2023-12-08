@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import {Card, Image,Input,Pagination,Space,Table,Tag,Tooltip,Modal} from 'antd';
+import { Card, Image, Input, Pagination, Space, Table, Tag, Tooltip, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -22,15 +22,15 @@ const EmployeesList = () => {
     const fetchData = async () => {
       try {
         const result = await axiosInstance
-        .get('employees')
-        .then((response) => response.data);
-      const filterDeleted = result.filter((item) => !item.deletedAt);
-      setData(filterDeleted);
+          .get('employees')
+          .then((response) => response.data);
+        const filterDeleted = result.filter((item) => !item.deletedAt);
+        setData(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();  
+    fetchData();
   }, [deletedEmployeesId]);
   const handleDelete = (projectId) => {
     setSelectedEmployeesId(projectId);
@@ -230,10 +230,7 @@ const EmployeesList = () => {
                     );
                 })
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-              scroll={{
-                x: true,
-                y: 'calc(100vh - 330px)',
-              }}
+              scroll={{ y: 'calc(100vh - 370px)' }}
               pagination={false}
               size="small"
             />
