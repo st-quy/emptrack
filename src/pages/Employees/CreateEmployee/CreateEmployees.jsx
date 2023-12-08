@@ -57,13 +57,13 @@ const CreateEmployee = () => {
       console.log(values);
       console.log(fileImg);
       console.log(code);
+      if (values.skills.length === 1) {
+        return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
+      }
+
       if (fileList.length > 0) {
         axiosInstance
-          .post('employees', {
-            ...values,
-            code,
-            avatar: fileImg,
-          })
+          .post('employees', { ...values, code, avatar: fileImg })
           .then(() => {
             Toast(
               'success',
@@ -76,6 +76,7 @@ const CreateEmployee = () => {
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
+
         formik.resetForm();
         form.resetFields();
         form2.resetFields();

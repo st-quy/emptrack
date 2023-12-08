@@ -217,7 +217,7 @@
     "STATUS": "Trạng thái",
     "SKILLS": "Kĩ năng",
     "POSITION": "Vị trí",
-    "LINE_MANAGER": "Được ai quản lí?",
+    "LINE_MANAGER": "Được quản lí bởi?",
     "DESCRIPTION": "Mô tả",
     "IS_MANAGER": "Người quản lí?",
     "UPLOAD": "Bấm để thêm ảnh",
@@ -258,6 +258,8 @@
     "SKILL_REQUIRED": "Vui lòng nhập tên kĩ năng",
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
     "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
-    "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email"
+    "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
+    "BIRTH_ENOUGH_AGE": "Vui lòng chọn năm sinh lớn hơn 18 tuổi",
+    "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng"
   }
 }
