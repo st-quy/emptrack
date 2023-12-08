@@ -210,7 +210,8 @@ const CreateEmployee = () => {
       </Space>
       <div
         style={{
-          maxHeight: '600px',
+          maxHeight: '80vh',
+          maxWidth: '100%',
           overflowY: 'auto',
         }}
       >
@@ -249,8 +250,8 @@ const CreateEmployee = () => {
                     formik.errors.name && formik.touched.name
                       ? 'error'
                       : formik.touched.name
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.name &&
@@ -285,8 +286,8 @@ const CreateEmployee = () => {
                     formik.errors.phone && formik.touched.phone
                       ? 'error'
                       : formik.touched.phone
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.phone &&
@@ -321,8 +322,8 @@ const CreateEmployee = () => {
                     formik.errors.gender && formik.touched.gender
                       ? 'error'
                       : formik.touched.gender
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.gender &&
@@ -370,8 +371,8 @@ const CreateEmployee = () => {
                     formik.errors.birth && formik.touched.birth
                       ? 'error'
                       : formik.touched.birth
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.birth &&
@@ -407,8 +408,8 @@ const CreateEmployee = () => {
                     formik.errors.citizen_card && formik.touched.citizen_card
                       ? 'error'
                       : formik.touched.citizen_card
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.citizen_card &&
@@ -444,8 +445,8 @@ const CreateEmployee = () => {
                     formik.errors.address && formik.touched.address
                       ? 'error'
                       : formik.touched.address
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.address &&
@@ -480,8 +481,8 @@ const CreateEmployee = () => {
                     formik.errors.email && formik.touched.email
                       ? 'error'
                       : formik.touched.email
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.email &&
@@ -554,8 +555,8 @@ const CreateEmployee = () => {
                     formik.errors.description && formik.touched.description
                       ? 'error'
                       : formik.touched.description
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.description &&
@@ -597,8 +598,8 @@ const CreateEmployee = () => {
                     formik.errors.isManager && formik.touched.isManager
                       ? 'error'
                       : formik.touched.isManager
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.isManager &&
@@ -640,8 +641,8 @@ const CreateEmployee = () => {
                     formik.errors.status && formik.touched.status
                       ? 'error'
                       : formik.touched.status
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.status &&
@@ -682,8 +683,8 @@ const CreateEmployee = () => {
                     formik.errors.position && formik.touched.position
                       ? 'error'
                       : formik.touched.position
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.position &&
@@ -725,8 +726,8 @@ const CreateEmployee = () => {
                     formik.errors.lineManager && formik.touched.lineManager
                       ? 'error'
                       : formik.touched.lineManager
-                      ? 'success'
-                      : ''
+                        ? 'success'
+                        : ''
                   }
                   help={
                     formik.errors.lineManager &&
@@ -777,17 +778,17 @@ const CreateEmployee = () => {
                       <Form.Item
                         validateStatus={
                           formik.errors.skills &&
-                          formik.errors.skills[index] &&
-                          formik.touched.skills &&
-                          formik.touched.skills[index]
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
                             ? 'error'
                             : ''
                         }
                         help={
                           formik.errors.skills &&
-                          formik.errors.skills[index] &&
-                          formik.touched.skills &&
-                          formik.touched.skills[index]
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
                             ? formik.errors.skills[index].skillname
                             : ''
                         }
@@ -806,17 +807,17 @@ const CreateEmployee = () => {
                       <Form.Item
                         validateStatus={
                           formik.errors.skills &&
-                          formik.errors.skills[index] &&
-                          formik.touched.skills &&
-                          formik.touched.skills[index]
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
                             ? 'error'
                             : ''
                         }
                         help={
                           formik.errors.skills &&
-                          formik.errors.skills[index] &&
-                          formik.touched.skills &&
-                          formik.touched.skills[index]
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
                             ? formik.errors.skills[index].exp
                             : ''
                         }

@@ -46,7 +46,9 @@
     "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
     "START DATE": "Start date",
-    "END DATE": "End date"
+    "END DATE": "End date",
+    "TOTAL": "Sum: {{total}} project",
+    "TOTAL_EMPLOYEES": "Sum: {{total}} employees"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
