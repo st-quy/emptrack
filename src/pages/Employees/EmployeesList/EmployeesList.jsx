@@ -70,7 +70,7 @@ const EmployeesList = () => {
   };
   const columns = [
     {
-      title: 'Action',
+      title: t('TABLE.ACTIONS'),
       key: 'action',
       width: 100,
       render: (text, record) => (
@@ -93,7 +93,7 @@ const EmployeesList = () => {
       ),
     },
     {
-      title: 'Code',
+      title: t('EMPLOYEES.CODE'),
       dataIndex: 'code',
       key: 'code',
       width: 100,
@@ -102,14 +102,14 @@ const EmployeesList = () => {
       },
     },
     {
-      title: 'Name',
+      title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
       width: 120,
     },
     {
-      title: 'Avatar',
+      title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
       width: 120,
@@ -125,13 +125,13 @@ const EmployeesList = () => {
       },
     },
     {
-      title: 'Citizen Indentity Card',
+      title: t('EMPLOYEES.CITIZEN_CARD'),
       dataIndex: 'citizen_card',
       key: 'citizen_card',
       width: 120,
     },
     {
-      title: 'Manager',
+      title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
       width: 100,
@@ -148,7 +148,7 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.isManager === value,
     },
     {
-      title: 'Status',
+      title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
       width: 100,
@@ -177,7 +177,7 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.status === value,
     },
     {
-      title: 'Position',
+      title: t('EMPLOYEES.POSITION'),
       dataIndex: 'position',
       key: 'position',
       width: 110,

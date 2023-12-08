@@ -130,8 +130,8 @@ const CreateProject = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axiosInstance.get('employees').then((res) => {
-        const employeesSelection = res.data;
-
+        const employeesSelection = res.data.filter(em => !em.deletedAt);
+        console.log(employeesSelection)
         setEmployeesSelection(employeesSelection);
       });
     };
