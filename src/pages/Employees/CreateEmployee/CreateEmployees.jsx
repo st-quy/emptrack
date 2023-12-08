@@ -26,6 +26,7 @@ import './CreateEmployees.scss';
 import ValidationSchema from './ValidationSchema';
 const { Item } = Form;
 const { Option } = Select;
+import roleList from '../../Project/CreateProject/rolelist';
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const CreateEmployee = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
+      email: '',
       phone: '',
       gender: '',
       birth: null,
@@ -62,7 +64,7 @@ const CreateEmployee = () => {
             code,
             avatar: fileImg,
           })
-          .then((response) => {
+          .then(() => {
             Toast(
               'success',
               t('TOAST.CREATED_SUCCESS', {
@@ -95,6 +97,7 @@ const CreateEmployee = () => {
   const [previewImage, setPreviewImage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [code, setCode] = useState('');
+  const [employeeOptions, setEmployeeOptions] = useState([]);
 
   const handlePic = async ({ fileList }) => {
     try {
@@ -183,6 +186,10 @@ const CreateEmployee = () => {
         const employees = response.data;
         const dl = 'DL2023';
         const newCode = dl + (employees.length + 1).toString().padStart(2, '0');
+        const filteredEmployees = employees.filter(
+          (employee) => employee.isManager,
+        );
+        setEmployeeOptions(filteredEmployees);
         setCode(newCode);
       } catch (error) {
         console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -420,84 +427,116 @@ const CreateEmployee = () => {
                   />
                 </Item>
               </Col>
-              <Col span={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
-                {/* ADDRESS EMPLOYEE*/}
-                <Col span={24}>
-                  <Form.Item
-                    label={t('EMPLOYEES.ADDRESS')}
-                    name="address"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the address',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.address && formik.touched.address
-                        ? 'error'
-                        : formik.touched.address
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.address &&
-                      formik.touched.address &&
-                      formik.errors.address
-                    }
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                  >
-                    <Input
-                      size="large"
-                      value={formik.values.address}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      placeholder={t('EMPLOYEES.ADDRESS')}
-                    />
-                  </Form.Item>
-                </Col>
-                {/* AVATAR EMPLOYEE */}
-                <Col span={24}>
-                  <Form.Item
-                    label={t('EMPLOYEES.AVATAR')}
-                    validateStatus={fileList.length === 0 && 'error'}
-                    help={
-                      fileList.length === 0 && t('EMPLOYEE_VALIDATION.AVATAR')
-                    }
-                    required
-                    hasFeedback
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                  >
-                    <div>
-                      <ImgCrop rotationSlider>
-                        <Upload
-                          listType="picture-card"
-                          fileList={fileList}
-                          onChange={handlePic}
-                          onPreview={handlePreview}
-                          onRemove={handleRemove}
-                        >
-                          {fileList.length === 0 && '+ Upload'}
-                        </Upload>
-                      </ImgCrop>
-                      {previewImage && (
-                        <Modal
-                          open={showModal}
-                          footer={null}
-                          onCancel={handlePreviewCancel}
-                        >
-                          <img
-                            src={previewImage}
-                            alt="Preview"
-                            style={{ width: '100%', maxHeight: '550px' }}
-                          />
-                        </Modal>
-                      )}
-                    </div>
-                  </Form.Item>
-                </Col>
+
+              {/* ADDRESS EMPLOYEE*/}
+              <Col span={12}>
+                <Form.Item
+                  label={t('EMPLOYEES.ADDRESS')}
+                  name="address"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter the address',
+                    },
+                  ]}
+                  hasFeedback
+                  validateStatus={
+                    formik.errors.address && formik.touched.address
+                      ? 'error'
+                      : formik.touched.address
+                      ? 'success'
+                      : ''
+                  }
+                  help={
+                    formik.errors.address &&
+                    formik.touched.address &&
+                    formik.errors.address
+                  }
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                >
+                  <Input
+                    size="large"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    placeholder={t('EMPLOYEES.ADDRESS')}
+                  />
+                </Form.Item>
+              </Col>
+              {/* EMAIL EMPLOYEE*/}
+              <Col span={12}>
+                <Form.Item
+                  label={t('EMPLOYEES.EMAIL')}
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter the email',
+                    },
+                  ]}
+                  hasFeedback
+                  validateStatus={
+                    formik.errors.email && formik.touched.email
+                      ? 'error'
+                      : formik.touched.email
+                      ? 'success'
+                      : ''
+                  }
+                  help={
+                    formik.errors.email &&
+                    formik.touched.email &&
+                    formik.errors.email
+                  }
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                >
+                  <Input
+                    size="large"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    placeholder={t('EMPLOYEES.EMAIL')}
+                  />
+                </Form.Item>
+              </Col>
+              {/* AVATAR EMPLOYEE */}
+              <Col span={12}>
+                <Form.Item
+                  label={t('EMPLOYEES.AVATAR')}
+                  status={fileList.length === 0 && 'error'}
+                  required
+                  hasFeedback
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                >
+                  <div>
+                    <ImgCrop rotationSlider>
+                      <Upload
+                        listType="picture-card"
+                        fileList={fileList}
+                        onChange={handlePic}
+                        onPreview={handlePreview}
+                        onRemove={handleRemove}
+                      >
+                        {fileList.length === 0 && '+ Upload'}
+                      </Upload>
+                    </ImgCrop>
+                    {previewImage && (
+                      <Modal
+                        open={showModal}
+                        footer={null}
+                        onCancel={handlePreviewCancel}
+                      >
+                        <img
+                          src={previewImage}
+                          alt="Preview"
+                          style={{ width: '100%', maxHeight: '550px' }}
+                        />
+                      </Modal>
+                    )}
+                  </div>
+                </Form.Item>
               </Col>
               {/* DESCRIPTION EMPLOYEE*/}
               <Col span={12}>
@@ -531,7 +570,7 @@ const CreateEmployee = () => {
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    rows={8}
+                    rows={4}
                     style={{ resize: 'none' }}
                     placeholder={t('EMPLOYEES.DESCRIPTION')}
                   />
@@ -654,13 +693,25 @@ const CreateEmployee = () => {
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Input
+                  <Select
                     size="large"
-                    placeholder={t('EMPLOYEES.POSITION')}
                     value={formik.values.position}
-                    onChange={formik.handleChange}
+                    placeholder={t('EMPLOYEES.POSITION')}
+                    onChange={(value) => {
+                      formik.setFieldValue('position', value);
+                    }}
                     onBlur={formik.handleBlur}
-                  />
+                    style={{ width: '100%' }}
+                  >
+                    {roleList &&
+                      roleList.map((e, index) => {
+                        return (
+                          <Option key={index} value={e.value}>
+                            {e.label}
+                          </Option>
+                        );
+                      })}
+                  </Select>
                 </Item>
               </Col>
               {/* LINE_MANAGER EMPLOYEE */}
@@ -685,13 +736,32 @@ const CreateEmployee = () => {
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Input
+                  {/* <Input
                     size="large"
                     placeholder={t('EMPLOYEES.LINE_MANAGER')}
                     value={formik.values.lineManager}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                  />
+                  /> */}
+                  <Select
+                    size="large"
+                    value={formik.values.lineManager}
+                    placeholder={t('EMPLOYEES.LINE_MANAGER')}
+                    onChange={(value) => {
+                      formik.setFieldValue('lineManager', value);
+                    }}
+                    onBlur={formik.handleBlur}
+                    style={{ width: '100%' }}
+                  >
+                    {employeeOptions &&
+                      employeeOptions.map((employee, index) => {
+                        return (
+                          <Option key={index} value={employee.name}>
+                            {employee.name}
+                          </Option>
+                        );
+                      })}
+                  </Select>
                 </Item>
               </Col>
               {/* SKILLS EMPLOYEE */}

@@ -12,6 +12,7 @@ const ValidationSchema = () => {
         t('EMPLOYEE_VALIDATION.NAME_MATCH_CAPITAL_LETTER'),
       )
       .matches(/\s/, t('EMPLOYEE_VALIDATION.NAME_MATCH_SPACE')),
+    email: Yup.string().required(t('EMPLOYEE_VALIDATION.EMAIL_REQUIRED')),
     phone: Yup.string()
       .matches(/^0\d{9}$/, t('EMPLOYEE_VALIDATION.PHONE_MATCH'))
       .required(t('EMPLOYEE_VALIDATION.PHONE_REQUIRED')),

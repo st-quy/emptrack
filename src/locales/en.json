@@ -202,6 +202,7 @@
   "EMPLOYEES": {
     "CREATE": "Create employee",
     "CODE": "Code employee",
+    "EMAIL": "Email",
     "NAME": "Name employee",
     "PHONE": "Phone number",
     "BIRTH": "Day of Birth",
@@ -242,7 +243,7 @@
     "STATUS_REQUIRED": "Please select a status",
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
-    "LINE_MANAGER_REQUIRED": "Please enter the line manager",
+    "LINE_MANAGER_REQUIRED": "Please select the line manager",
     "BIRTH_MAX": "Date of birth cannot be greater than current date",
     "BIRTH_REQUIRED": "Please select year of birth",
     "DESCRIPTION_REQUIRED": "Please enter description",
@@ -251,6 +252,7 @@
     "AVATAR": "Please select avatar",
     "SKILL_REQUIRED": "Please enter skill name",
     "EXP_REQUIRED": "Please enter year of experience",
-    "ADDRESS_REQUIRED": "Please enter address"
+    "ADDRESS_REQUIRED": "Please enter address",
+    "EMAIL_REQUIRED": "Please enter email address"
   }
 }

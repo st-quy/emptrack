@@ -207,6 +207,7 @@
   "EMPLOYEES": {
     "CREATE": "Tạo nhân viên",
     "CODE": "Mã nhân viên",
+    "EMAIL": "Email",
     "NAME": "Tên nhân viên",
     "PHONE": "Số điện thoại",
     "BIRTH": "Năm sinh",
@@ -247,7 +248,7 @@
     "STATUS_REQUIRED": "Vui lòng chọn trạng thái",
     "IS_MANAGER_REQUIRED": "Bạn có phải người quản lí không?",
     "POSITION_REQUIRED": "Vui lòng chọn vị trí",
-    "LINE_MANAGER_REQUIRED": "Vui lòng nhập tên người quản lí",
+    "LINE_MANAGER_REQUIRED": "Vui lòng chọn người quản lí",
     "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
     "BIRTH_REQUIRED": "Vui lòng chọn năm sinh",
     "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
@@ -256,6 +257,7 @@
     "AVATAR": "Vui lòng chọn ảnh đại diện",
     "SKILL_REQUIRED": "Vui lòng nhập tên kĩ năng",
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
-    "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ"
+    "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
+    "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email"
   }
 }
