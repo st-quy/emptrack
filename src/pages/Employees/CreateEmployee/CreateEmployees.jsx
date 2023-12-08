@@ -57,11 +57,10 @@ const CreateEmployee = () => {
       console.log(values);
       console.log(fileImg);
       console.log(code);
-      if (values.skills.length === 1) {
-        return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
-      }
 
-      if (fileList.length > 0) {
+      if (values.skills.length === 0) {
+        return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
+      } else if (fileList.length > 0) {
         axiosInstance
           .post('employees', { ...values, code, avatar: fileImg })
           .then(() => {
