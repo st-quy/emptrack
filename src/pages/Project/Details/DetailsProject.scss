@@ -1,4 +1,4 @@
-#project_create {
+#details-project {
   div.ant-col.ant-form-item-label {
     text-align: start;
   }
@@ -12,5 +12,13 @@
     padding: 4px 11px;
     border: 1px solid #d9d9d9;
     border-radius: 6px;
+  }
+
+  .ant-input-disabled,
+  .ant-input[disabled],
+  .css-dev-only-do-not-override-1g853jt.ant-picker
+    .ant-picker-input
+    > input[disabled] {
+    color: black;
   }
 }

@@ -11,17 +11,18 @@ import {
   Space,
   Typography,
 } from 'antd';
-import axios from 'axios';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 import './CreateProject.scss';
 import './rolelist';
 import roleSelection from './rolelist';
+import Schema from './schema';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -31,52 +32,19 @@ const emptyMember = {
   member: '',
   role: '',
 };
+
 const CreateProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [employeesSelection, setEmployeesSelection] = useState();
   const [members, setMembers] = useState([emptyMember]);
+  const schema = Schema();
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_create', route: '/projects/create' },
   ];
 
-  let schema = Yup.object().shape({
-    name: Yup.string()
-      .trim()
-      .max(60, t('VALIDATE.MAX', { field: t('PROJECTS.NAME'), number: '60' }))
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.NAME') })),
-    description: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
-    technical: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),
-    dateRange: Yup.object().shape({
-      startDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_START') }),
-      ),
-      endDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_END') }),
-      ),
-    }),
-    manager: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.MANAGER') })),
-    members: Yup.array()
-      .of(
-        Yup.object().shape({
-          member: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('PROJECTS.MEMBER') }),
-          ),
-          role: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }),
-          ),
-        }),
-      )
-      .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.MEMBER') })),
-  });
   const initialValues = {
     name: '',
     manager: '',
@@ -96,7 +64,7 @@ const CreateProject = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: schema,
-    onSubmit: (value) => {
+    onSubmit: async (value) => {
       const managerName = employeesSelection.find(
         (e) => e.id === value.manager,
       ).name;
@@ -117,13 +85,12 @@ const CreateProject = () => {
       let name = value.name.trim().replace(/  +/g, ' ');
       let description = value.description.trim().replace(/  +/g, ' ');
       let status = value.status;
-      let technical = value.technical;
+      let technical = value.technical.replace(/[ ]+/g, ' ').trim();
       let startDate = value.dateRange.startDate;
       let endDate = value.dateRange.endDate;
       let manager = [{ name: managerName, id: value.manager }];
-
       try {
-        axios.post('https://api-emptrack.onrender.com/projects', {
+        await axiosInstance.post('projects', {
           member,
           name,
           description,
@@ -133,34 +100,52 @@ const CreateProject = () => {
           endDate,
           manager,
         });
-
         //show notif
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+          }),
+          2,
+        );
         //Clear form
         formik.resetForm();
         form.resetFields();
-
         //Redirect to details page
-        navigate(`/projects`);
+        setTimeout(() => {
+          navigate(`/projects`);
+        }, 2000);
       } catch (error) {
-        console.log(error);
+        Toast(
+          'error',
+          t('TOAST.CREATED_ERROR', {
+            field: t('BREADCRUMB.PROJECTS'),
+          }),
+          2,
+        );
       }
     },
   });
 
   useEffect(() => {
-    axios.get('https://api-emptrack.onrender.com/employees').then((res) => {
-      const employeesSelection = res.data;
+    const fetchData = async () => {
+      await axiosInstance.get('employees').then((res) => {
+        const employeesSelection = res.data;
 
-      setEmployeesSelection(employeesSelection);
-    });
+        setEmployeesSelection(employeesSelection);
+      });
+    };
+    fetchData();
   }, []);
 
-  // console.log(formik.errors);
+  const getAvailableOptions = () => {
+    const selectedOptions = members?.map((member) => member.member);
 
-  // const filterSelectedMembers = () =>
-  //   employeesSelection.filter(
-  //     (option) => !members.some((m) => m.member === option.value),
-  //   );
+    return employeesSelection?.filter(
+      (option) => !selectedOptions.includes(option.id),
+    );
+  };
+
   return (
     <div id="project_create">
       <Space className="w-100 justify-content-between">
@@ -171,10 +156,10 @@ const CreateProject = () => {
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-        style={{borderRadius: '30px' }}
+        style={{ borderRadius: '30px' }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
-          {({ values, errors }) => (
+          {({ values }) => (
             <Form
               labelCol={{
                 sm: { span: 24 },
@@ -365,13 +350,18 @@ const CreateProject = () => {
                                 );
                               }}
                               className="w-100 members-select"
-                              placeholder="Email"
                             >
-                              <option defaultValue>Select Member</option>
+                              <option defaultValue>
+                                {members[index]?.member
+                                  ? employeesSelection.find(
+                                      (e) => e.id === members[index].member,
+                                    ).name
+                                  : 'Select member'}
+                              </option>
                               {employeesSelection &&
-                                employeesSelection.map((e, index) => {
+                                getAvailableOptions(index).map((e, i) => {
                                   return (
-                                    <option key={index} value={e.id}>
+                                    <option key={i} value={e.id}>
                                       {e.name}
                                     </option>
                                   );
