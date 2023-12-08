@@ -260,6 +260,7 @@
     "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
     "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
     "BIRTH_ENOUGH_AGE": "Vui lòng chọn năm sinh lớn hơn 18 tuổi",
-    "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng"
+    "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
+    "EMAIL_INVALID": "Email phải bao gồm kí tự @"
   }
 }
