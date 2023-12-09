@@ -199,6 +199,7 @@
   "TOAST": {
     "CREATED_SUCCESS": "Created {{field}} successfully",
     "CREATED_ERROR": "{{field}} could not be created",
+    "CREATED_ERROR_SAME_NAME": "Project name already exists",
     "DELETED_SUCCESS": "Deleted {{field}} successfully"
   },
   "EMPLOYEES": {

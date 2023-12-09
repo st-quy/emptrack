@@ -65,64 +65,74 @@ const CreateProject = () => {
     initialValues: initialValues,
     validationSchema: schema,
     onSubmit: async (value) => {
-      const managerName = employeesSelection.find(
-        (e) => e.id === value.manager,
-      ).name;
+      let name = value.name.trim().replace(/  +/g, ' ');
+      const allProjects = await axiosInstance
+        .get('projects')
+        .then((res) => res.data);
+      const isSameName = allProjects.find((project) => project.name === name);
 
-      let member = [];
-      members.map((mem) => {
-        const memberName = employeesSelection.find(
-          (e) => e.id === mem.member,
+      if (!isSameName) {
+        const managerName = employeesSelection.find(
+          (e) => e.id === value.manager,
         ).name;
 
-        member.push({
-          role: mem.role,
-          name: memberName,
-          id: mem.member,
-        });
-      });
+        let member = [];
+        members.map((mem) => {
+          const memberName = employeesSelection.find(
+            (e) => e.id === mem.member,
+          ).name;
 
-      let name = value.name.trim().replace(/  +/g, ' ');
-      let description = value.description.trim().replace(/  +/g, ' ');
-      let status = value.status;
-      let technical = value.technical.replace(/[ ]+/g, ' ').trim();
-      let startDate = value.dateRange.startDate;
-      let endDate = value.dateRange.endDate;
-      let manager = [{ name: managerName, id: value.manager }];
-      try {
-        await axiosInstance.post('projects', {
-          member,
-          name,
-          description,
-          status,
-          technical,
-          startDate,
-          endDate,
-          manager,
+          member.push({
+            role: mem.role,
+            name: memberName,
+            id: mem.member,
+          });
         });
-        //show notif
-        Toast(
-          'success',
-          t('TOAST.CREATED_SUCCESS', {
-            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-          }),
-          2,
-        );
-        //Clear form
-        formik.resetForm();
-        form.resetFields();
-        //Redirect to details page
-        setTimeout(() => {
-          navigate(`/projects`);
-        }, 2000);
-      } catch (error) {
-        Toast(
-          'error',
-          t('TOAST.CREATED_ERROR', {
-            field: t('BREADCRUMB.PROJECTS'),
-          }),
-          2,
-        );
+
+        let description = value.description.trim().replace(/  +/g, ' ');
+        let status = value.status;
+        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let startDate = value.dateRange.startDate;
+        let endDate = value.dateRange.endDate;
+        let manager = [{ name: managerName, id: value.manager }];
+
+        try {
+          await axiosInstance.post('projects', {
+            member,
+            name,
+            description,
+            status,
+            technical,
+            startDate,
+            endDate,
+            manager,
+          });
+          //show notif
+          Toast(
+            'success',
+            t('TOAST.CREATED_SUCCESS', {
+              field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+            }),
+            2,
+          );
+          //Clear form
+          formik.resetForm();
+          form.resetFields();
+          //Redirect to details page
+          setTimeout(() => {
+            navigate(`/projects`);
+          }, 2000);
+        } catch (error) {
+          Toast(
+            'error',
+            t('TOAST.CREATED_ERROR', {
+              field: t('BREADCRUMB.PROJECTS'),
+            }),
+            2,
+          );
+        }
+      } else {
+        Toast('error', t('TOAST.CREATED_ERROR_SAME_NAME'), 3);
       }
     },
   });
@@ -130,8 +140,7 @@ const CreateProject = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axiosInstance.get('employees').then((res) => {
-        const employeesSelection = res.data.filter(em => !em.deletedAt);
-        console.log(employeesSelection)
+        const employeesSelection = res.data.filter((em) => !em.deletedAt);
         setEmployeesSelection(employeesSelection);
       });
     };
@@ -217,12 +226,14 @@ const CreateProject = () => {
                         formik.setFieldValue('manager', value)
                       }
                       allowClear
-                      options={employeesSelection?.map((em) => {
-                        return {
-                          value: em.id,
-                          label: em.name,
-                        };
-                      })}
+                      options={employeesSelection
+                        ?.filter((em) => em.isManager === true)
+                        .map((em) => {
+                          return {
+                            value: em.id,
+                            label: em.name,
+                          };
+                        })}
                     />
                   </Form.Item>
                   <Form.Item
@@ -404,7 +415,6 @@ const CreateProject = () => {
                                 );
                               }}
                               className="w-100 members-select"
-                              placeholder="First Name"
                             >
                               <option defaultValue>Select Role</option>
                               {roleSelection &&
@@ -415,6 +425,17 @@ const CreateProject = () => {
                                     </option>
                                   );
                                 })}
+                              {/* <Select
+                                mode="multiple"
+                                // size={size}
+                                placeholder="Please select"
+                                // defaultValue={}
+                                // onChange={handleChange}
+                                style={{
+                                  width: '100%',
+                                }}
+                                options={roleSelection}
+                              /> */}
                             </Field>
                             {formik.errors.members &&
                             formik.touched.members &&
