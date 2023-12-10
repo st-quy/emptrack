@@ -230,9 +230,11 @@ const ProjectList = () => {
                           member.name
                             .toLowerCase()
                             .includes(searchedText.toLowerCase()) ||
-                          member.role
-                            .toLowerCase()
-                            .includes(searchedText.toLowerCase()),
+                          member.role.some((m) =>
+                            m
+                              .toLowerCase()
+                              .includes(searchedText.toLowerCase()),
+                          ),
                       )) ||
                     item.technical
                       .toLowerCase()
