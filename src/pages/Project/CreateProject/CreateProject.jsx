@@ -20,6 +20,7 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import './CreateProject.scss';
+import CustomSelect from './CustomSelect';
 import './rolelist';
 import roleSelection from './rolelist';
 import Schema from './schema';
@@ -30,7 +31,7 @@ const dateFormat = 'DD/MM/YYYY';
 
 const emptyMember = {
   member: '',
-  role: '',
+  role: [],
 };
 
 const CreateProject = () => {
@@ -70,32 +71,27 @@ const CreateProject = () => {
         .get('projects')
         .then((res) => res.data);
       const isSameName = allProjects.find((project) => project.name === name);
-
       if (!isSameName) {
         const managerName = employeesSelection.find(
           (e) => e.id === value.manager,
         ).name;
-
         let member = [];
         members.map((mem) => {
           const memberName = employeesSelection.find(
             (e) => e.id === mem.member,
           ).name;
-
           member.push({
-            role: mem.role,
+            role: mem.role.map((r) => r.value),
             name: memberName,
             id: mem.member,
           });
         });
-
         let description = value.description.trim().replace(/  +/g, ' ');
         let status = value.status;
         let technical = value.technical.replace(/[ ]+/g, ' ').trim();
         let startDate = value.dateRange.startDate;
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
-
         try {
           await axiosInstance.post('projects', {
             member,
@@ -392,7 +388,7 @@ const CreateProject = () => {
                             )}
                           </Col>
                           <Col span={11}>
-                            <Field
+                            {/* <Field
                               component="select"
                               name={`members[${index}].role`}
                               id={`members[${index}].role`}
@@ -425,18 +421,26 @@ const CreateProject = () => {
                                     </option>
                                   );
                                 })}
-                              {/* <Select
-                                mode="multiple"
-                                // size={size}
-                                placeholder="Please select"
-                                // defaultValue={}
-                                // onChange={handleChange}
-                                style={{
-                                  width: '100%',
-                                }}
-                                options={roleSelection}
-                              /> */}
-                            </Field>
+                            </Field> */}
+                            {/* <Field
+                              className="w-100 members-select"
+                              name={`members[${index}].role`}
+                              id={`members[${index}].role`}
+                              options={roleSelection}
+                              component={CustomSelect}
+                              // placeholder="Select multi languages..."
+                              isMulti={true}
+                            /> */}
+                            <Field
+                              component={CustomSelect}
+                              name={`members[${index}].role`}
+                              index={index}
+                              options={roleSelection}
+                              isMulti={true}
+                              members={members}
+                              setMembers={setMembers}
+                              formik={formik}
+                            ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
                             {
