@@ -6,9 +6,7 @@ import {
   Input,
   Radio,
   Row,
-  Select,
   Space,
-  Switch,
   Tag,
   Typography,
 } from 'antd';
@@ -23,7 +21,6 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
 import './DetailsProject.scss';
 const { RangePicker } = DatePicker;
-const { Text } = Typography;
 const dateFormat = 'DD/MM/YYYY';
 const DetailsProject = () => {
   const { id } = useParams();
@@ -47,10 +44,10 @@ const DetailsProject = () => {
 
   function tagRender(props) {
     const { label, value, closable, onClose } = props;
-
     return (
       <Tag
         color={options.find((item) => item.value === value).color}
+        // color={'orange'}
         closable={closable}
         onClose={onClose}
         style={{ marginRight: 3 }}
@@ -61,14 +58,14 @@ const DetailsProject = () => {
   }
 
   const options = [
-    { label: 'Fullstack', value: 'Fullstack', color: 'green' },
-    { label: 'Devops', value: 'Devops', color: 'blue' },
-    { label: 'Backend', value: 'Backend', color: 'orange' },
-    { label: 'Frontend', value: 'Frontend', color: 'geekblue' },
+    { label: 'fullstack', value: 'fullstack', color: 'green' },
+    { label: 'devops', value: 'devops', color: 'blue' },
+    { label: 'backend', value: 'backend', color: 'orange' },
+    { label: 'frontend', value: 'frontend', color: 'geekblue' },
     { label: 'BA', value: 'BA', color: 'cyan' },
-    { label: 'Tester', value: 'Tester', color: 'volcano' },
-    { label: 'PO', value: 'PO', color: 'geekblue' },
-    { label: 'SM', value: 'SM', color: 'purple' },
+    { label: 'tester', value: 'tester', color: 'volcano' },
+    { label: 'PO', value: 'product owner', color: 'geekblue' },
+    { label: 'SM', value: 'scrum master', color: 'purple' },
   ];
   return (
     <div id="details-project">
@@ -137,7 +134,7 @@ const DetailsProject = () => {
                       className="w-100"
                       defaultValue={[
                         dayjs(project?.startDate.toString(), dateFormat),
-                        dayjs(project?.startDate.toString(), dateFormat),
+                        dayjs(project?.endDate.toString(), dateFormat),
                       ]}
                       format={dateFormat}
                       disabled
@@ -181,25 +178,15 @@ const DetailsProject = () => {
                     <Form.Item
                       name={`members[${index}].role`}
                       label={t('PROJECTS.ROLE')}
-                      initialValue={[
-                        capitalizeFLetter(member?.role),
-                        'Backend',
-                        'Frontend',
-                      ]}
                     >
-                      <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="Please select"
-                        options={options}
-                        tagRender={tagRender}
-                        disabled
-                      />
-                      {/* <Tag color="magenta">
-                        {capitalizeFLetter(member?.role)}
-                      </Tag> */}
-
-                      {/* <Input disabled /> */}
+                      {member.role.map((r) => {
+                        return tagRender({
+                          label: capitalizeFLetter(r),
+                          value: r,
+                          closable: false,
+                          onClose: false,
+                        });
+                      })}
                     </Form.Item>
                   </Col>
                 </Row>

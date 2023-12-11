@@ -7,6 +7,15 @@
     display: block;
     margin-bottom: 15px;
   }
+  .ant-typography::before {
+    display: inline-block;
+    margin-inline-end: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
 
   .members-select {
     padding: 4px 11px;
@@ -54,5 +63,14 @@
   }
   .css-1jqq78o-placeholder {
     color: rgba(0, 0, 0, 0.88);
+  }
+  .label-required .ant-col.ant-form-item-label::before {
+    display: inline-block;
+    margin-inline-end: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
   }
 }
