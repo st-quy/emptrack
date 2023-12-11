@@ -20,6 +20,7 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import './CreateProject.scss';
+import CustomSelect from './CustomSelect';
 import './rolelist';
 import roleSelection from './rolelist';
 import Schema from './schema';
@@ -30,7 +31,7 @@ const dateFormat = 'DD/MM/YYYY';
 
 const emptyMember = {
   member: '',
-  role: '',
+  role: [],
 };
 
 const CreateProject = () => {
@@ -65,64 +66,69 @@ const CreateProject = () => {
     initialValues: initialValues,
     validationSchema: schema,
     onSubmit: async (value) => {
-      const managerName = employeesSelection.find(
-        (e) => e.id === value.manager,
-      ).name;
-
-      let member = [];
-      members.map((mem) => {
-        const memberName = employeesSelection.find(
-          (e) => e.id === mem.member,
-        ).name;
-
-        member.push({
-          role: mem.role,
-          name: memberName,
-          id: mem.member,
-        });
-      });
-
       let name = value.name.trim().replace(/  +/g, ' ');
-      let description = value.description.trim().replace(/  +/g, ' ');
-      let status = value.status;
-      let technical = value.technical.replace(/[ ]+/g, ' ').trim();
-      let startDate = value.dateRange.startDate;
-      let endDate = value.dateRange.endDate;
-      let manager = [{ name: managerName, id: value.manager }];
-      try {
-        await axiosInstance.post('projects', {
-          member,
-          name,
-          description,
-          status,
-          technical,
-          startDate,
-          endDate,
-          manager,
+      const allProjects = await axiosInstance
+        .get('projects')
+        .then((res) => res.data);
+      const isSameName = allProjects.find((project) => project.name === name);
+      if (!isSameName) {
+        const managerName = employeesSelection.find(
+          (e) => e.id === value.manager,
+        ).name;
+        let member = [];
+        members.map((mem) => {
+          const memberName = employeesSelection.find(
+            (e) => e.id === mem.member,
+          ).name;
+          member.push({
+            role: mem.role.map((r) => r.value),
+            name: memberName,
+            id: mem.member,
+          });
         });
-        //show notif
-        Toast(
-          'success',
-          t('TOAST.CREATED_SUCCESS', {
-            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-          }),
-          2,
-        );
-        //Clear form
-        formik.resetForm();
-        form.resetFields();
-        //Redirect to details page
-        setTimeout(() => {
-          navigate(`/projects`);
-        }, 2000);
-      } catch (error) {
-        Toast(
-          'error',
-          t('TOAST.CREATED_ERROR', {
-            field: t('BREADCRUMB.PROJECTS'),
-          }),
-          2,
-        );
+        let description = value.description.trim().replace(/  +/g, ' ');
+        let status = value.status;
+        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let startDate = value.dateRange.startDate;
+        let endDate = value.dateRange.endDate;
+        let manager = [{ name: managerName, id: value.manager }];
+        try {
+          await axiosInstance.post('projects', {
+            member,
+            name,
+            description,
+            status,
+            technical,
+            startDate,
+            endDate,
+            manager,
+          });
+          //show notif
+          Toast(
+            'success',
+            t('TOAST.CREATED_SUCCESS', {
+              field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+            }),
+            2,
+          );
+          //Clear form
+          formik.resetForm();
+          form.resetFields();
+          //Redirect to details page
+          setTimeout(() => {
+            navigate(`/projects`);
+          }, 2000);
+        } catch (error) {
+          Toast(
+            'error',
+            t('TOAST.CREATED_ERROR', {
+              field: t('BREADCRUMB.PROJECTS'),
+            }),
+            2,
+          );
+        }
+      } else {
+        Toast('error', t('TOAST.CREATED_ERROR_SAME_NAME'), 3);
       }
     },
   });
@@ -130,8 +136,7 @@ const CreateProject = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axiosInstance.get('employees').then((res) => {
-        const employeesSelection = res.data.filter(em => !em.deletedAt);
-        console.log(employeesSelection)
+        const employeesSelection = res.data.filter((em) => !em.deletedAt);
         setEmployeesSelection(employeesSelection);
       });
     };
@@ -156,7 +161,12 @@ const CreateProject = () => {
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-        style={{ borderRadius: '30px' }}
+        style={{
+          // maxHeight: '80vh',
+          // maxWidth: '100%',
+          // overflowY: 'auto',
+          borderRadius: '30px',
+        }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
           {({ values }) => (
@@ -217,12 +227,14 @@ const CreateProject = () => {
                         formik.setFieldValue('manager', value)
                       }
                       allowClear
-                      options={employeesSelection?.map((em) => {
-                        return {
-                          value: em.id,
-                          label: em.name,
-                        };
-                      })}
+                      options={employeesSelection
+                        ?.filter((em) => em.isManager === true)
+                        .map((em) => {
+                          return {
+                            value: em.id,
+                            label: em.name,
+                          };
+                        })}
                     />
                   </Form.Item>
                   <Form.Item
@@ -356,7 +368,7 @@ const CreateProject = () => {
                                   ? employeesSelection.find(
                                       (e) => e.id === members[index].member,
                                     ).name
-                                  : 'Select member'}
+                                  : t('PROJECTS.SELECT_MEMBER')}
                               </option>
                               {employeesSelection &&
                                 getAvailableOptions(index).map((e, i) => {
@@ -369,9 +381,6 @@ const CreateProject = () => {
                             </Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.member */
-                            } &&
                             formik.errors.members[index]?.member ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.member}
@@ -382,45 +391,17 @@ const CreateProject = () => {
                           </Col>
                           <Col span={11}>
                             <Field
-                              component="select"
+                              component={CustomSelect}
                               name={`members[${index}].role`}
-                              id={`members[${index}].role`}
-                              onChange={(value) => {
-                                arrayHelpers.replace(index, {
-                                  ...members[index],
-                                  role: value.target.value,
-                                });
-                                setMembers((prevMembers) => {
-                                  const updatedMembers = [...prevMembers];
-                                  updatedMembers[index] = {
-                                    ...updatedMembers[index],
-                                    role: value.target.value,
-                                  };
-                                  return updatedMembers;
-                                });
-                                formik.setFieldValue(
-                                  `members.${index}.role`,
-                                  value.target.value,
-                                );
-                              }}
-                              className="w-100 members-select"
-                              placeholder="First Name"
-                            >
-                              <option defaultValue>Select Role</option>
-                              {roleSelection &&
-                                roleSelection.map((e, index) => {
-                                  return (
-                                    <option key={index} value={e.value}>
-                                      {e.label}
-                                    </option>
-                                  );
-                                })}
-                            </Field>
+                              index={index}
+                              options={roleSelection}
+                              isMulti={true}
+                              members={members}
+                              setMembers={setMembers}
+                              formik={formik}
+                            ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.role */
-                            } &&
                             formik.errors.members[index]?.role ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.role}
