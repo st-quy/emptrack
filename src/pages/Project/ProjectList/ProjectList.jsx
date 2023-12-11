@@ -226,22 +226,22 @@ const ProjectList = () => {
                           .toLowerCase()
                           .includes(searchedText.toLowerCase()),
                       )) ||
-                    (item.member &&
-                      item.member.some(
-                        (member) =>
-                          member.name
-                            .toLowerCase()
-                            .includes(searchedText.toLowerCase()) ||
-                          member.role
-                            .toLowerCase()
-                            .includes(searchedText.toLowerCase()),
-                      )) ||
+                    // (item.member &&
+                    //   item.member.some(
+                    //     (member) =>
+                    //       member.name
+                    //         .toLowerCase()
+                    //         .includes(searchedText.toLowerCase()) ||
+                    //       member.role
+                    //         .toLowerCase()
+                    //         .includes(searchedText.toLowerCase()),
+                    //   )) ||
                     item.technical
                       .toLowerCase()
                       .includes(searchedText.toLowerCase()) ||
-                    item.description
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
+                    // item.description
+                    //   .toLowerCase()
+                    //   .includes(searchedText.toLowerCase()) ||
                     item.startDate
                       .toLowerCase()
                       .includes(searchedText.toLowerCase()) ||

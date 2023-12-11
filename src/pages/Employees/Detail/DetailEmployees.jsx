@@ -1,47 +1,127 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import Button from '../../../components/atoms/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { Space } from 'antd';
 import Card from 'antd/es/card/Card';
+import { axiosInstance } from '../../../config/axios';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import dayjs from 'dayjs';
+import TextArea from 'antd/es/input/TextArea';
+import './DetailEmployees.scss';
+import {
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Space,
+  Upload,
+} from 'antd';
+import ImgCrop from 'antd-img-crop';
+import FormItem from 'antd/es/form/FormItem';
+const { Item } = Form;
+// const { RangePicker } = DatePicker;DetailEmployees
+// const { Text } = Typography;
+const dateFormat = 'DD/MM/YYYY';
 
 function DetailEmployees() {
+
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { code } = useParams();
-
-  useEffect(() => {
-    // Fetch data based on the 'code' parameter
-    // You can use this data to populate your DetailEmployees component
-    // For example, you can make an API call using the 'code' parameter
-    // and store the result in state
-  }, [code]);
+  const { id } = useParams();
+  const [employees, setEmployees] = useState();
   
+  useEffect(() => {
+    const fetchData = async () => {
+      const employeeData = await axiosInstance
+        .get(`employees/${id}`)
+        .then((res) => res.data);
+        setEmployees(employeeData);
+    };
+    fetchData();
+  }, [id]);
+  
+  function capitalizeFLetter(string) {
+    return string[0].toUpperCase() + string.slice(1);
+  }
 
   return (
     <>
-      <div className="employees_update" style={{ height: 100 }}>
-        <Space className="w-100 justify-content-between">
-          <Breadcrumb items={[{ key: 'employees' }]} />
+      <div id="employee_details" style={{ height: 100}}>
+       {employees ? (
+<>
+<Space className="w-100 justify-content-between">
+          <Breadcrumb items=
+          {[
+            { key: 'employees' },
+          { key:'employees_details', rout: `/employees/details/${id}`}
+        ]}
+         />
           <Button onClick={() => navigate('/employees/update')}>
             {t('BREADCRUMB.USERS_UPDATE')}
           </Button>
         </Space>
-         <Card title={t('EMPLOYEES.CODE')} className="first-card">
-            <Form form={form}>
-              <Row gutter={[16, 0]}>
+        <div
+        style={{
+          maxHeight: '80vh',
+          maxWidth: '100%',
+          overflowY: 'auto',
+        }}
+      >
+        <Card title={t('EMPLOYEES.DETAILS')} className="details-card" style={{ borderRadius: '30px', overflowY: 'auto' }}>
+            <Form>
+            <Row gutter={[16, 16]}>
+                 {/* AVATAR EMPLOYEE */}
+                 <Col span={12}>
+                    {t('EMPLOYEES.AVATAR')}
+                        <div className='styleAvatar'>
+                          <img
+                            src={employees?.avatar[0].url}
+                            alt="Preview"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '50%',  
+                              // marginTop: '40px',  
+                            }}
+                          />
+                        </div>
+                  
+                  </Col>
+                        
+               <Col span={12}>
+                  <Form.Item
+                    label={t('EMPLOYEES.DESCRIPTION')}
+                    name="description"
+                   
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
+                  >
+                    <TextArea
+                      size="large"
+                      defaultValue={employees?.description}
+                      disabled
+                      rows={8}
+                      style={{ resize: 'none' }}
+                      placeholder={t('EMPLOYEES.DESCRIPTION')}
+                    />
+                  </Form.Item>
+                </Col>
                 {/* CODE EMPLOYEE */}
                 <Col span={12}>
+                  
                   <Item
                     label={t('EMPLOYEES.CODE')}
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
-                  >
+                    >
                     <Input
                       size="large"
+                      defaultValue={employees?.code}
                       placeholder={t('EMPLOYEES.CODE')}
-                      value={code}
                       readOnly
                       disabled
                     />
@@ -52,34 +132,13 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.NAME')}
                     name="name"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the name',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.name && formik.touched.name
-                        ? 'error'
-                        : formik.touched.name
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.name &&
-                      formik.touched.name &&
-                      formik.errors.name
-                    }
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
-                    <Input
+                    <Input className='text'
                       size="large"
-                      placeholder={t('EMPLOYEES.NAME')}
-                      value={formik.values.name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                    defaultValue={employees?.name}
+                      disabled
                     />
                   </Item>
                 </Col>
@@ -88,34 +147,16 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.PHONE')}
                     name="phone"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the phone',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.phone && formik.touched.phone
-                        ? 'error'
-                        : formik.touched.phone
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.phone &&
-                      formik.touched.phone &&
-                      formik.errors.phone
-                    }
+                  
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Input
                       size="large"
+                      defaultValue={employees?.phone}
+                      disabled
                       placeholder={t('EMPLOYEES.PHONE')}
-                      value={formik.values.phone}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                     
                     />
                   </Item>
                 </Col>
@@ -124,35 +165,14 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.GENDER')}
                     name="gender"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please select the gender',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.gender && formik.touched.gender
-                        ? 'error'
-                        : formik.touched.gender
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.gender &&
-                      formik.touched.gender &&
-                      formik.errors.gender
-                    }
+                    
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Select
                       size="large"
-                      value={formik.values.gender}
-                      onChange={(selectedOption) => {
-                        formik.setFieldValue('gender', selectedOption);
-                      }}
-                      onBlur={formik.handleBlur}
+                      defaultValue={employees?.gender}
+                      disabled
                       placeholder={t('EMPLOYEES.GENDER')}
                       style={{
                         width: '100%',
@@ -170,234 +190,80 @@ function DetailEmployees() {
                 </Col>
                 {/* BIRTHDAY EMPLOYEE */}
                 <Col span={12}>
-                  <Item
-                    label={t('EMPLOYEES.BIRTH')}
-                    name="birth"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please select the birth date',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.birth && formik.touched.birth
-                        ? 'error'
-                        : formik.touched.birth
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.birth &&
-                      formik.touched.birth &&
-                      formik.errors.birth
-                    }
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                  >
-                    <DatePicker
-                      size="large"
-                      value={formik.values.birth}
-                      onChange={(date) => formik.setFieldValue('birth', date)}
-                      onBlur={formik.handleBlur}
-                      placeholder={t('EMPLOYEES.BIRTH')}
-                      style={{ width: '100%' }}
-                    />
-                  </Item>
+                <Item
+    label={t('EMPLOYEES.BIRTH')}
+    name="birth"
+    labelCol={{ span: 24 }}
+    wrapperCol={{ span: 24 }}
+  >
+    <DatePicker
+      size="large"
+      // defaultValue={dayjs(employees?.dob)}
+      disabled
+      // placeholder={t('EMPLOYEES.dob')}
+      defaultValue={dayjs(employees?.dob, dateFormat)}
+      style={{ width: '100%' }}
+    />
+  </Item>
                 </Col>
                 {/* CITIZEN_CARD EMPLOYEE */}
                 <Col span={12}>
                   <Item
                     label={t('EMPLOYEES.CITIZEN_CARD')}
                     name="citizen_card"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the citizen_card',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.citizen_card && formik.touched.citizen_card
-                        ? 'error'
-                        : formik.touched.citizen_card
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.citizen_card &&
-                      formik.touched.citizen_card &&
-                      formik.errors.citizen_card
-                    }
+                   
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Input
                       size="large"
+                      defaultValue={employees?.cccd}
+                      disabled
                       placeholder={t('EMPLOYEES.CITIZEN_CARD')}
-                      value={formik.values.citizen_card}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                    
                     />
                   </Item>
                 </Col>
-                <Col span={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  {/* ADDRESS EMPLOYEE*/}
+                {/* <Col span={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
                   <Col span={24}>
                     <Form.Item
                       label={t('EMPLOYEES.ADDRESS')}
                       name="address"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Please enter the address',
-                        },
-                      ]}
-                      hasFeedback
-                      validateStatus={
-                        formik.errors.address && formik.touched.address
-                          ? 'error'
-                          : formik.touched.address
-                          ? 'success'
-                          : ''
-                      }
-                      help={
-                        formik.errors.address &&
-                        formik.touched.address &&
-                        formik.errors.address
-                      }
+                    
                       labelCol={{ span: 24 }}
                       wrapperCol={{ span: 24 }}
                     >
                       <Input
                         size="large"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        defaultValue={employees?.address}
+                      disabled
                         placeholder={t('EMPLOYEES.ADDRESS')}
                       />
                     </Form.Item>
                   </Col>
-                  {/* AVATAR EMPLOYEE */}
-                  <Col span={24}>
-                    <Form.Item
-                      label={t('EMPLOYEES.AVATAR')}
-                      validateStatus={fileList.length === 0 && 'error'}
-                      help={
-                        fileList.length === 0 && t('EMPLOYEE_VALIDATION.AVATAR')
-                      }
-                      required
-                      hasFeedback
-                      labelCol={{ span: 24 }}
-                      wrapperCol={{ span: 24 }}
-                    >
-                      <div>
-                        <ImgCrop rotationSlider>
-                          <Upload
-                            listType="picture-card"
-                            fileList={fileList}
-                            onChange={handlePic}
-                            onPreview={handlePreview}
-                            onRemove={handleRemove}
-                          >
-                            {fileList.length === 0 && '+ Upload'}
-                          </Upload>
-                        </ImgCrop>
-                        {previewImage && (
-                          <Modal
-                            open={showModal}
-                            footer={null}
-                            onCancel={handlePreviewCancel}
-                          >
-                            <img
-                              src={previewImage}
-                              alt="Preview"
-                              style={{ width: '100%', maxHeight: '550px' }}
-                            />
-                          </Modal>
-                        )}
-                      </div>
-                    </Form.Item>
-                  </Col>
-                </Col>
-                {/* DESCRIPTION EMPLOYEE*/}
-                <Col span={12}>
-                  <Form.Item
-                    label={t('EMPLOYEES.DESCRIPTION')}
-                    name="description"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the description',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.description && formik.touched.description
-                        ? 'error'
-                        : formik.touched.description
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.description &&
-                      formik.touched.description &&
-                      formik.errors.description
-                    }
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                  >
-                    <TextArea
-                      size="large"
-                      value={formik.values.description}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      rows={8}
-                      style={{ resize: 'none' }}
-                      placeholder={t('EMPLOYEES.DESCRIPTION')}
-                    />
-                  </Form.Item>
-                </Col>
+                </Col> */}
+                
               </Row>
             </Form>
-          </Card>
-          <Card title={t('EMPLOYEES.DETAILS')} className="second-card">
-            <Form form={form2}>
+            {/* {t('EMPLOYEES.DETAILS')} */}
+            <Form>
               <Row gutter={[16, 0]}>
                 {/* IS_MANAGER EMPLOYEE */}
                 <Col span={12}>
                   <Item
                     label={t('EMPLOYEES.IS_MANAGER')}
                     name="isManager"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please select the manager status',
-                      },
-                    ]}
-                    validateStatus={
-                      formik.errors.isManager && formik.touched.isManager
-                        ? 'error'
-                        : formik.touched.isManager
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.isManager &&
-                      formik.touched.isManager &&
-                      formik.errors.isManager
-                    }
+                   
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                     hasFeedback
                   >
                     <Select
                       size="large"
-                      value={formik.values.isManager}
-                      onChange={(value) => {
-                        formik.setFieldValue('isManager', value);
-                      }}
-                      onBlur={formik.handleBlur}
+                      defaultValue={employees?.isManager}
+                      disabled
+                     
+              
                       placeholder={t('EMPLOYEES.IS_MANAGER')}
                       style={{ width: '100%' }}
                     >
@@ -411,35 +277,15 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.STATUS')}
                     name="status"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please select the status',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.status && formik.touched.status
-                        ? 'error'
-                        : formik.touched.status
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.status &&
-                      formik.touched.status &&
-                      formik.errors.status
-                    }
+                   
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Select
                       size="large"
-                      value={formik.values.status}
-                      onChange={(value) => {
-                        formik.setFieldValue('status', value);
-                      }}
-                      onBlur={formik.handleBlur}
+                      defaultValue={employees?.status}
+                      disabled
+                     
                       placeholder={t('EMPLOYEES.STATUS')}
                       style={{ width: '100%' }}
                     >
@@ -453,34 +299,17 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.POSITION')}
                     name="position"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter the position',
-                      },
-                    ]}
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.position && formik.touched.position
-                        ? 'error'
-                        : formik.touched.position
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.position &&
-                      formik.touched.position &&
-                      formik.errors.position
-                    }
+                   
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Input
                       size="large"
+                      defaultValue={employees?.position}
+                      disabled
+                     
                       placeholder={t('EMPLOYEES.POSITION')}
-                      value={formik.values.position}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                     
                     />
                   </Item>
                 </Col>
@@ -489,110 +318,27 @@ function DetailEmployees() {
                   <Item
                     label={t('EMPLOYEES.LINE_MANAGER')}
                     name="lineManager"
-                    required
-                    hasFeedback
-                    validateStatus={
-                      formik.errors.lineManager && formik.touched.lineManager
-                        ? 'error'
-                        : formik.touched.lineManager
-                        ? 'success'
-                        : ''
-                    }
-                    help={
-                      formik.errors.lineManager &&
-                      formik.touched.lineManager &&
-                      formik.errors.lineManager
-                    }
+                   
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
                   >
                     <Input
                       size="large"
+                      defaultValue={employees?.lineManager}
+                      disabled
                       placeholder={t('EMPLOYEES.LINE_MANAGER')}
-                      value={formik.values.lineManager}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                    
                     />
                   </Item>
                 </Col>
-                {/* SKILLS EMPLOYEE */}
-                <Col span={24}>
-                  <Form.Item
-                    label={t('EMPLOYEES.SKILLS')}
-                    required
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                  >
-                    {formik.values.skills.map((skill, index) => (
-                      <div key={index}>
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].skillname
-                              : ''
-                          }
-                          hasFeedback
-                        >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.SKILL_NAME')}
-                            name={`skills[${index}].skillname`}
-                            value={formik.values.skills[index].skillname}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                        </Form.Item>
-
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].exp
-                              : ''
-                          }
-                          hasFeedback
-                        >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.EXP')}
-                            name={`skills[${index}].exp`}
-                            value={formik.values.skills[index].exp}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                        </Form.Item>
-                        <Button onClick={() => removeSkill(index)}>
-                          {t('EMPLOYEES.REMOVE_SKILL')}
-                        </Button>
-                      </div>
-                    ))}
-                  </Form.Item>
-                  <Button onClick={addSkill}>{t('EMPLOYEES.ADD_SKILL')}</Button>
-                </Col>
+             
+                
               </Row>
             </Form>
-          </Card> 
+          </Card>
+         </div> </>
+          
+       ): <SpinLoading />}
       </div>
     </>
   );

@@ -152,7 +152,13 @@ const CreateProject = () => {
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
-
+      <div
+        style={{
+          maxHeight: '80vh',
+          maxWidth: '100%',
+          overflowY: 'auto',
+        }}
+        >
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
@@ -474,6 +480,7 @@ const CreateProject = () => {
           )}
         </Formik>
       </Card>
+      </div>
     </div>
   );
 };
