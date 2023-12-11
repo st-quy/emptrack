@@ -1,7 +1,10 @@
 import { useField } from 'formik';
+import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 
 export default function SelectField(props) {
+  const { t } = useTranslation();
+
   const [field, state, { setValue, setTouched }] = useField(props.field.name);
 
   // value is an array now
@@ -26,6 +29,9 @@ export default function SelectField(props) {
       isMulti
       onChange={onChange}
       onBlur={setTouched}
+      placeholder={t('PROJECTS.SELECT_ROLE')}
+      isSearchable
+      menuPlacement="auto"
     />
   );
 }

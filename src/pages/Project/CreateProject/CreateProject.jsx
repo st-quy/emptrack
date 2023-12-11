@@ -161,7 +161,12 @@ const CreateProject = () => {
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-        style={{ borderRadius: '30px' }}
+        style={{
+          // maxHeight: '80vh',
+          // maxWidth: '100%',
+          // overflowY: 'auto',
+          borderRadius: '30px',
+        }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
           {({ values }) => (
@@ -363,7 +368,7 @@ const CreateProject = () => {
                                   ? employeesSelection.find(
                                       (e) => e.id === members[index].member,
                                     ).name
-                                  : 'Select member'}
+                                  : t('PROJECTS.SELECT_MEMBER')}
                               </option>
                               {employeesSelection &&
                                 getAvailableOptions(index).map((e, i) => {
@@ -376,9 +381,6 @@ const CreateProject = () => {
                             </Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.member */
-                            } &&
                             formik.errors.members[index]?.member ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.member}
@@ -388,49 +390,6 @@ const CreateProject = () => {
                             )}
                           </Col>
                           <Col span={11}>
-                            {/* <Field
-                              component="select"
-                              name={`members[${index}].role`}
-                              id={`members[${index}].role`}
-                              onChange={(value) => {
-                                arrayHelpers.replace(index, {
-                                  ...members[index],
-                                  role: value.target.value,
-                                });
-                                setMembers((prevMembers) => {
-                                  const updatedMembers = [...prevMembers];
-                                  updatedMembers[index] = {
-                                    ...updatedMembers[index],
-                                    role: value.target.value,
-                                  };
-                                  return updatedMembers;
-                                });
-                                formik.setFieldValue(
-                                  `members.${index}.role`,
-                                  value.target.value,
-                                );
-                              }}
-                              className="w-100 members-select"
-                            >
-                              <option defaultValue>Select Role</option>
-                              {roleSelection &&
-                                roleSelection.map((e, index) => {
-                                  return (
-                                    <option key={index} value={e.value}>
-                                      {e.label}
-                                    </option>
-                                  );
-                                })}
-                            </Field> */}
-                            {/* <Field
-                              className="w-100 members-select"
-                              name={`members[${index}].role`}
-                              id={`members[${index}].role`}
-                              options={roleSelection}
-                              component={CustomSelect}
-                              // placeholder="Select multi languages..."
-                              isMulti={true}
-                            /> */}
                             <Field
                               component={CustomSelect}
                               name={`members[${index}].role`}
@@ -443,9 +402,6 @@ const CreateProject = () => {
                             ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.role */
-                            } &&
                             formik.errors.members[index]?.role ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.role}
