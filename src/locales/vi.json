@@ -247,7 +247,8 @@
     "EXP": "Năm kinh nghiệm",
     "ADD_SKILL": "Thêm kĩ năng",
     "REMOVE_SKILL": "Xóa kĩ năng",
-    "ADDRESS": "Địa chỉ"
+    "ADDRESS": "Địa chỉ",
+    "ID": "No."
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
