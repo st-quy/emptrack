@@ -372,20 +372,16 @@ const ProjectUpdate = () => {
                               onChange={(value) => {
                                 arrayHelpers.replace(index, {
                                   ...members[index],
-                                  member: value.target.value,
+                                  name: value.target.value,
                                 });
                                 setMembers((prevMembers) => {
                                   const updatedMembers = [...prevMembers];
                                   updatedMembers[index] = {
                                     ...updatedMembers[index],
-                                    member: value.target.value,
+                                    name: value.target.value,
                                   };
                                   return updatedMembers;
                                 });
-                                formik.setFieldValue(
-                                  `members.${index}.member`,
-                                  value.target.value,
-                                );
                               }}
                             >
                               <Select
@@ -408,11 +404,14 @@ const ProjectUpdate = () => {
                                 ))}
                               </Select>
                             </Form.Item>
-                            {formik.errors.member &&
-                            formik.touched.member &&
-                            formik.errors.member[index]?.name ? (
+                            {formik.errors.members &&
+                            formik.touched.members &&
+                            {
+                              /* formik.touched.members[index]?.member */
+                            } &&
+                            formik.errors.members[index]?.member ? (
                               <div className="text-danger">
-                                {formik.errors.member[index]?.name}
+                                {formik.errors.members[index]?.member}
                               </div>
                             ) : (
                               <div style={{ height: 22 }}></div>
@@ -462,14 +461,14 @@ const ProjectUpdate = () => {
                                 ))}
                               </Select>
                             </Form.Item>
-                            {formik.errors.member &&
-                            formik.touched.member &&
+                            {formik.errors.members &&
+                            formik.touched.members &&
                             {
                               /* formik.touched.member[index]?.role */
                             } &&
-                            formik.errors.member[index]?.role ? (
+                            formik.errors.members[index]?.role ? (
                               <div className="text-danger">
-                                {formik.errors.member[index]?.role}
+                                {formik.errors.members[index]?.role}
                               </div>
                             ) : (
                               <div style={{ height: 22 }}></div>
@@ -495,13 +494,13 @@ const ProjectUpdate = () => {
                         </Row>
                       </div>
                     ))}
-                    {typeof formik.errors.member === 'string' && (
+                    {typeof formik.errors.members === 'string' && (
                       <div className="text-danger">{formik.errors.member}</div>
                     )}
                     <Form.Item>
                       <Button
                         onClick={() => {
-                          arrayHelpers.push(emptyMember);
+                          arrayHelpers.push(emptyMember); 
                           project.member.push(emptyMember);
                           setMembers((prev) => [...prev, emptyMember]);
                         }}
