@@ -1,6 +1,22 @@
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Input, Modal, Pagination, Space, Table, Tooltip } from 'antd';
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  FieldTimeOutlined,
+} from '@ant-design/icons';
+import {
+  Card,
+  Input,
+  Pagination,
+  Space,
+  Table,
+  Tooltip,
+  Modal,
+  message,
+  DatePicker,
+  Select,
+} from 'antd';
 import { debounce } from 'lodash';
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +26,12 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import '../ProjectList/ProjectList.scss';
+import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
+import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
+import moment from 'moment';
 
 const ProjectList = () => {
+  const [dataFirst, setDataList] = useState([]);
   const [data, setData] = useState([]);
   const { t } = useTranslation();
   // const [searchedText, setSearchedText] = useState('');
@@ -21,7 +41,21 @@ const ProjectList = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [dataProject, setDataProject] = useState();
+  const { RangePicker } = DatePicker;
 
+  useEffect(() => {
+    document.title = 'EMP | PROJECTS';
+  }, []);
+
+  const showDrawer = (record) => {
+    setDataProject(record);
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +64,7 @@ const ProjectList = () => {
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
         setData(filterDeleted);
+        setDataList(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -45,7 +80,7 @@ const ProjectList = () => {
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance.delete(`projects/${selectedProjectId}`).then(() => {
-        // message.success('Dự án đã được xóa thành công!');
+        //  message.success('Dự án đã được xóa thành công!');
         Toast(
           'success',
           t('TOAST.DELETED_SUCCESS', {
@@ -78,13 +113,12 @@ const ProjectList = () => {
       title: t('TABLE.ACTIONS'),
       key: 'action',
       width: 60,
-      fixed: 'left',
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
             <Button
               type="link"
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -93,6 +127,13 @@ const ProjectList = () => {
               type="link"
               icon={<EyeOutlined />}
               onClick={() => handleView(record.id)}
+            />
+          </Tooltip>
+          <Tooltip title="History">
+            <Button
+              type="text"
+              icon={<FieldTimeOutlined />}
+              onClick={() => showDrawer(record)}
             />
           </Tooltip>
         </span>
@@ -192,98 +233,216 @@ const ProjectList = () => {
   ];
 
   const [searchedText, setSearchedText] = useState('');
+  const [searchParam, setSearchParam] = useState({
+    manager: '',
+    project_name: '',
+    startDate: '',
+    endDate: '',
+    status: '',
+  });
+
+  const handleSearch = () => {
+    // Sao chép dữ liệu ban đầu để không làm thay đổi dữ liệu gốc
+    let filteredData = [...data];
+
+    if (searchParam.manager) {
+      filteredData = filteredData.filter((val) =>
+        val.manager.some((manager) =>
+          manager.name.includes(searchParam.manager),
+        ),
+      );
+    }
+
+    if (searchParam.project_name) {
+      filteredData = filteredData.filter((val) =>
+        val.name.includes(searchParam.project_name),
+      );
+    }
+
+    if (searchParam.startDate && searchParam.endDate) {
+      const start = moment(searchParam.startDate, 'DD/MM/YYYY');
+      const end = moment(searchParam.endDate, 'DD/MM/YYYY');
+      filteredData = filteredData.filter((item) => {
+        const itemStartDate = moment(item.startDate, 'DD/MM/YYYY');
+        const itemEndDate = moment(item.endDate, 'DD/MM/YYYY');
+        return (
+          itemStartDate.isSameOrBefore(start) && itemEndDate.isSameOrBefore(end)
+        );
+      });
+    }
+
+    if (searchParam.status) {
+      filteredData = filteredData.filter((val) =>
+        val.status.toUpperCase().includes(searchParam.status.toUpperCase()),
+      );
+    }
+    setData(filteredData);
+    // Sử dụng filteredData để làm việc với dữ liệu đã được lọc
+    // Ví dụ: setData(filteredData);
+  };
   const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
   return (
     <div className="project_create" style={{ height: 100 }}>
-      {data.length > 0 ? (
-        <>
-          <Space className="w-100 justify-content-between">
-            <Breadcrumb items={[{ key: 'projects' }]} />
-            <Button onClick={() => navigate('/projects/create')}>
-              {t('BREADCRUMB.PROJECTS_CREATE')}
+      <>
+        <DrawerTracking open={open} onClose={onClose} data={dataProject} />
+        <Space className="w-100 justify-content-between">
+          <Breadcrumb items={[{ key: 'projects' }]} />
+          <Button onClick={() => navigate('/projects/create')}>
+            {t('BREADCRUMB.PROJECTS_CREATE')}
+          </Button>
+        </Space>
+        <Card
+          title={t('PROJECTS.LIST').toUpperCase()}
+          style={{ borderRadius: '30px' }}
+        >
+          <Space size={[8, 16]} wrap className="w-100 py-3">
+            <TextSearch
+              label={t('TEXT_SEARCH.MANAGER')}
+              func={(e) => {
+                if (!e.target.value) {
+                  setData(dataFirst);
+                }
+                setSearchParam({ ...searchParam, manager: e.target.value });
+              }}
+            />
+            <TextSearch
+              label={t('TEXT_SEARCH.PROJECT_NAME')}
+              func={(e) => {
+                if (!e.target.value) {
+                  setData(dataFirst);
+                }
+                setSearchParam({
+                  ...searchParam,
+                  project_name: e.target.value,
+                });
+              }}
+            />
+            <RangePicker
+              onChange={(e) => {
+                if (e === null) {
+                  setData(dataFirst);
+                } else {
+                  setSearchParam({
+                    ...searchParam,
+                    startDate: moment(e[0]['$d']).format('DD/MM/YYYY'),
+                    endDate: moment(e[1]['$d']).format('DD/MM/YYYY'),
+                  });
+                }
+              }}
+              format={'DD/MM/YYYY'}
+            />
+            <Select
+              // defaultValue=""
+              style={{
+                width: 200,
+              }}
+              options={[
+                {
+                  value: 'Active',
+                  label: 'Active',
+                },
+                {
+                  value: 'Inactive',
+                  label: 'Inactive',
+                },
+              ]}
+              placeholder={t('TEXT_SEARCH.SELECT', {
+                label: t('TEXT_SEARCH.STATUS'),
+              })}
+              onChange={(e) => {
+                if (!e) {
+                  setData(dataFirst);
+                }
+                setSearchParam({
+                  ...searchParam,
+                  status: e,
+                });
+              }}
+              allowClear
+            />
+            <Button type="primary" onClick={() => handleSearch()}>
+              {t('BUTTON.SEARCH')}
             </Button>
           </Space>
-          <Card
-            title={t('PROJECTS.LIST').toUpperCase()}
-            style={{ borderRadius: '30px' }}
-          >
-            <Input.Search
+          {/* <Input.Search
               placeholder={t('TABLE.SEARCH') + '...'}
               style={{ marginBottom: 8, width: 300, marginTop: 8 }}
               onChange={(e) => setSearchedText(e.target.value)}
-            />
-            <Table
-              columns={columns}
-              dataSource={data
-                .filter(
-                  (item) =>
-                    // !item.deletedAt &&
-                    // Chỉ hiển thị các dự án chưa bị xóa
-                    (item.manager &&
-                      item.manager.some((manager) =>
-                        manager.name
+            /> */}
+          <Table
+            columns={columns}
+            dataSource={
+              data.length > 0
+                ? data
+                    .filter(
+                      (item) =>
+                        // !item.deletedAt &&
+                        // Chỉ hiển thị các dự án chưa bị xóa
+                        (item.manager &&
+                          item.manager.some((manager) =>
+                            manager.name
+                              .toLowerCase()
+                              .includes(searchedText.toLowerCase()),
+                          )) ||
+                        (item.member &&
+                          item.member.some(
+                            (member) =>
+                              member.name
+                                .toLowerCase()
+                                .includes(searchedText.toLowerCase()) ||
+                              member.role
+                                .toLowerCase()
+                                .includes(searchedText.toLowerCase()),
+                          )) ||
+                        item.technical
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()) ||
+                        item.description
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()) ||
+                        item.startDate
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()) ||
+                        item.endDate
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()) ||
+                        item.status
+                          .toLowerCase()
+                          .includes(searchedText.toLowerCase()) ||
+                        item.name
                           .toLowerCase()
                           .includes(searchedText.toLowerCase()),
-                      )) ||
-                    // (item.member &&
-                    //   item.member.some(
-                    //     (member) =>
-                    //       member.name
-                    //         .toLowerCase()
-                    //         .includes(searchedText.toLowerCase()) ||
-                    //       member.role
-                    //         .toLowerCase()
-                    //         .includes(searchedText.toLowerCase()),
-                    //   )) ||
-                    item.technical
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    // item.description
-                    //   .toLowerCase()
-                    //   .includes(searchedText.toLowerCase()) ||
-                    item.startDate
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.endDate
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.status
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.name
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()),
-                )
-                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-              scroll={{ y: 'calc(100vh - 400px)' }}
-              pagination={false}
-            />
-            <Pagination
-              total={data.filter((item) => !item.deletedAt).length}
-              current={currentPage}
-              pageSize={pageSize}
-              showSizeChanger
-              showTotal={(total) => t('TABLE.TOTAL', { total })}
-              className="my-3"
-              onChange={(page, pageSize) => {
-                setCurrentPage(page);
-                setPageSize(pageSize);
-              }}
-            />
-          </Card>
-          <Modal
-            title="Confirm Delete"
-            visible={showDeleteModal}
-            onOk={handleConfirmDelete}
-            onCancel={handleCancelDelete}
-          >
-            <p>Are you sure you want to delete this project?</p>
-          </Modal>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+                    )
+                    .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                : []
+            }
+            scroll={{ y: 'calc(100vh - 400px)' }}
+            pagination={false}
+          />
+          <Pagination
+            total={data.filter((item) => !item.deletedAt).length}
+            current={currentPage}
+            pageSize={pageSize}
+            showSizeChanger
+            showTotal={(total) => t('TABLE.TOTAL', { total })}
+            className="my-3"
+            onChange={(page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            }}
+          />
+          {/* <SpinLoading /> */}
+        </Card>
+        <Modal
+          title={t('TABLE.COMFIRM_DELETE')}
+          visible={showDeleteModal}
+          onOk={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        >
+          <p>{t('PROJECTS.COMFIRM_DELETE_PROJECT')}</p>
+        </Modal>
+      </>
     </div>
   );
 };

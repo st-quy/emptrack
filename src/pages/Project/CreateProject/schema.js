@@ -31,9 +31,9 @@ const Schema = () => {
           member: Yup.string().required(
             t('VALIDATE.REQUIRED', { field: t('PROJECTS.MEMBER') }),
           ),
-          role: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }),
-          ),
+          role: Yup.array()
+            .required(t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }))
+            .min(1, t('VALIDATE.MINONE', { field: t('ROLE.ROLE') })),
         }),
       )
       .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.MEMBER') })),
