@@ -46,7 +46,9 @@
     "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
     "START DATE": "Start date",
-    "END DATE": "End date"
+    "END DATE": "End date",
+    "TOTAL": "Sum: {{total}} project",
+    "TOTAL_EMPLOYEES": "Sum: {{total}} employees"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -197,11 +199,13 @@
   "TOAST": {
     "CREATED_SUCCESS": "Created {{field}} successfully",
     "CREATED_ERROR": "{{field}} could not be created",
+    "CREATED_ERROR_SAME_NAME": "Project name already exists",
     "DELETED_SUCCESS": "Deleted {{field}} successfully"
   },
   "EMPLOYEES": {
     "CREATE": "Create employee",
     "CODE": "Code employee",
+    "EMAIL": "Email",
     "NAME": "Name employee",
     "PHONE": "Phone number",
     "BIRTH": "Day of Birth",
@@ -213,7 +217,7 @@
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
-    "IS_MANAGER": "Is Manager?",
+    "IS_MANAGER": "Managed by?",
     "UPLOAD": "Click to Upload",
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
@@ -242,7 +246,7 @@
     "STATUS_REQUIRED": "Please select a status",
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
-    "LINE_MANAGER_REQUIRED": "Please enter the line manager",
+    "LINE_MANAGER_REQUIRED": "Please select the line manager",
     "BIRTH_MAX": "Date of birth cannot be greater than current date",
     "BIRTH_REQUIRED": "Please select year of birth",
     "DESCRIPTION_REQUIRED": "Please enter description",
@@ -251,6 +255,10 @@
     "AVATAR": "Please select avatar",
     "SKILL_REQUIRED": "Please enter skill name",
     "EXP_REQUIRED": "Please enter year of experience",
-    "ADDRESS_REQUIRED": "Please enter address"
+    "ADDRESS_REQUIRED": "Please enter address",
+    "EMAIL_REQUIRED": "Please enter email address",
+    "BIRTH_ENOUGH_AGE": "Please select a year of birth greater than 18 years old",
+    "SKILL": "Please enter at least 1 skill",
+    "EMAIL_INVALID": "Email must include the @ character"
   }
 }

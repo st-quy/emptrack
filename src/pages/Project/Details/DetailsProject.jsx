@@ -4,6 +4,7 @@ import {
   DatePicker,
   Form,
   Input,
+  Radio,
   Row,
   Space,
   Typography,
@@ -111,12 +112,15 @@ const DetailsProject = () => {
                       disabled
                     />
                   </Form.Item>
-                  <Form.Item
-                    name="status"
-                    label={t('PROJECTS.STATUS')}
-                    initialValue={project?.status}
-                  >
-                    <Input disabled />
+                  <Form.Item label={t('PROJECTS.STATUS')}>
+                    <Radio.Group name="status" value={project?.status}>
+                      <Radio value="active">
+                        {t('PROJECTS.STATUS_ACTIVE')}
+                      </Radio>
+                      <Radio value="inactive">
+                        {t('PROJECTS.STATUS_INACTIVE')}
+                      </Radio>
+                    </Radio.Group>
                   </Form.Item>
                   <Form.Item
                     name="technical"

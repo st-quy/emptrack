@@ -1,6 +1,7 @@
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Input, Modal, Pagination, Space, Table, Tooltip } from 'antd';
 import { debounce } from 'lodash';
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -45,7 +46,7 @@ const ProjectList = () => {
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance.delete(`projects/${selectedProjectId}`).then(() => {
-        // message.success('Dự án đã được xóa thành công!');
+        //  message.success('Dự án đã được xóa thành công!');
         Toast(
           'success',
           t('TOAST.DELETED_SUCCESS', {
@@ -80,7 +81,6 @@ const ProjectList = () => {
       title: t('TABLE.ACTIONS'),
       key: 'action',
       width: 60,
-      fixed: 'left',
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
@@ -220,8 +220,6 @@ const ProjectList = () => {
               dataSource={data
                 .filter(
                   (item) =>
-                    // !item.deletedAt &&
-                    // Chỉ hiển thị các dự án chưa bị xóa
                     (item.manager &&
                       item.manager.some((manager) =>
                         manager.name
@@ -234,9 +232,11 @@ const ProjectList = () => {
                           member.name
                             .toLowerCase()
                             .includes(searchedText.toLowerCase()) ||
-                          member.role
-                            .toLowerCase()
-                            .includes(searchedText.toLowerCase()),
+                          member.role.some((m) =>
+                            m
+                              .toLowerCase()
+                              .includes(searchedText.toLowerCase()),
+                          ),
                       )) ||
                     item.technical
                       .toLowerCase()

@@ -49,7 +49,8 @@
     "DESCRIPTION": "Mô tả",
     "START DATE": "Ngày bắt đầu",
     "END DATE": "Ngày kết thúc",
-    "TOTAL": "Tổng: {{total}} dự án"
+    "TOTAL": "Tổng: {{total}} dự án",
+    "TOTAL_EMPLOYEES": "Tổng: {{total}} nhân viên"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -202,11 +203,13 @@
   "TOAST": {
     "CREATED_SUCCESS": "Thêm {{field}} thành công",
     "CREATED_ERROR": "{{field}} thêm không thành công",
+    "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công"
   },
   "EMPLOYEES": {
     "CREATE": "Tạo nhân viên",
     "CODE": "Mã nhân viên",
+    "EMAIL": "Email",
     "NAME": "Tên nhân viên",
     "PHONE": "Số điện thoại",
     "BIRTH": "Năm sinh",
@@ -216,7 +219,7 @@
     "STATUS": "Trạng thái",
     "SKILLS": "Kĩ năng",
     "POSITION": "Vị trí",
-    "LINE_MANAGER": "Được ai quản lí?",
+    "LINE_MANAGER": "Được quản lí bởi?",
     "DESCRIPTION": "Mô tả",
     "IS_MANAGER": "Người quản lí?",
     "UPLOAD": "Bấm để thêm ảnh",
@@ -247,7 +250,7 @@
     "STATUS_REQUIRED": "Vui lòng chọn trạng thái",
     "IS_MANAGER_REQUIRED": "Bạn có phải người quản lí không?",
     "POSITION_REQUIRED": "Vui lòng chọn vị trí",
-    "LINE_MANAGER_REQUIRED": "Vui lòng nhập tên người quản lí",
+    "LINE_MANAGER_REQUIRED": "Vui lòng chọn người quản lí",
     "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
     "BIRTH_REQUIRED": "Vui lòng chọn năm sinh",
     "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
@@ -256,6 +259,10 @@
     "AVATAR": "Vui lòng chọn ảnh đại diện",
     "SKILL_REQUIRED": "Vui lòng nhập tên kĩ năng",
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
-    "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ"
+    "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
+    "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
+    "BIRTH_ENOUGH_AGE": "Vui lòng chọn năm sinh lớn hơn 18 tuổi",
+    "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
+    "EMAIL_INVALID": "Email phải bao gồm kí tự @"
   }
 }
