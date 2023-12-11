@@ -28,7 +28,7 @@ import Schema from './schema';
 const { Text } = Typography;
 const emptyMember = {
   member: '',
-  role: '',
+  role: [],
 };
 const ProjectUpdate = () => {
   const [managerOptions, setManagerOptions] = useState([]);
@@ -468,9 +468,10 @@ const ProjectUpdate = () => {
                               index={index}
                               options={roleSelection}
                               isMulti={true}
-                              members={members}
+                              members={project.member}
                               setMembers={setMembers}
                               formik={formik}
+                              // defaultValue={member.role}
                             ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
