@@ -1,31 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
+  Card,
+  Col,
+  DatePicker,
   Form,
   Input,
-  Card,
   Radio,
   Row,
-  Col,
   Select,
-  DatePicker,
   Space,
   Typography,
 } from 'antd';
+import dayjs from 'dayjs';
+import { FieldArray, Formik, useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { useParams } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
-import { Toast } from '../../../components/toast/Toast';
-import { axiosInstance } from '../../../config/axios';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import './ProjectUpdate.scss';
-import dayjs from 'dayjs';
-import { Formik, FieldArray, Field, useFormik } from 'formik';
 import './rolelist';
 import roleSelection from './rolelist';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import Schema from './schema';
 const { Text } = Typography;
 const emptyMember = {
@@ -137,7 +134,7 @@ const ProjectUpdate = () => {
 
         formik.resetForm();
         form.resetFields();
-    
+
         setTimeout(() => {
           navigate(`/projects`);
         }, 2000);
@@ -160,7 +157,6 @@ const ProjectUpdate = () => {
   if (!project) {
     return <div>Project not found</div>;
   }
-  
 
   const breadcrumbItems = [
     { key: 'projects' },
@@ -179,23 +175,21 @@ const ProjectUpdate = () => {
         style={{ borderRadius: '30px' }}
         title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
       >
-        <Formik Formik initialValues={initialValues} 
-        // validationSchema={schema}
-        >
+        <Formik Formik initialValues={initialValues} validationSchema={schema}>
           {(values, errors) => (
             <Form
-            labelCol={{
-              sm: { span: 24 },
-              md: { span: 24 },
-              lg: { span: 5 },
-            }}
-            wrapperCol={{
-              sm: { span: 24 },
-              md: { span: 24 },
-              lg: { span: 19 },
-            }}
-            className="p-2"
-            form={form}
+              labelCol={{
+                sm: { span: 24 },
+                md: { span: 24 },
+                lg: { span: 5 },
+              }}
+              wrapperCol={{
+                sm: { span: 24 },
+                md: { span: 24 },
+                lg: { span: 19 },
+              }}
+              className="p-2"
+              form={form}
             >
               <Row className="w-100" gutter={16}>
                 <Col span={12}>
@@ -502,7 +496,7 @@ const ProjectUpdate = () => {
                     <Form.Item>
                       <Button
                         onClick={() => {
-                          arrayHelpers.push(emptyMember); 
+                          arrayHelpers.push(emptyMember);
                           project.member.push(emptyMember);
                           setMembers((prev) => [...prev, emptyMember]);
                         }}
