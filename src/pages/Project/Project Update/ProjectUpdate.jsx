@@ -17,6 +17,8 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import Button from '../../../components/atoms/Button/Button';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
+import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 import './ProjectUpdate.scss';
 import dayjs from 'dayjs';
 import { Formik, FieldArray, Field, useFormik } from 'formik';
@@ -372,20 +374,16 @@ const ProjectUpdate = () => {
                               onChange={(value) => {
                                 arrayHelpers.replace(index, {
                                   ...members[index],
-                                  member: value.target.value,
+                                  name: value.target.value,
                                 });
                                 setMembers((prevMembers) => {
                                   const updatedMembers = [...prevMembers];
                                   updatedMembers[index] = {
                                     ...updatedMembers[index],
-                                    member: value.target.value,
+                                    name: value.target.value,
                                   };
                                   return updatedMembers;
                                 });
-                                formik.setFieldValue(
-                                  `members.${index}.member`,
-                                  value.target.value,
-                                );
                               }}
                             >
                               <Select
