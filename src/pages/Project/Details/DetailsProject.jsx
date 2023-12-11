@@ -6,7 +6,10 @@ import {
   Input,
   Radio,
   Row,
+  Select,
   Space,
+  Switch,
+  Tag,
   Typography,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
@@ -42,6 +45,31 @@ const DetailsProject = () => {
     return string[0].toUpperCase() + string.slice(1);
   }
 
+  function tagRender(props) {
+    const { label, value, closable, onClose } = props;
+
+    return (
+      <Tag
+        color={options.find((item) => item.value === value).color}
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3 }}
+      >
+        {label}
+      </Tag>
+    );
+  }
+
+  const options = [
+    { label: 'Fullstack', value: 'Fullstack', color: 'green' },
+    { label: 'Devops', value: 'Devops', color: 'blue' },
+    { label: 'Backend', value: 'Backend', color: 'orange' },
+    { label: 'Frontend', value: 'Frontend', color: 'geekblue' },
+    { label: 'BA', value: 'BA', color: 'cyan' },
+    { label: 'Tester', value: 'Tester', color: 'volcano' },
+    { label: 'PO', value: 'PO', color: 'geekblue' },
+    { label: 'SM', value: 'SM', color: 'purple' },
+  ];
   return (
     <div id="details-project">
       {project ? (
@@ -59,7 +87,7 @@ const DetailsProject = () => {
           </Space>
 
           <Card
-            className="card-create-project"
+            className="card-detail-project"
             title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
             style={{ borderRadius: '30px' }}
           >
@@ -76,6 +104,9 @@ const DetailsProject = () => {
               }}
               className="p-2"
             >
+              <Typography.Title level={5}>
+                {t('PROJECTS.BASIC_INFORMATION')}
+              </Typography.Title>
               <Row className="w-100" gutter={16}>
                 <Col span={12}>
                   <Form.Item
@@ -112,6 +143,13 @@ const DetailsProject = () => {
                       disabled
                     />
                   </Form.Item>
+                  <Form.Item
+                    name="technical"
+                    label={t('PROJECTS.TECHNICAL')}
+                    initialValue={project?.technical}
+                  >
+                    <Input disabled />
+                  </Form.Item>
                   <Form.Item label={t('PROJECTS.STATUS')}>
                     <Radio.Group name="status" value={project?.status}>
                       <Radio value="active">
@@ -122,16 +160,11 @@ const DetailsProject = () => {
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
-                  <Form.Item
-                    name="technical"
-                    label={t('PROJECTS.TECHNICAL')}
-                    initialValue={project?.technical}
-                  >
-                    <Input disabled />
-                  </Form.Item>
                 </Col>
               </Row>
-              <Text>{t('PROJECTS.MEMBER')}:</Text>
+              <Typography.Title level={5}>
+                {t('PROJECTS.MEMBER_LIST')}:
+              </Typography.Title>
 
               {project?.member.map((member, index) => (
                 <Row className="w-100" gutter={16} key={index}>
@@ -148,9 +181,25 @@ const DetailsProject = () => {
                     <Form.Item
                       name={`members[${index}].role`}
                       label={t('PROJECTS.ROLE')}
-                      initialValue={capitalizeFLetter(member?.role)}
+                      initialValue={[
+                        capitalizeFLetter(member?.role),
+                        'Backend',
+                        'Frontend',
+                      ]}
                     >
-                      <Input disabled />
+                      <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Please select"
+                        options={options}
+                        tagRender={tagRender}
+                        disabled
+                      />
+                      {/* <Tag color="magenta">
+                        {capitalizeFLetter(member?.role)}
+                      </Tag> */}
+
+                      {/* <Input disabled /> */}
                     </Form.Item>
                   </Col>
                 </Row>

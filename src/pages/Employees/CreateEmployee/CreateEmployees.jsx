@@ -54,9 +54,6 @@ const CreateEmployee = () => {
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-      console.log(values);
-      console.log(fileImg);
-      console.log(code);
 
       if (values.skills.length === 0) {
         return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);

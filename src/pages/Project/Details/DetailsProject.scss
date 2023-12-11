@@ -2,6 +2,11 @@
   div.ant-col.ant-form-item-label {
     text-align: start;
   }
+  .card-detail-project {
+    .ant-card-body {
+      padding-top: 16px !important;
+    }
+  }
 
   .ant-typography {
     display: block;

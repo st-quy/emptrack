@@ -1,6 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Image, Input, Pagination, Space, Table, Tag, Tooltip, Modal } from 'antd';
+import {
+  Card,
+  Image,
+  Input,
+  Pagination,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  Modal,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +28,11 @@ const EmployeesList = () => {
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
+
+  useEffect(() => {
+    document.title = 'EMP | EMPLOYEES';
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,21 +54,23 @@ const EmployeesList = () => {
   };
   const handleConfirmDelete = async () => {
     try {
-      await axiosInstance.delete(`employees/${selectedEmployeesId}`).then(() => {
-        //  message.success('Dự án đã được xóa thành công!');
-        Toast(
-          'success',
-          t('TOAST.DELETED_SUCCESS', {
-            field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
-          }),
-          2,
-        );
-        // Loại bỏ dự án đã bị xóa khỏi mảng data
-        setData(data.filter((item) => item.id !== selectedEmployeesId));
+      await axiosInstance
+        .delete(`employees/${selectedEmployeesId}`)
+        .then(() => {
+          //  message.success('Dự án đã được xóa thành công!');
+          Toast(
+            'success',
+            t('TOAST.DELETED_SUCCESS', {
+              field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
+            }),
+            2,
+          );
+          // Loại bỏ dự án đã bị xóa khỏi mảng data
+          setData(data.filter((item) => item.id !== selectedEmployeesId));
 
-        setSelectedEmployeesId(null);
-        setShowDeleteModal(false);
-      });
+          setSelectedEmployeesId(null);
+          setShowDeleteModal(false);
+        });
     } catch (error) {
       console.error('Error deleting project:', error);
     }
@@ -78,7 +95,7 @@ const EmployeesList = () => {
           <Tooltip title="Delete">
             <Button
               type="link"
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -200,11 +217,10 @@ const EmployeesList = () => {
             </Button>
           </Space>
           <Card
-            title={'Danh sách nhân viên'.toUpperCase()}
+            title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
             style={{
               width: '100%',
               margin: 'auto',
-              border: '1px solid #d9d9d9',
               borderRadius: '30px',
             }}
           >
@@ -248,12 +264,12 @@ const EmployeesList = () => {
             />
           </Card>
           <Modal
-            title="Confirm Delete"
+            title={t('TABLE.COMFIRM_DELETE')}
             visible={showDeleteModal}
             onOk={handleConfirmDelete}
             onCancel={handleCancelDelete}
           >
-            <p>Are you sure you want to delete this project?</p>
+            <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
           </Modal>
         </>
       ) : (
