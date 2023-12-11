@@ -28,13 +28,13 @@ const { Item } = Form;
 const { Option } = Select;
 import roleList from '../../Project/CreateProject/rolelist';
 
-const CreateEmployee = () => {
-  const navigate = useNavigate();
+  const CreateEmployee = () => {
+    const navigate = useNavigate();
 
-  const [form] = Form.useForm();
-  const [form2] = Form.useForm();
-  const { TextArea } = Input;
-  const { t } = useTranslation();
+    const [form] = Form.useForm();
+    const [form2] = Form.useForm();
+    const { TextArea } = Input;
+    const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -85,10 +85,10 @@ const CreateEmployee = () => {
     },
   });
 
-  const breadcrumbItems = [
-    { key: 'EMPLOYEES', route: '/employees' },
-    { key: 'EMPLOYEES_CREATE', route: '/employees/create' },
-  ];
+    const breadcrumbItems = [
+      { key: 'EMPLOYEES', route: '/employees' },
+      { key: 'EMPLOYEES_CREATE', route: '/employees/create' },
+    ];
 
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
@@ -96,80 +96,80 @@ const CreateEmployee = () => {
   const [code, setCode] = useState('');
   const [employeeOptions, setEmployeeOptions] = useState([]);
 
-  const handlePic = async ({ fileList }) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', fileList[0].originFileObj);
-      formData.append('upload_preset', 'hvmlst6p');
-      formData.append('cloud_name', 'do32v7ajg');
+    const handlePic = async ({ fileList }) => {
+      try {
+        const formData = new FormData();
+        formData.append('file', fileList[0].originFileObj);
+        formData.append('upload_preset', 'hvmlst6p');
+        formData.append('cloud_name', 'do32v7ajg');
 
-      const response = await axios.post(
-        'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
-        formData,
-      );
-      const imageUrl = response.data.secure_url;
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
+          formData,
+        );
+        const imageUrl = response.data.secure_url;
 
-      const updatedFileList = fileList.map((file) => {
-        if (file.uid === fileList[0].uid) {
-          return {
-            ...file,
-            status: 'done',
-            url: imageUrl,
-            public_id: response.data.public_id,
-          };
-        }
-        return file;
-      });
+        const updatedFileList = fileList.map((file) => {
+          if (file.uid === fileList[0].uid) {
+            return {
+              ...file,
+              status: 'done',
+              url: imageUrl,
+              public_id: response.data.public_id,
+            };
+          }
+          return file;
+        });
 
-      setFileList(updatedFileList);
-    } catch (error) {
-      console.error('Lỗi khi tải lên ảnh:', error);
-    }
-  };
+        setFileList(updatedFileList);
+      } catch (error) {
+        console.error('Lỗi khi tải lên ảnh:', error);
+      }
+    };
 
-  const handlePreview = async (file) => {
-    setPreviewImage(file.url);
-    setShowModal(true);
-  };
+    const handlePreview = async (file) => {
+      setPreviewImage(file.url);
+      setShowModal(true);
+    };
 
-  const handlePreviewCancel = () => {
-    setPreviewImage(null);
-    setShowModal(false);
-  };
+    const handlePreviewCancel = () => {
+      setPreviewImage(null);
+      setShowModal(false);
+    };
 
-  const apiKey = '722147886179251';
-  const apiSecret = 'xYvEodr_5WS06SyphifPtymGRio';
-  const deleteUrl = 'https://api.cloudinary.com/v1_1/do32v7ajg/image/destroy';
+    const apiKey = '722147886179251';
+    const apiSecret = 'xYvEodr_5WS06SyphifPtymGRio';
+    const deleteUrl = 'https://api.cloudinary.com/v1_1/do32v7ajg/image/destroy';
 
-  const handleRemove = async (file) => {
-    try {
-      const publicId = file.public_id;
-      const timestamp = new Date().getTime();
-      const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
-      const signature = CryptoJS.SHA1(string).toString();
-      const formData = new FormData();
-      formData.append('public_id', publicId);
-      formData.append('api_key', apiKey);
-      formData.append('signature', signature);
-      formData.append('timestamp', timestamp);
-      axios.post(deleteUrl, formData);
-      setFileList([]);
-    } catch (error) {
-      console.log('Error deleting image from Cloudinary:', error);
-    }
-  };
+    const handleRemove = async (file) => {
+      try {
+        const publicId = file.public_id;
+        const timestamp = new Date().getTime();
+        const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
+        const signature = CryptoJS.SHA1(string).toString();
+        const formData = new FormData();
+        formData.append('public_id', publicId);
+        formData.append('api_key', apiKey);
+        formData.append('signature', signature);
+        formData.append('timestamp', timestamp);
+        axios.post(deleteUrl, formData);
+        setFileList([]);
+      } catch (error) {
+        console.log('Error deleting image from Cloudinary:', error);
+      }
+    };
 
-  const fileImg = fileList.map((file) => ({
-    url: file.url,
-    public_id: file.public_id,
-  }));
+    const fileImg = fileList.map((file) => ({
+      url: file.url,
+      public_id: file.public_id,
+    }));
 
-  const addSkill = () => {
-    formik.setFieldValue('skills', [
-      ...formik.values.skills,
-      { skillname: '', exp: '' },
-    ]);
-  };
+    const addSkill = () => {
+      formik.setFieldValue('skills', [
+        ...formik.values.skills,
+        { skillname: '', exp: '' },
+      ]);
+    };
 
   const removeSkill = (index) => {
     const newSkills = [...formik.values.skills];
@@ -193,8 +193,19 @@ const CreateEmployee = () => {
       }
     };
 
-    generateCode();
-  }, []);
+      generateCode();
+    }, []);
+    const [detailVisible, setDetailVisible] = useState(false);
+    const [selectedDetail, setSelectedDetail] = useState(null);
+
+    const showDetailModal = (detail) => {
+      setSelectedDetail(detail);
+      setDetailVisible(true);
+    };
+
+    const hideDetailModal = () => {
+      setDetailVisible(false);
+    };
 
   return (
     <div id="employees">
@@ -845,4 +856,4 @@ const CreateEmployee = () => {
   );
 };
 
-export default CreateEmployee;
+  export default CreateEmployee;

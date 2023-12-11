@@ -68,7 +68,8 @@
     "EMPLOYEES_CREATE": "Thêm nhân viên",
     "PROJECTS_CREATE": "Thêm dự án",
     "PROJECTS_UPDATE": "Cập nhật dự án",
-    "PROJECTS_DETAILS": "Chi tiết dự án"
+    "PROJECTS_DETAILS": "Chi tiết dự án",
+    "EMPLOYEES_DETAILS":"Chi tiết nhân viên"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",

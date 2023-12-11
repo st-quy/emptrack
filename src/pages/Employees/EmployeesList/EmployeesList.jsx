@@ -80,10 +80,11 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-
-  const handleView = (id) => {
-    // Implement view logic here
-    console.log(`Viewing record with id ${id}`);
+  const abc = (id) => {
+    console.log(
+      "fdfsf"
+    )
+    navigate(`/employees/details/${id}`);
   };
   const columns = [
     {
@@ -103,7 +104,7 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.id)}
+              onClick={() => abc(record.id)}
             />
           </Tooltip>
         </span>
