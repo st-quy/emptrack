@@ -1,31 +1,99 @@
 #employees {
-  .button__create {
-    font-size: 16px !important;
+  .card {
+    border-radius: 30px;
+  }
+
+  .buttonSkills {
+    height: 30px;
     border-radius: 12px;
-    height: 35px;
-    color: white !important;
-    background: #ee9ca7; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      to bottom,
-      #ffdde1,
-      #ee9ca7
-    ); /* Chrome 10-25, Safari 5.1-6 */
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    width: 100px;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow: inset 2px 2px 2px 0 rgba(255, 255, 255, 0.5),
+      7px 7px 20px 0 rgba(0, 0, 0, 0.1), 4px 4px 5px 0 rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+  .btn-skills {
+    background: #ee9ca7;
     background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
-    justify-items: end;
+    width: 130px;
+    height: 40px;
+    line-height: 42px;
+    padding: 0;
+    border: none;
   }
-  .button__create:hover {
-    border-color: #fb8494 !important;
+  .btn-skills span {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
   }
-  .first-card {
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  .btn-skills:before,
+  .btn-skills:after {
+    position: absolute;
+    content: '';
+    right: 0;
+    top: 0;
+    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    transition: all 0.3s ease;
   }
-  .second-card {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
+  .btn-skills:before {
+    height: 0%;
+    width: 2px;
+  }
+  .btn-skills:after {
+    width: 0%;
+    height: 2px;
+  }
+  .btn-skills:hover {
+    background: transparent;
+    box-shadow: none;
+  }
+  .btn-skills:hover:before {
+    height: 100%;
+  }
+  .btn-skills:hover:after {
+    width: 100%;
+  }
+  .btn-skills span:hover {
+    color: rgba(0, 0, 0, 0.79);
+  }
+  .btn-skills span:before,
+  .btn-skills span:after {
+    position: absolute;
+    content: '';
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    transition: all 0.3s ease;
+  }
+  .btn-skills span:before {
+    width: 2px;
+    height: 0%;
+  }
+  .btn-skills span:after {
+    width: 0%;
+    height: 2px;
+  }
+  .btn-skills span:hover:before {
+    height: 100%;
+  }
+  .btn-skills span:hover:after {
+    width: 100%;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
   }
 }
