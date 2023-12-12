@@ -4,12 +4,12 @@ import {
   Card,
   Image,
   Input,
+  Modal,
   Pagination,
   Space,
   Table,
   Tag,
   Tooltip,
-  Modal,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { axiosInstance } from '../../../config/axios';
 import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 const EmployeesList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const EmployeesList = () => {
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
+  const [allProjects, setAllProjects] = useState([]);
 
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
@@ -41,23 +42,49 @@ const EmployeesList = () => {
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
         setData(filterDeleted);
+
+        await axiosInstance.get('/projects').then((res) => {
+          const filterDeletedProjects = res.data.filter(
+            (item) => !item.deletedAt,
+          );
+
+          setAllProjects(filterDeletedProjects);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, [deletedEmployeesId]);
-  const handleDelete = (projectId) => {
-    setSelectedEmployeesId(projectId);
-    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
-    setShowDeleteModal(true);
+  const handleDelete = async (employeeId) => {
+    try {
+      let isDelete = true;
+      allProjects.map((project) => {
+        for (let index = 0; index < project.member.length; index++) {
+          if (project.member[index].id === employeeId) {
+            isDelete = false;
+            break;
+          }
+        }
+
+        if (project.manager[0].id === selectedEmployeesId) isDelete = false;
+      });
+
+      if (isDelete) {
+        setSelectedEmployeesId(employeeId);
+        setShowDeleteModal(true);
+      } else {
+        warningDelete();
+      }
+    } catch (error) {
+      console.error('Error get all projects:', error);
+    }
   };
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance
         .delete(`employees/${selectedEmployeesId}`)
         .then(() => {
-          //  message.success('Dự án đã được xóa thành công!');
           Toast(
             'success',
             t('TOAST.DELETED_SUCCESS', {
@@ -80,11 +107,16 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-  const abc = (id) => {
-    console.log(
-      "fdfsf"
-    )
+
+  const handleView = (id) => {
     navigate(`/employees/details/${id}`);
+  };
+
+  const warningDelete = () => {
+    Modal.warning({
+      title: t('MODAL.WARNING_DELETE_TITLE'),
+      content: t('MODAL.WARNING_DELETE'),
+    });
   };
   const columns = [
     {
@@ -104,7 +136,7 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => abc(record.id)}
+              onClick={() => handleView(record.id)}
             />
           </Tooltip>
         </span>
@@ -118,7 +150,10 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
-      render: (id, record, index) => { ++index; return index; },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
     },
     {
       title: t('EMPLOYEES.AVATAR'),
@@ -133,8 +168,8 @@ const EmployeesList = () => {
               src={avatar.url}
               alt={`Avatar ${index + 1}`}
               style={{
-                width: '60px', 
-                height: '60px', 
+                width: '60px',
+                height: '60px',
                 borderRadius: '50%',
               }}
             />
@@ -145,7 +180,7 @@ const EmployeesList = () => {
         showTitle: false,
       },
     },
-    
+
     {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
@@ -153,7 +188,7 @@ const EmployeesList = () => {
       render: (text) => <a>{text}</a>,
       width: 70,
     },
-    
+
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
       dataIndex: 'citizen_card',

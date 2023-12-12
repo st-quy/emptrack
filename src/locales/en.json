@@ -69,7 +69,7 @@
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
     "PROJECTS_DETAILS": "Project details",
-    "EMPLOYEES_DETAIL":"Employees details"
+    "EMPLOYEES_DETAIL": "Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -77,7 +77,9 @@
     "CONFIRM_DELETE": "Are you sure you want to delete {{name}}?",
     "TITLE_DELETE": "Delete {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Generate access token",
-    "CHOOSE_LOCALTION": "Choose location"
+    "CHOOSE_LOCALTION": "Choose location",
+    "WARNING_DELETE_TITLE": "Warning delete employee",
+    "WARNING_DELETE": "Employee cannot be deleted because they are currently involved in a project. \n Please remove the employee from the project before proceeding with the deletion."
   },
   "STATUS": {
     "CREATE": "Create",
