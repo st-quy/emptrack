@@ -41,6 +41,7 @@ const ProjectUpdate = () => {
   const { RangePicker } = DatePicker;
   const schema = Schema();
   const [form] = Form.useForm();
+  const [select, setSelect] = useState([]);
 
   useEffect(() => {
     const managerEmployees = employees.filter(
@@ -62,6 +63,7 @@ const ProjectUpdate = () => {
 
         setProject(projectData);
         setEmployees(employeeData);
+        setSelect(projectData.member.map((m) => m.id));
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -92,62 +94,8 @@ const ProjectUpdate = () => {
   };
   const formik = useFormik({
     initialValues: initialValues,
-    // validationSchema: schema,
+
     onSubmit: async (value) => {
-      // const managerName = employees.find((e) => e.id === value.manager).name;
-
-      // let member = [];
-      // members.map((mem) => {
-      //   const memberName = employees.find((e) => e.id === mem.member).name;
-
-      //   member.push({
-      //     role: mem.role,
-      //     name: memberName,
-      //     id: mem.member,
-      //   });
-      // });
-
-      // let name = value.name.trim().replace(/  +/g, ' ');
-      // let description = value.description.trim().replace(/  +/g, ' ');
-      // let status = value.status;
-      // let technical = value.technical;
-      // let startDate = value.dateRange.startDate;
-      // let endDate = value.dateRange.endDate;
-      // let manager = [{ name: managerName, id: value.manager }];
-      // try {
-      //   // axiosInstance.patch(`projects/${projectId}`, {
-      //   //   member,
-      //   //   name,
-      //   //   description,
-      //   //   status,
-      //   //   technical,
-      //   //   startDate,
-      //   //   endDate,
-      //   //   manager,
-      //   // });
-      //   Toast(
-      //     'success',
-      //     t('TOAST.CREATED_SUCCESS', {
-      //       field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-      //     }),
-      //     2,
-      //   );
-
-      //   formik.resetForm();
-      //   form.resetFields();
-
-      //   setTimeout(() => {
-      //     navigate(`/projects`);
-      //   }, 2000);
-      // } catch (error) {
-      //   Toast(
-      //     'error',
-      //     t('TOAST.CREATED_ERROR', {
-      //       field: t('BREADCRUMB.PROJECTS'),
-      //     }),
-      //     2,
-      //   );
-      // }
       console.log(value);
     },
   });
@@ -166,8 +114,7 @@ const ProjectUpdate = () => {
   ];
 
   const getAvailableOptions = () => {
-    const selectedOptions = project.member?.map((member) => member.id);
-
+    const selectedOptions = select.map((member) => member?.id);
     return employees?.filter((option) => !selectedOptions.includes(option.id));
   };
   return (
@@ -183,7 +130,7 @@ const ProjectUpdate = () => {
         style={{ borderRadius: '30px' }}
         title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
       >
-        <Formik Formik initialValues={initialValues} validationSchema={schema}>
+        <Formik Formik initialValues={initialValues}>
           {({ values }) => (
             <Form
               labelCol={{
@@ -367,7 +314,7 @@ const ProjectUpdate = () => {
                       <div key={index}>
                         <Row gutter={16}>
                           <Col span={12}>
-                            <Field
+                            {/* <Field
                               component="select"
                               name={`members[${index}].member`}
                               id={`members[${index}].member`}
@@ -406,12 +353,70 @@ const ProjectUpdate = () => {
                                     </option>
                                   );
                                 })}
+                            </Field> */}
+                            <Field
+                              component="select"
+                              name={`members[${index}].member`}
+                              id={`members[${index}].member`}
+                              onChange={(target) => {
+                                const selectedMemberId = target.target.value;
+                                // Add the selected employee to the 'select' array
+                                setSelect((prevSelect) => {
+                                  const newSelect = [
+                                    ...prevSelect,
+                                    selectedMemberId,
+                                  ];
+                                  return newSelect;
+                                });
+                                arrayHelpers.replace(index, {
+                                  ...members[index],
+                                  member: selectedMemberId,
+                                });
+
+                                setMembers((prevMembers) => {
+                                  const updatedMembers = [...prevMembers];
+                                  updatedMembers[index] = {
+                                    ...updatedMembers[index],
+                                    member: selectedMemberId,
+                                  };
+                                  return updatedMembers;
+                                });
+
+                                formik.setFieldValue(
+                                  `members.${index}.member`,
+                                  selectedMemberId,
+                                );
+                              }}
+                              className="w-100 members-select"
+                            >
+                              <option defaultValue>
+                                {/* {project.member[index]?.name
+                                  ? employees.find(
+                                      (e) => e.id === project.member[index].id,
+                                    ).name
+                                  : 'Select member'} */}
+                                {select[index] 
+                                  ? employees.find(
+                                      (e) => e.id === select[index],
+                                    ).name
+                                  : 'Select member'}
+                              </option>
+                              {employees &&
+                                getAvailableOptions(index).map((e, i) => {
+                                  // Only render the employee if not already selected
+                                  if (!select.includes(e.id)) {
+                                    return (
+                                      <option key={i} value={e.id}>
+                                        {e.name}
+                                      </option>
+                                    );
+                                  }
+                                  return null;
+                                })}
                             </Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.member */
-                            } &&
+                            {} &&
                             formik.errors.members[index]?.member ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.member}
@@ -421,41 +426,6 @@ const ProjectUpdate = () => {
                             )}
                           </Col>
                           <Col span={11}>
-                            {/* <Field
-                              component="select"
-                              name={`members[${index}].role`}
-                              id={`members[${index}].role`}
-                              onChange={(value) => {
-                                arrayHelpers.replace(index, {
-                                  ...members[index],
-                                  role: value.target.value,
-                                });
-                                setMembers((prevMembers) => {
-                                  const updatedMembers = [...prevMembers];
-                                  updatedMembers[index] = {
-                                    ...updatedMembers[index],
-                                    role: value.target.value,
-                                  };
-                                  return updatedMembers;
-                                });
-                                formik.setFieldValue(
-                                  `members.${index}.role`,
-                                  value.target.value,
-                                );
-                              }}
-                              className="w-100 members-select"
-                              placeholder="First Name"
-                            >
-                              <option defaultValue>Select Role</option>
-                              {roleSelection &&
-                                roleSelection.map((e, index) => {
-                                  return (
-                                    <option key={index} value={e.value}>
-                                      {e.label}
-                                    </option>
-                                  );
-                                })}
-                            </Field> */}
                             <Field
                               component={SelectField}
                               name={`members[${index}].role`}
@@ -465,17 +435,12 @@ const ProjectUpdate = () => {
                               defaultValue={
                                 index < values.members.length && project?.member
                               }
-                              // {index < values.members.length && }
-                              // members={project.member}
                               setMembers={setMembers}
                               formik={formik}
-                              // defaultValue={member.role}
                             ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.role */
-                            } &&
+                            {} &&
                             formik.errors.members[index]?.role ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.role}
@@ -512,8 +477,6 @@ const ProjectUpdate = () => {
                       <Button
                         onClick={() => {
                           arrayHelpers.push(emptyMember);
-                          // setMembers((prev) => [...prev, emptyMember]);
-                          // formik.setFieldValue(`members`, [...members]);
                         }}
                         icon={<PlusOutlined />}
                         className="button ant-btn-primary my-3"
