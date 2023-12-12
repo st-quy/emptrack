@@ -9,48 +9,94 @@ import {
   Table,
   Tag,
   Tooltip,
+  Modal,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { axiosInstance } from '../../../config/axios';
-
+import { Toast } from '../../../components/toast/Toast';
 const EmployeesList = () => {
-  const [currentPage, setCrurentPage] = useState(1);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState([]);
+  const [deletedEmployeesId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
+
+  useEffect(() => {
+    document.title = 'EMP | EMPLOYEES';
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await axiosInstance.get('employees').then((response) => {
-          setData(response.data);
-        });
+        const result = await axiosInstance
+          .get('employees')
+          .then((response) => response.data);
+        const filterDeleted = result.filter((item) => !item.deletedAt);
+        setData(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
-  }, []);
-  const handleDelete = (id) => {
-    // Implement delete logic here
-    console.log(`Deleting record with id ${id}`);
+  }, [deletedEmployeesId]);
+  const handleDelete = (projectId) => {
+    setSelectedEmployeesId(projectId);
+    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
+    setShowDeleteModal(true);
   };
-  const handleView = (id) => {
-    // Implement view logic here
-    console.log(`Viewing record with id ${id}`);
+  const handleConfirmDelete = async () => {
+    try {
+      await axiosInstance
+        .delete(`employees/${selectedEmployeesId}`)
+        .then(() => {
+          //  message.success('Dự án đã được xóa thành công!');
+          Toast(
+            'success',
+            t('TOAST.DELETED_SUCCESS', {
+              field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
+            }),
+            2,
+          );
+          // Loại bỏ dự án đã bị xóa khỏi mảng data
+          setData(data.filter((item) => item.id !== selectedEmployeesId));
+
+          setSelectedEmployeesId(null);
+          setShowDeleteModal(false);
+        });
+    } catch (error) {
+      console.error('Error deleting project:', error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setSelectedEmployeesId(null);
+    setShowDeleteModal(false);
+  };
+  const abc = (id) => {
+    console.log(
+      "fdfsf"
+    )
+    navigate(`/employees/details/${id}`);
   };
   const columns = [
     {
-      title: 'Action',
+      title: t('TABLE.ACTIONS'),
       key: 'action',
-      fixed: 'left',
-      width: 100,
+      width: 50,
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
             <Button
               type="link"
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -58,116 +104,84 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.id)}
+              onClick={() => abc(record.id)}
             />
           </Tooltip>
         </span>
       ),
     },
     {
-      title: 'Avatar',
+      title: t('EMPLOYEES.ID'),
+      dataIndex: 'id',
+      key: 'id',
+      width: 30,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id, record, index) => { ++index; return index; },
+    },
+    {
+      title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
-      width: 150,
+      width: 60,
       render: (avatar) => (
         <span>
           {avatar.map((avatar, index) => (
-            <Image key={index} src={avatar.url} alt={`Avatar ${index + 1}`} />
+            <Image
+              key={index}
+              src={avatar.url}
+              alt={`Avatar ${index + 1}`}
+              style={{
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%',
+              }}
+            />
           ))}
         </span>
       ),
-
       ellipsis: {
         showTitle: false,
       },
     },
+    
     {
-      title: 'Name',
+      title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
       key: 'name',
-
       render: (text) => <a>{text}</a>,
-      width: 150,
+      width: 70,
+    },
+    
+    {
+      title: t('EMPLOYEES.CITIZEN_CARD'),
+      dataIndex: 'citizen_card',
+      key: 'citizen_card',
+      width: 90,
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
-      render: (text) => <a>{text}</a>,
-      width: 150,
-      filters: [
-        { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' },
-      ],
-      onFilter: (value, record) => record.gender === value,
-    },
-    {
-      title: 'Phone Number',
-      dataIndex: 'phone',
-      key: 'phone',
-      width: 150,
-    },
-    {
-      title: 'Adress',
-      dataIndex: 'address',
-      key: 'address',
-      width: 150,
-    },
-    {
-      title: 'Date Of Birth',
-      dataIndex: 'dob',
-      key: 'dob',
-      width: 150,
-    },
-    {
-      title: 'Citizen Identity Card',
-      dataIndex: 'cccd',
-      key: 'cccd',
-      width: 150,
-    },
-    {
-      title: 'Is Manager',
+      title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 150,
+      width: 80,
       render: (isManager) => (
-        <Tag color={isManager ? 'green' : 'red'}>
-          {isManager ? 'Yes' : 'No'}
-        </Tag>
+        <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
       ellipsis: {
         showTitle: false,
       },
-      // filters: [
-      //   { text: 'Yes', value: 'yes' },
-      //   { text: 'No', value: 'no' },
-      // ],
-      // onFilter: (value, record) => record.isManager === value,
+      filters: [
+        { text: 'Manager', value: true },
+        { text: 'Non-Manager', value: false },
+      ],
+      onFilter: (value, record) => record.isManager === value,
     },
     {
-      title: 'Line Manager',
-      dataIndex: 'lineManager',
-      key: 'lineManager',
-      width: 150,
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-      width: 150,
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
-      title: 'Status',
+      title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 150,
-
+      width: 80,
       ellipsis: {
         showTitle: false,
       },
@@ -193,38 +207,10 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.status === value,
     },
     {
-      title: 'Skill',
-      dataIndex: 'skills',
-      key: 'skills',
-      width: 150,
-      render: (skills) => (
-        <ul>
-          {skills.map((skill, index) => (
-            <li key={index}>
-              <strong>{skill.skillname}</strong>: {skill.exp}
-            </li>
-          ))}
-        </ul>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
-      title: 'Position',
+      title: t('EMPLOYEES.POSITION'),
       dataIndex: 'position',
       key: 'position',
-      width: 150,
-
-      ellipsis: {
-        showTitle: false,
-      },
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      width: 150,
+      width: 80,
       ellipsis: {
         showTitle: false,
       },
@@ -235,50 +221,73 @@ const EmployeesList = () => {
 
   return (
     <div className="project_create">
-      <Space className="w-100 justify-content-between">
-        <Breadcrumb items={[{ key: 'employees' }]} />
-        <Button>Tạo ứng dụng</Button>
-      </Space>
-      <Card title="Danh sách người dùng">
-        <Input.Search
-          placeholder="Tìm kiếm..."
-          style={{ marginBottom: 8, width: 200 }}
-          onChange={(e) => setSearchedText(e.target.value)}
-        />
-        <Table
-          columns={columns}
-          dataSource={data
-            .filter(
-              (item) =>
-                (item.name &&
-                  item.name
-                    .toLowerCase()
-                    .includes(searchedText.toLowerCase())) ||
-                (item.address &&
-                  item.address
-                    .toLowerCase()
-                    .includes(searchedText.toLowerCase())),
-            )
-            .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-          scroll={{
-            x: 1500,
-            y: 'calc(100vh - 400px)',
-          }}
-          pagination={false}
-        />
-        <Pagination
-          total={data.length}
-          current={currentPage}
-          pageSize={pageSize}
-          showSizeChanger
-          showTotal={(total) => `Total ${total} items`}
-          style={{ marginTop: '25px' }}
-          onChange={(page, pageSize) => {
-            setCrurentPage(page);
-            setPageSize(pageSize);
-          }}
-        />
-      </Card>
+      {data.length > 0 ? (
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb items={[{ key: 'employees' }]} />
+            <Button onClick={() => navigate('/employees/create')}>
+              {t('BREADCRUMB.EMPLOYEES_CREATE')}
+            </Button>
+          </Space>
+          <Card
+            title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
+            style={{
+              width: '100%',
+              margin: 'auto',
+              borderRadius: '30px',
+            }}
+          >
+            <Input.Search
+              placeholder="Tìm kiếm..."
+              style={{ marginTop: 8, marginBottom: 8, width: 300 }}
+              onChange={(e) => setSearchedText(e.target.value)}
+            />
+            <Table
+              columns={columns}
+              dataSource={data
+                .filter((item) => {
+                  return Object.values(item)
+                    .filter(
+                      (value) =>
+                        typeof value === 'string' || typeof value === 'number',
+                    )
+                    .some((value) =>
+                      value
+                        .toString()
+                        .toLowerCase()
+                        .includes(searchedText.toLowerCase()),
+                    );
+                })
+                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+              scroll={{ y: 'calc(100vh - 370px)' }}
+              pagination={false}
+              size="small"
+            />
+            <Pagination
+              total={data.filter((item) => !item.deletedAt).length}
+              current={currentPage}
+              pageSize={pageSize}
+              showSizeChanger
+              showTotal={(total) => t('TABLE.TOTAL_EMPLOYEES', { total })}
+              className="my-3"
+              onChange={(page, pageSize) => {
+                setCurrentPage(page);
+                setPageSize(pageSize);
+              }}
+            />
+          </Card>
+          <Modal
+            title={t('TABLE.COMFIRM_DELETE')}
+            visible={showDeleteModal}
+            onOk={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          >
+            <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
+          </Modal>
+        </>
+      ) : (
+        <SpinLoading />
+      )}
     </div>
   );
 };

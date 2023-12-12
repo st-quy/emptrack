@@ -4,14 +4,18 @@ import './Dashboard.scss';
 import LineChart from '../../components/charts/LineChart/LineChart';
 import WorkingPieChart from '../../components/charts/PieChart/WorkingPieChart';
 import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
   const breadcrumbItems = [{ key: 'dashboard' }];
+  useEffect(() => {
+    document.title = 'EMP | DASHBOARD';
+  }, []);
   return (
     <div id="dashboard">
       <Breadcrumb items={breadcrumbItems} />
       <Row className="w-100 dashboard-container" gutter={[16, 16]}>
-        <Col xs={24} sm={24} md={14}>
+        <Col xs={24} sm={24} md={24} lg={14}>
           <Space direction="vertical" size={16} className="w-100">
             <Row className="w-100">
               <Card
@@ -43,7 +47,7 @@ const Dashboard = () => {
             </Row>
           </Space>
         </Col>
-        <Col xs={24} sm={24} md={10}>
+        <Col xs={24} sm={24} md={24} lg={10}>
           <Card
             className="card-timeline w-100"
             title="Biến động công ty"
