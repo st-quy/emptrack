@@ -68,7 +68,8 @@
     "EMPLOYEES_CREATE": "Thêm nhân viên",
     "PROJECTS_CREATE": "Thêm dự án",
     "PROJECTS_UPDATE": "Cập nhật dự án",
-    "PROJECTS_DETAILS": "Chi tiết dự án"
+    "PROJECTS_DETAILS": "Chi tiết dự án",
+    "EMPLOYEES_DETAILS":"Chi tiết nhân viên"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -246,7 +247,8 @@
     "EXP": "Năm kinh nghiệm",
     "ADD_SKILL": "Thêm kĩ năng",
     "REMOVE_SKILL": "Xóa kĩ năng",
-    "ADDRESS": "Địa chỉ"
+    "ADDRESS": "Địa chỉ",
+    "ID": "STT"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",

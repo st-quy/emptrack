@@ -139,7 +139,16 @@ const ProjectList = () => {
         </span>
       ),
     },
-
+    {
+      title: t('EMPLOYEES.ID'),
+      dataIndex: 'id',
+      key: 'id',
+      width: 30,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id, record, index) => { ++index; return index; },
+    },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',

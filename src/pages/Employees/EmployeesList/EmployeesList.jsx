@@ -80,16 +80,17 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-
-  const handleView = (id) => {
-    // Implement view logic here
-    console.log(`Viewing record with id ${id}`);
+  const abc = (id) => {
+    console.log(
+      "fdfsf"
+    )
+    navigate(`/employees/details/${id}`);
   };
   const columns = [
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 100,
+      width: 50,
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
@@ -103,37 +104,40 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => handleView(record.id)}
+              onClick={() => abc(record.id)}
             />
           </Tooltip>
         </span>
       ),
     },
     {
-      title: t('EMPLOYEES.CODE'),
-      dataIndex: 'code',
-      key: 'code',
-      width: 100,
+      title: t('EMPLOYEES.ID'),
+      dataIndex: 'id',
+      key: 'id',
+      width: 30,
       ellipsis: {
         showTitle: false,
       },
-    },
-    {
-      title: t('EMPLOYEES.NAME'),
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-      width: 120,
+      render: (id, record, index) => { ++index; return index; },
     },
     {
       title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
-      width: 120,
+      width: 60,
       render: (avatar) => (
         <span>
           {avatar.map((avatar, index) => (
-            <Image key={index} src={avatar.url} alt={`Avatar ${index + 1}`} />
+            <Image
+              key={index}
+              src={avatar.url}
+              alt={`Avatar ${index + 1}`}
+              style={{
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%',
+              }}
+            />
           ))}
         </span>
       ),
@@ -141,17 +145,26 @@ const EmployeesList = () => {
         showTitle: false,
       },
     },
+    
+    {
+      title: t('EMPLOYEES.NAME'),
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+      width: 70,
+    },
+    
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
       dataIndex: 'citizen_card',
       key: 'citizen_card',
-      width: 120,
+      width: 90,
     },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 100,
+      width: 80,
       render: (isManager) => (
         <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
@@ -168,7 +181,7 @@ const EmployeesList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 100,
+      width: 80,
       ellipsis: {
         showTitle: false,
       },
@@ -197,7 +210,7 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.POSITION'),
       dataIndex: 'position',
       key: 'position',
-      width: 110,
+      width: 80,
       ellipsis: {
         showTitle: false,
       },

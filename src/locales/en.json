@@ -68,7 +68,8 @@
     "PROJECTS_CREATE": "Create project",
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
-    "PROJECTS_DETAILS": "Project details"
+    "PROJECTS_DETAILS": "Project details",
+    "EMPLOYEES_DETAIL":"Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -246,7 +247,8 @@
     "EXP": "Years Of Experience",
     "ADD_SKILL": "Add Skill",
     "REMOVE_SKILL": "Remove Skill",
-    "ADDRESS": "Address"
+    "ADDRESS": "Address",
+    "ID": "No."
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",

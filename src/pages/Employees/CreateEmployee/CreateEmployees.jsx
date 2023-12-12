@@ -212,6 +212,7 @@ const CreateEmployee = () => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
         });
     };
+
     generateCode();
   }, []);
 
