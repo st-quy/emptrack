@@ -74,7 +74,6 @@ const CreateEmployee = () => {
             avatar: fileImg,
           })
           .then((response) => {
-            console.log(response.data);
             Toast(
               'success',
               t('TOAST.CREATED_SUCCESS', {
