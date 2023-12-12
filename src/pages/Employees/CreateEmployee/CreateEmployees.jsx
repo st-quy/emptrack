@@ -214,7 +214,7 @@ import roleList from '../../Project/CreateProject/rolelist';
         style={{ justifyContent: 'space-between', width: '100%' }}
       >
         <Breadcrumb items={breadcrumbItems} />
-        <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
+        <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
       <div
         style={{
@@ -223,7 +223,7 @@ import roleList from '../../Project/CreateProject/rolelist';
           overflowY: 'auto',
         }}
       >
-        <Card title={t('EMPLOYEES.CODE')} className="first-card">
+        <Card title={t('BUTTON.ADD_MEMBER')} className="details-card" style={{ borderRadius: '30px' }}>
           <Form form={form}>
             <Row gutter={[16, 0]}>
               {/* CODE EMPLOYEE */}
@@ -588,7 +588,7 @@ import roleList from '../../Project/CreateProject/rolelist';
             </Row>
           </Form>
         </Card>
-        <Card title={t('EMPLOYEES.DETAILS')} className="second-card">
+        <Card title={t('EMPLOYEES.DETAILS')} className="second-card" style={{ borderRadius: '30px' }}>
           <Form form={form2}>
             <Row gutter={[16, 0]}>
               {/* IS_MANAGER EMPLOYEE */}

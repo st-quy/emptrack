@@ -149,7 +149,7 @@ const ProjectList = () => {
       },
       render: (id, record, index) => { ++index; return index; },
     },
-    {
+     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
       key: 'manager',
