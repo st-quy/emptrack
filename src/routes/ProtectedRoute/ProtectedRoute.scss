@@ -66,19 +66,17 @@
     }
   }
   .layout-content {
+    height: fit-content;
+    background: #eff3f9 !important;
+    border-radius: 50px 50px 0 0 !important;
     .ant-card-layout {
-      height: calc(100vh - 83px) !important;
+      max-height: fit-content;
+      height: calc(100vh - 75px) !important;
       border-radius: 50px 50px 0 0;
       background: #eff3f9 !important;
       .ant-card-body {
-        padding: 5px 35px;
+        padding: 0 35px;
       }
     }
   }
-}
-.ant-menu-item-selected {
-  // background-color: black !important;
-}
-.ant-menu-item {
-  // background-color: #2c2c2c !important;
 }

@@ -46,9 +46,7 @@
         "USERS": "Users",
         "USERS_CREATE": "Create user",
         "USERS_UPDATE": "Update user",
-        "PROFILE": "Profile",
-        "EMPLOYEES_UPDATE": "Update Employees"
-
+        "PROFILE": "Profile"
     },
     "MODAL": {
         "SYNC_INFO": "Sync Information",
@@ -117,7 +115,9 @@
         "BASIC_INFORMATION": "Basic Information",
         "DEVICES": "Devices",
         "ENDPOINT": "Endpoint",
-        "SCHEDULE": "Schedule"
+        "SCHEDULE": "Schedule",
+        "Action": "Action",
+        "AVATAR": "Avatar"
     },
     "USERS": {
         "NAME": "Name",
@@ -162,30 +162,6 @@
     "NOTFOUND": {
         "CONTENT_SORRY": "SORRY BUT THE PAGE YOU ARE LOOKING FOR DOES NOT EXIST, HAVE BEEN REMOVED. NAME CHANGED OR IS TEMPORARILY UNAVAILABLE",
         "404": "404 - PAGE NOT FOUND"
-    },
-    "EMPLOYEES": {
-        "DESCRIPTION": " DESCRIPTION",
-        "PHONE": "PHONE",
-        "CODE": "CODE",
-        "NAME": "NAME",
-        "BIRTH": "BIRTH",
-        "GENDER": "GENDER",
-        "GENDER_WOMEN": "Female",
-        "GENDER_MEN": "Male",
-        "GENDER_UNKNOWN": "Unknown",
-        "CITIZEN_CARD": "CITIZEN_CARD",
-        "AVATAR": "AVATAR",
-        "DETAILS": "Detail",
-        "UPDATE": "Update",
-        "IS_MANAGER": "Manager",
-        "POSITION": "Position",
-        "SKILLS": "SKILLS",
-        "STATUS": "Status",
-        "ACTIVE": "Active",
-        "INACTIVE": "Inactive",
-        "LINE_MANAGER": "Line Manager",
-        "MANAGER": "Manager",
-        "NOT_MANAGER": "Not Manager"
-
     }
+
 }

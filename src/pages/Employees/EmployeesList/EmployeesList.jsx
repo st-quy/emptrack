@@ -11,23 +11,24 @@ import {
   Tooltip,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import Button from '../../components/atoms/Button/Button';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import Button from '../../../components/atoms/Button/Button';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { axiosInstance } from '../../../config/axios';
 import { useNavigate } from 'react-router-dom';
+
 
 const EmployeesList = () => {
   const [currentPage, setCrurentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:5500/emptrack-firestore/employees.json',
-        );
-        const result = await response.json();
-        setData(result);
+        await axiosInstance.get('employees').then((response) => {
+          setData(response.data);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -35,10 +36,12 @@ const EmployeesList = () => {
     fetchData();
   }, []);
   const handleDelete = (id) => {
+    // Implement delete logic here
     console.log(`Deleting record with id ${id}`);
   };
   const handleView = (id) => {
-    console.log(`Viewing record with id ${id}`);
+    // Implement view logic here
+    console.log(`Update ${id}`);
     navigate(`/employees/update/${id}`);
   };
   const columns = [
@@ -117,14 +120,14 @@ const EmployeesList = () => {
     },
     {
       title: 'Date Of Birth',
-      dataIndex: 'dob',
-      key: 'dob',
+      dataIndex: 'birth',
+      key: 'birth',
       width: 150,
     },
     {
       title: 'Citizen Identity Card',
-      dataIndex: 'cccd',
-      key: 'cccd',
+      dataIndex: 'citizen_card',
+      key: 'citizen_card',
       width: 150,
     },
     {
@@ -264,7 +267,7 @@ const EmployeesList = () => {
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
           scroll={{
             x: 1500,
-            y: 300,
+            y: 'calc(100vh - 400px)',
           }}
           pagination={false}
         />
