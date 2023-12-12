@@ -151,7 +151,7 @@ const EmployeesList = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
-      width: 90,
+      width: 70,
     },
     
     {
@@ -164,7 +164,7 @@ const EmployeesList = () => {
       title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 100,
+      width: 80,
       render: (isManager) => (
         <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
@@ -181,7 +181,7 @@ const EmployeesList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 100,
+      width: 80,
       ellipsis: {
         showTitle: false,
       },
@@ -210,7 +210,7 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.POSITION'),
       dataIndex: 'position',
       key: 'position',
-      width: 110,
+      width: 80,
       ellipsis: {
         showTitle: false,
       },
