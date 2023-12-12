@@ -4,12 +4,12 @@ import {
   Card,
   Image,
   Input,
+  Modal,
   Pagination,
   Space,
   Table,
   Tag,
   Tooltip,
-  Modal,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { axiosInstance } from '../../../config/axios';
 import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 const EmployeesList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -27,7 +27,9 @@ const EmployeesList = () => {
   const [data, setData] = useState([]);
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
+  const [allProjects, setAllProjects] = useState([]);
 
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
@@ -41,23 +43,49 @@ const EmployeesList = () => {
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
         setData(filterDeleted);
+
+        await axiosInstance.get('/projects').then((res) => {
+          const filterDeletedProjects = res.data.filter(
+            (item) => !item.deletedAt,
+          );
+
+          setAllProjects(filterDeletedProjects);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, [deletedEmployeesId]);
-  const handleDelete = (projectId) => {
-    setSelectedEmployeesId(projectId);
-    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
-    setShowDeleteModal(true);
+  const handleDelete = async (employeeId) => {
+    try {
+      let isDelete = true;
+      allProjects.map((project) => {
+        for (let index = 0; index < project.member.length; index++) {
+          if (project.member[index].id === employeeId) {
+            isDelete = false;
+            break;
+          }
+        }
+
+        if (project.manager[0].id === selectedEmployeesId) isDelete = false;
+      });
+
+      if (isDelete) {
+        setSelectedEmployeesId(employeeId);
+        setShowDeleteModal(true);
+      } else {
+        setShowWarningModal(true);
+      }
+    } catch (error) {
+      console.error('Error get all projects:', error);
+    }
   };
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance
         .delete(`employees/${selectedEmployeesId}`)
         .then(() => {
-          //  message.success('Dự án đã được xóa thành công!');
           Toast(
             'success',
             t('TOAST.DELETED_SUCCESS', {
@@ -80,10 +108,10 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-  const abc = (id) => {
-    console.log(
-      "fdfsf"
-    )
+  const handleCancelWarning = () => {
+    setShowWarningModal(false);
+  };
+  const handleView = (id) => {
     navigate(`/employees/details/${id}`);
   };
   const columns = [
@@ -104,7 +132,7 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => abc(record.id)}
+              onClick={() => handleView(record.id)}
             />
           </Tooltip>
         </span>
@@ -271,6 +299,22 @@ const EmployeesList = () => {
             onCancel={handleCancelDelete}
           >
             <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
+          </Modal>
+          <Modal
+            title={t('TABLE.COMFIRM_DELETE')}
+            visible={showWarningModal}
+            onCancel={handleCancelWarning}
+            footer={[
+              <Button
+                key="back"
+                onClick={handleCancelWarning}
+                className="button ant-btn-primary"
+              >
+                {t('BUTTON.CANCEL')}
+              </Button>,
+            ]}
+          >
+            <p>{t('MODAL.WARNING_DELETE')}</p>
           </Modal>
         </>
       ) : (
