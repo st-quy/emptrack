@@ -18,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import SelectField from './CustomSelect';
 import './ProjectUpdate.scss';
@@ -95,60 +94,61 @@ const ProjectUpdate = () => {
     initialValues: initialValues,
     // validationSchema: schema,
     onSubmit: async (value) => {
-      const managerName = employees.find((e) => e.id === value.manager).name;
+      // const managerName = employees.find((e) => e.id === value.manager).name;
 
-      let member = [];
-      members.map((mem) => {
-        const memberName = employees.find((e) => e.id === mem.member).name;
+      // let member = [];
+      // members.map((mem) => {
+      //   const memberName = employees.find((e) => e.id === mem.member).name;
 
-        member.push({
-          role: mem.role,
-          name: memberName,
-          id: mem.member,
-        });
-      });
+      //   member.push({
+      //     role: mem.role,
+      //     name: memberName,
+      //     id: mem.member,
+      //   });
+      // });
 
-      let name = value.name.trim().replace(/  +/g, ' ');
-      let description = value.description.trim().replace(/  +/g, ' ');
-      let status = value.status;
-      let technical = value.technical;
-      let startDate = value.dateRange.startDate;
-      let endDate = value.dateRange.endDate;
-      let manager = [{ name: managerName, id: value.manager }];
-      try {
-        // axiosInstance.patch(`projects/${projectId}`, {
-        //   member,
-        //   name,
-        //   description,
-        //   status,
-        //   technical,
-        //   startDate,
-        //   endDate,
-        //   manager,
-        // });
-        Toast(
-          'success',
-          t('TOAST.CREATED_SUCCESS', {
-            field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-          }),
-          2,
-        );
+      // let name = value.name.trim().replace(/  +/g, ' ');
+      // let description = value.description.trim().replace(/  +/g, ' ');
+      // let status = value.status;
+      // let technical = value.technical;
+      // let startDate = value.dateRange.startDate;
+      // let endDate = value.dateRange.endDate;
+      // let manager = [{ name: managerName, id: value.manager }];
+      // try {
+      //   // axiosInstance.patch(`projects/${projectId}`, {
+      //   //   member,
+      //   //   name,
+      //   //   description,
+      //   //   status,
+      //   //   technical,
+      //   //   startDate,
+      //   //   endDate,
+      //   //   manager,
+      //   // });
+      //   Toast(
+      //     'success',
+      //     t('TOAST.CREATED_SUCCESS', {
+      //       field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+      //     }),
+      //     2,
+      //   );
 
-        formik.resetForm();
-        form.resetFields();
+      //   formik.resetForm();
+      //   form.resetFields();
 
-        setTimeout(() => {
-          navigate(`/projects`);
-        }, 2000);
-      } catch (error) {
-        Toast(
-          'error',
-          t('TOAST.CREATED_ERROR', {
-            field: t('BREADCRUMB.PROJECTS'),
-          }),
-          2,
-        );
-      }
+      //   setTimeout(() => {
+      //     navigate(`/projects`);
+      //   }, 2000);
+      // } catch (error) {
+      //   Toast(
+      //     'error',
+      //     t('TOAST.CREATED_ERROR', {
+      //       field: t('BREADCRUMB.PROJECTS'),
+      //     }),
+      //     2,
+      //   );
+      // }
+      console.log(value);
     },
   });
 
@@ -166,7 +166,7 @@ const ProjectUpdate = () => {
   ];
 
   const getAvailableOptions = () => {
-    const selectedOptions = members?.map((member) => member.member);
+    const selectedOptions = project.member?.map((member) => member.id);
 
     return employees?.filter((option) => !selectedOptions.includes(option.id));
   };
@@ -183,11 +183,7 @@ const ProjectUpdate = () => {
         style={{ borderRadius: '30px' }}
         title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
       >
-        <Formik
-          Formik
-          initialValues={initialValues}
-          // validationSchema={schema}
-        >
+        <Formik Formik initialValues={initialValues} validationSchema={schema}>
           {({ values }) => (
             <Form
               labelCol={{
@@ -222,9 +218,7 @@ const ProjectUpdate = () => {
                     <Input
                       placeholder={t('PROJECTS.NAME')}
                       value={formik.name}
-                      onChange={() => {
-                        formik.handleChange;
-                      }}
+                      onChange={formik.handleChange}
                       autoFocus
                     />
                   </Form.Item>
@@ -398,9 +392,9 @@ const ProjectUpdate = () => {
                               className="w-100 members-select"
                             >
                               <option defaultValue>
-                                {members[index]?.member
+                                {project.member[index]?.name
                                   ? employees.find(
-                                      (e) => e.id === members[index].member,
+                                      (e) => e.id === project.member[index].id,
                                     ).name
                                   : 'Select member'}
                               </option>
@@ -468,7 +462,11 @@ const ProjectUpdate = () => {
                               index={index}
                               options={roleSelection}
                               isMulti={true}
-                              members={project.member}
+                              defaultValue={
+                                index < values.members.length && project?.member
+                              }
+                              // {index < values.members.length && }
+                              // members={project.member}
                               setMembers={setMembers}
                               formik={formik}
                               // defaultValue={member.role}
@@ -514,8 +512,8 @@ const ProjectUpdate = () => {
                       <Button
                         onClick={() => {
                           arrayHelpers.push(emptyMember);
-                          setMembers((prev) => [...prev, emptyMember]);
-                          formik.setFieldValue(`members`, [...members]);
+                          // setMembers((prev) => [...prev, emptyMember]);
+                          // formik.setFieldValue(`members`, [...members]);
                         }}
                         icon={<PlusOutlined />}
                         className="button ant-btn-primary my-3"
