@@ -1,5 +1,4 @@
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { useAuth } from './provider/authProvider';
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import NotFound from './pages/Notfound/Notfound';

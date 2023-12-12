@@ -11,17 +11,19 @@ import {
   Space,
   Typography,
 } from 'antd';
-import axios from 'axios';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
 import './CreateProject.scss';
+import CustomSelect from './CustomSelect';
 import './rolelist';
 import roleSelection from './rolelist';
+import Schema from './schema';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -29,54 +31,21 @@ const dateFormat = 'DD/MM/YYYY';
 
 const emptyMember = {
   member: '',
-  role: '',
+  role: [],
 };
+
 const CreateProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [employeesSelection, setEmployeesSelection] = useState();
   const [members, setMembers] = useState([emptyMember]);
+  const schema = Schema();
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_create', route: '/projects/create' },
   ];
 
-  let schema = Yup.object().shape({
-    name: Yup.string()
-      .trim()
-      .max(60, t('VALIDATE.MAX', { field: t('PROJECTS.NAME'), number: '60' }))
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.NAME') })),
-    description: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
-    technical: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),
-    dateRange: Yup.object().shape({
-      startDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_START') }),
-      ),
-      endDate: Yup.string().required(
-        t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_END') }),
-      ),
-    }),
-    manager: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.MANAGER') })),
-    members: Yup.array()
-      .of(
-        Yup.object().shape({
-          member: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('PROJECTS.MEMBER') }),
-          ),
-          role: Yup.string().required(
-            t('VALIDATE.REQUIRED', { field: t('ROLE.ROLE') }),
-          ),
-        }),
-      )
-      .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.MEMBER') })),
-  });
   const initialValues = {
     name: '',
     manager: '',
@@ -96,85 +65,127 @@ const CreateProject = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: schema,
-    onSubmit: (value) => {
-      const managerName = employeesSelection.find(
-        (e) => e.id === value.manager,
-      ).name;
-
-      let member = [];
-      members.map((mem) => {
-        const memberName = employeesSelection.find(
-          (e) => e.id === mem.member,
-        ).name;
-
-        member.push({
-          role: mem.role,
-          name: memberName,
-          id: mem.member,
-        });
-      });
-
+    onSubmit: async (value) => {
       let name = value.name.trim().replace(/  +/g, ' ');
-      let description = value.description.trim().replace(/  +/g, ' ');
-      let status = value.status;
-      let technical = value.technical;
-      let startDate = value.dateRange.startDate;
-      let endDate = value.dateRange.endDate;
-      let manager = [{ name: managerName, id: value.manager }];
-
-      try {
-        axios.post('https://api-emptrack.onrender.com/projects', {
-          member,
-          name,
-          description,
-          status,
-          technical,
-          startDate,
-          endDate,
-          manager,
+      const allProjects = await axiosInstance
+        .get('projects')
+        .then((res) => res.data);
+      const isSameName = allProjects.find((project) => project.name === name);
+      if (!isSameName) {
+        const managerName = employeesSelection.find(
+          (e) => e.id === value.manager,
+        ).name;
+        let member = [];
+        members.map((mem) => {
+          const memberName = employeesSelection.find(
+            (e) => e.id === mem.member,
+          ).name;
+          member.push({
+            role: mem.role.map((r) => r.value),
+            name: memberName,
+            id: mem.member,
+          });
         });
-
-        //show notif
-        //Clear form
-        formik.resetForm();
-        form.resetFields();
-
-        //Redirect to details page
-        navigate(`/projects`);
-      } catch (error) {
-        console.log(error);
+        let description = value.description.trim().replace(/  +/g, ' ');
+        let status = value.status;
+        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let startDate = value.dateRange.startDate;
+        let endDate = value.dateRange.endDate;
+        let manager = [{ name: managerName, id: value.manager }];
+        try {
+          await axiosInstance
+            .post('projects', {
+              member,
+              name,
+              description,
+              status,
+              technical,
+              startDate,
+              endDate,
+              manager,
+            })
+            .then((result) => {
+              const dataHistory = result.data.data.member.map(
+                (member) => `${member.name} Joined project`,
+              );
+              axiosInstance.post('tracking', {
+                project: result.data.data,
+                history: [
+                  {
+                    time: result.data.data.createdAt,
+                    value: [`Start project`, ...dataHistory],
+                  },
+                ],
+              });
+              //show notif
+              Toast(
+                'success',
+                t('TOAST.CREATED_SUCCESS', {
+                  field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+                }),
+                2,
+              );
+              //Clear form
+              formik.resetForm();
+              form.resetFields();
+              //Redirect to details page
+              setTimeout(() => {
+                navigate(`/projects`);
+              }, 2000);
+            });
+        } catch (error) {
+          Toast(
+            'error',
+            t('TOAST.CREATED_ERROR', {
+              field: t('BREADCRUMB.PROJECTS'),
+            }),
+            2,
+          );
+        }
       }
     },
   });
-
   useEffect(() => {
-    axios.get('https://api-emptrack.onrender.com/employees').then((res) => {
-      const employeesSelection = res.data;
-
-      setEmployeesSelection(employeesSelection);
-    });
+    const fetchData = async () => {
+      await axiosInstance.get('employees').then((res) => {
+        const employeesSelection = res.data.filter((em) => !em.deletedAt);
+        setEmployeesSelection(employeesSelection);
+      });
+    };
+    fetchData();
   }, []);
+  const getAvailableOptions = () => {
+    const selectedOptions = members?.map((member) => member.member);
 
-  // console.log(formik.errors);
-
-  // const filterSelectedMembers = () =>
-  //   employeesSelection.filter(
-  //     (option) => !members.some((m) => m.member === option.value),
-  //   );
+    return employeesSelection?.filter(
+      (option) => !selectedOptions.includes(option.id),
+    );
+  };
   return (
     <div id="project_create">
       <Space className="w-100 justify-content-between">
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
-
+      <div
+        style={{
+          maxHeight: '80vh',
+          maxWidth: '100%',
+          overflowY: 'auto',
+        }}
+        >
       <Card
         className="card-create-project"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-        style={{borderRadius: '30px' }}
+        style={{
+          // maxHeight: '80vh',
+          // maxWidth: '100%',
+          // overflowY: 'auto',
+          borderRadius: '30px',
+        }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
-          {({ values, errors }) => (
+          {({ values }) => (
             <Form
               labelCol={{
                 sm: { span: 24 },
@@ -201,7 +212,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Input
@@ -223,7 +239,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Select
@@ -232,12 +253,14 @@ const CreateProject = () => {
                         formik.setFieldValue('manager', value)
                       }
                       allowClear
-                      options={employeesSelection?.map((em) => {
-                        return {
-                          value: em.id,
-                          label: em.name,
-                        };
-                      })}
+                      options={employeesSelection
+                        ?.filter((em) => em.isManager === true)
+                        .map((em) => {
+                          return {
+                            value: em.id,
+                            label: em.name,
+                          };
+                        })}
                     />
                   </Form.Item>
                   <Form.Item
@@ -252,7 +275,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <TextArea
@@ -275,6 +303,11 @@ const CreateProject = () => {
                         </div>
                       )
                     }
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
                   >
                     <RangePicker
                       status={
@@ -296,7 +329,10 @@ const CreateProject = () => {
                       className="w-100"
                     />
                   </Form.Item>
-                  <Form.Item label={t('PROJECTS.STATUS')}>
+                  <Form.Item
+                    label={t('PROJECTS.STATUS')}
+                    className="label-required"
+                  >
                     <Radio.Group
                       name="status"
                       value={formik.values.status}
@@ -324,7 +360,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Input
@@ -365,13 +406,18 @@ const CreateProject = () => {
                                 );
                               }}
                               className="w-100 members-select"
-                              placeholder="Email"
                             >
-                              <option defaultValue>Select Member</option>
+                              <option defaultValue>
+                                {members[index]?.member
+                                  ? employeesSelection.find(
+                                      (e) => e.id === members[index].member,
+                                    ).name
+                                  : t('PROJECTS.SELECT_MEMBER')}
+                              </option>
                               {employeesSelection &&
-                                employeesSelection.map((e, index) => {
+                                getAvailableOptions(index).map((e, i) => {
                                   return (
-                                    <option key={index} value={e.id}>
+                                    <option key={i} value={e.id}>
                                       {e.name}
                                     </option>
                                   );
@@ -379,9 +425,6 @@ const CreateProject = () => {
                             </Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.member */
-                            } &&
                             formik.errors.members[index]?.member ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.member}
@@ -392,45 +435,17 @@ const CreateProject = () => {
                           </Col>
                           <Col span={11}>
                             <Field
-                              component="select"
+                              component={CustomSelect}
                               name={`members[${index}].role`}
-                              id={`members[${index}].role`}
-                              onChange={(value) => {
-                                arrayHelpers.replace(index, {
-                                  ...members[index],
-                                  role: value.target.value,
-                                });
-                                setMembers((prevMembers) => {
-                                  const updatedMembers = [...prevMembers];
-                                  updatedMembers[index] = {
-                                    ...updatedMembers[index],
-                                    role: value.target.value,
-                                  };
-                                  return updatedMembers;
-                                });
-                                formik.setFieldValue(
-                                  `members.${index}.role`,
-                                  value.target.value,
-                                );
-                              }}
-                              className="w-100 members-select"
-                              placeholder="First Name"
-                            >
-                              <option defaultValue>Select Role</option>
-                              {roleSelection &&
-                                roleSelection.map((e, index) => {
-                                  return (
-                                    <option key={index} value={e.value}>
-                                      {e.label}
-                                    </option>
-                                  );
-                                })}
-                            </Field>
+                              index={index}
+                              options={roleSelection}
+                              isMulti={true}
+                              members={members}
+                              setMembers={setMembers}
+                              formik={formik}
+                            ></Field>
                             {formik.errors.members &&
                             formik.touched.members &&
-                            {
-                              /* formik.touched.members[index]?.role */
-                            } &&
                             formik.errors.members[index]?.role ? (
                               <div className="text-danger">
                                 {formik.errors.members[index]?.role}
@@ -484,8 +499,8 @@ const CreateProject = () => {
           )}
         </Formik>
       </Card>
+      </div>
     </div>
   );
 };
-
 export default CreateProject;

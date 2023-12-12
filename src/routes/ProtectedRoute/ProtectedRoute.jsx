@@ -23,9 +23,11 @@ export const ProtectedRoute = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
+
   if (!token) {
     return <Navigate to="/login" />;
   }
+
   const IMenu = [
     {
       key: 'dashboard',
@@ -52,7 +54,7 @@ export const ProtectedRoute = () => {
     <Layout id="layout-container">
       <Header className="layout-header">
         <Typography className="logo-header">{t('SYSTEM.LOGO_NAME')}</Typography>
-        <Space className="menu-list" direction="horizontal" size={48}>
+        <Space className="menu-list" direction="horizontal" size={36}>
           {IMenu.map((item, index) => {
             return (
               <Tooltip title={item.label} key={index} trigger="hover">

@@ -60,7 +60,7 @@ const BoolPieChart = () => {
   return (
     <div
       id="main"
-      style={{ width: '100%', height: '250px', paddingTop: '24px' }}
+      style={{ width: '100%', height: '230px', paddingTop: '16px' }}
       ref={chartRef}
     ></div>
   );

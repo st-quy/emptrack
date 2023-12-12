@@ -5,7 +5,7 @@ import { initReactI18next } from 'react-i18next';
 import translationEn from '../locales/en.json';
 import translationVi from '../locales/vi.json';
 
-const localeStorage = localStorage.getItem("locales");
+const localeStorage = localStorage.getItem("lang");
 
 const resources = {
   en: { translation: translationEn },
@@ -17,7 +17,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: localeStorage ?? "vi",
+    fallbackLng: localeStorage ? localeStorage : "vi",
     debug: false,
     interpolation: {
       escapeValue: false,

@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { axiosInstance } from '../../config/axios';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import ImgCrop from 'antd-img-crop';
 
@@ -135,6 +136,7 @@ const UpdateForm = () => {
 
   const breadcrumbItems = [
     { key: 'employees', route: '/employees' },
+    { key: 'employees_details', route: `/employees/update/${id}`},
     { key: 'employees_update', route: `/employees/update/${id}`},
   ];
   const validateBirthDate = (_, value) => {
@@ -474,14 +476,19 @@ const UpdateForm = () => {
                 >
                  <div>
       <div>
-        <ImgCrop rotationSlider>         
-         <img src={employeesData?.avatar[0].url} 
-            style={{ padding:'0 20px',width: '50%'}}         
-        >                    
-          </img>                   
-            </ImgCrop>
-            <div>
-            <button onClick={handleSubmit}>Submit</button>
+      <ImgCrop rotationSlider>
+      <Upload
+        listType="picture-card"
+        fileList={fileList}
+        onChange={handlePic}
+        onPreview={handlePreview}
+        onRemove={handleRemove}
+      >
+        Click to upload
+      </Upload>
+      <Img src={employeesData?.avatar[0].url} style={{ padding: '0 20px', width: '50%' }} />
+    </ImgCrop>
+            <div>         
           </div>  
           </div>
           

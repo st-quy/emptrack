@@ -9,6 +9,7 @@ import {
   Checkbox,
   Form,
   Input,
+  notification,
 } from 'antd';
 import './Login.scss';
 import { useTranslation } from 'react-i18next';
@@ -17,27 +18,51 @@ import iconGoogle from '../../assets/img/google-icon.png';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { auth, provider } from '../../service/firebase';
 import { signInWithPopup } from 'firebase/auth';
+import { axiosInstance } from '../../config/axios';
+import { useEffect } from 'react';
+import { Toast } from '../../components/toast/Toast';
 
 const Login = () => {
   const { setToken, token } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, message) => {
+    api[type]({
+      message,
+    });
+  };
   if (token) {
     return <Navigate to="/" />;
   }
+  useEffect(() => {
+    document.title = 'EMP | LOGIN';
+  }, []);
 
   const handleClick = () => {
     signInWithPopup(auth, provider).then((data) => {
-      setToken(data.user.accessToken);
+      if (data.user.email === import.meta.env.VITE_APP_EMAIL) {
+        setToken(data.user.accessToken);
+      } else {
+        return openNotificationWithIcon('error', `${t('LOGIN.ERROR')}`);
+      }
     });
   };
 
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+  const onFinish = async (values) => {
+    await axiosInstance.post('login', values).then((response) => {
+      if (response) {
+        navigate('/');
+        Toast('success', t('TOAST.LOGIN_SUCCESS'));
+        return setToken(response.data);
+      } else {
+        return openNotificationWithIcon('error', `${t('LOGIN.ERROR')}`);
+      }
+    });
   };
   return (
     <div id="main-container">
+      {contextHolder}
       <Row className="auth-sidebar">
         <Col xs={0} sm={8} md={8} className="auth-sidebar-content">
           <video
@@ -104,15 +129,6 @@ const Login = () => {
                   placeholder="Password"
                 />
               </Form.Item>
-              <Form.Item>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <a className="login-form-forgot" href="">
-                  Forgot password
-                </a>
-              </Form.Item>
-
               <Form.Item>
                 <Button
                   type="primary"
