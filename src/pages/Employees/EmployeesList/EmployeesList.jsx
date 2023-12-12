@@ -27,7 +27,6 @@ const EmployeesList = () => {
   const [data, setData] = useState([]);
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showWarningModal, setShowWarningModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
   const [allProjects, setAllProjects] = useState([]);
 
@@ -75,7 +74,7 @@ const EmployeesList = () => {
         setSelectedEmployeesId(employeeId);
         setShowDeleteModal(true);
       } else {
-        setShowWarningModal(true);
+        warningDelete();
       }
     } catch (error) {
       console.error('Error get all projects:', error);
@@ -108,11 +107,16 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-  const handleCancelWarning = () => {
-    setShowWarningModal(false);
-  };
+
   const handleView = (id) => {
     navigate(`/employees/details/${id}`);
+  };
+
+  const warningDelete = () => {
+    Modal.warning({
+      title: t('MODAL.WARNING_DELETE_TITLE'),
+      content: t('MODAL.WARNING_DELETE'),
+    });
   };
   const columns = [
     {
@@ -146,7 +150,10 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
-      render: (id, record, index) => { ++index; return index; },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
     },
     {
       title: t('EMPLOYEES.AVATAR'),
@@ -161,8 +168,8 @@ const EmployeesList = () => {
               src={avatar.url}
               alt={`Avatar ${index + 1}`}
               style={{
-                width: '60px', 
-                height: '60px', 
+                width: '60px',
+                height: '60px',
                 borderRadius: '50%',
               }}
             />
@@ -173,7 +180,7 @@ const EmployeesList = () => {
         showTitle: false,
       },
     },
-    
+
     {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
@@ -181,7 +188,7 @@ const EmployeesList = () => {
       render: (text) => <a>{text}</a>,
       width: 70,
     },
-    
+
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
       dataIndex: 'citizen_card',
@@ -311,22 +318,6 @@ const EmployeesList = () => {
             onCancel={handleCancelDelete}
           >
             <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
-          </Modal>
-          <Modal
-            title={t('TABLE.COMFIRM_DELETE')}
-            visible={showWarningModal}
-            onCancel={handleCancelWarning}
-            footer={[
-              <Button
-                key="back"
-                onClick={handleCancelWarning}
-                className="button ant-btn-primary"
-              >
-                {t('BUTTON.CANCEL')}
-              </Button>,
-            ]}
-          >
-            <p>{t('MODAL.WARNING_DELETE')}</p>
           </Modal>
         </>
       ) : (

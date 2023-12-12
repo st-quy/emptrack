@@ -5,30 +5,27 @@ import {
 } from '@ant-design/icons';
 import {
   Card,
-  Input,
+  DatePicker,
+  Modal,
   Pagination,
+  Select,
   Space,
   Table,
   Tooltip,
-  Modal,
-  message,
-  DatePicker,
-  Select,
 } from 'antd';
 import { debounce } from 'lodash';
 // eslint-disable-next-line no-unused-vars
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
-import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import '../ProjectList/ProjectList.scss';
-import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
-import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
-import moment from 'moment';
 
 const ProjectList = () => {
   const [dataFirst, setDataList] = useState([]);
@@ -147,7 +144,10 @@ const ProjectList = () => {
       ellipsis: {
         showTitle: false,
       },
-      render: (id, record, index) => { ++index; return index; },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
     },
     {
       title: t('TABLE.MANAGER'),
@@ -374,11 +374,7 @@ const ProjectList = () => {
               {t('BUTTON.SEARCH')}
             </Button>
           </Space>
-          {/* <Input.Search
-              placeholder={t('TABLE.SEARCH') + '...'}
-              style={{ marginBottom: 8, width: 300, marginTop: 8 }}
-              onChange={(e) => setSearchedText(e.target.value)}
-            /> */}
+
           <Table
             columns={columns}
             dataSource={

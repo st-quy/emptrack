@@ -78,7 +78,8 @@
     "TITLE_DELETE": "Xóa {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Tạo access token",
     "CHOOSE_LOCALTION": "Chọn địa điểm",
-    "WARNING_DELETE": "Nhân viên không thể bị xóa vì đang tham gia trong một dự án. \n Vui lòng gỡ nhân viên khỏi dự án trước khi tiến hành xóa."
+    "WARNING_DELETE_TITLE": "Cảnh báo xóa nhân viên",
+    "WARNING_DELETE": "Nhân viên không thể bị xóa vì đang tham gia trong một dự án.\n\n\nVui lòng gỡ nhân viên khỏi dự án trước khi tiến hành xóa."
   },
   "STATUS": {
     "CREATE": "Tạo",
