@@ -157,6 +157,8 @@ const ProjectList = () => {
       title: t('TABLE.ACTIONS'),
       key: 'action',
       width: 60,
+      align: 'center',
+
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
@@ -187,6 +189,8 @@ const ProjectList = () => {
       title: t('EMPLOYEES.ID'),
       dataIndex: 'id',
       key: 'id',
+      align: 'center',
+
       width: 30,
       ellipsis: {
         showTitle: false,
@@ -199,6 +203,8 @@ const ProjectList = () => {
      {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
+      align: 'center',
+
       key: 'manager',
       width: 80,
       sorter: (a, b) => a.manager[0].name.localeCompare(b.manager[0].name),
@@ -216,6 +222,8 @@ const ProjectList = () => {
     {
       title: t('BREADCRUMB.PROJECTS'),
       dataIndex: 'name',
+      align: 'center',
+
       key: 'name',
       render: (text) => <a>{text}</a>,
       width: 80,
@@ -224,6 +232,8 @@ const ProjectList = () => {
     {
       title: t('TABLE.START DATE'),
       dataIndex: 'startDate',
+      align: 'center',
+
       key: 'startDate',
       width: 80,
       sorter: {
@@ -242,6 +252,8 @@ const ProjectList = () => {
     {
       title: t('TABLE.END DATE'),
       dataIndex: 'endDate',
+      align: 'center',
+
       key: 'endDate',
       width: 80,
       sorter: {
@@ -260,6 +272,8 @@ const ProjectList = () => {
     {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
+      align: 'center',
+
       key: 'status',
       width: 60,
       ellipsis: {
