@@ -74,11 +74,12 @@
     "PROFILE": "Profile",
     "EMPLOYEES_CREATE": "Create employees",
     "EMPLOYEES": "Employees",
+    "EMPLOYEES_UPDATE": "Update employees",
     "PROJECTS_CREATE": "Create project",
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
     "PROJECTS_DETAILS": "Project details",
-    "EMPLOYEES_DETAIL": "Employees details"
+    "EMPLOYEES_DETAILS":"Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -227,6 +228,7 @@
   "TOAST": {
     "CREATED_SUCCESS": "Created {{field}} successfully",
     "CREATED_ERROR": "{{field}} could not be created",
+    "UPDATED_SUCCESS": "Updated {{field}} successfully",
     "CREATED_ERROR_SAME_NAME": "Project name already exists",
     "DELETED_SUCCESS": "Deleted {{field}} successfully",
     "LOGIN_SUCCESS": "Login successfully",
@@ -248,7 +250,7 @@
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
-    "IS_MANAGER": "Managed ?",
+    "IS_MANAGER": "Manager ?",
     "UPLOAD": "Click to Upload",
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",

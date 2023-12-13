@@ -15,6 +15,7 @@ import {
   Menu,
   Dropdown,
 } from 'antd';
+import { filter } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,9 +26,9 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
-import '../ProjectList/ProjectList.scss';
-import { filter } from 'lodash';
 import { areAllSearchParamsEmpty } from '../../../helpers';
+import '../ProjectList/ProjectList.scss';
+
 const { RangePicker } = DatePicker;
 
 const ProjectList = () => {
@@ -172,6 +173,8 @@ const ProjectList = () => {
       title: t('TABLE.ACTIONS'),
       key: 'action',
       width: 60,
+      align: 'center',
+
       render: (text, record) => (
         <span>
           <Tooltip title={t('TABLE.DELETE')}>
@@ -202,6 +205,8 @@ const ProjectList = () => {
       title: t('EMPLOYEES.ID'),
       dataIndex: 'id',
       key: 'id',
+      align: 'center',
+
       width: 30,
       ellipsis: {
         showTitle: false,
@@ -214,6 +219,8 @@ const ProjectList = () => {
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
+      align: 'center',
+
       key: 'manager',
       width: 80,
       sorter: (a, b) => a.manager[0].name.localeCompare(b.manager[0].name),
@@ -231,6 +238,8 @@ const ProjectList = () => {
     {
       title: t('BREADCRUMB.PROJECTS'),
       dataIndex: 'name',
+      align: 'center',
+
       key: 'name',
       render: (text) => <a>{text}</a>,
       width: 80,
@@ -239,6 +248,8 @@ const ProjectList = () => {
     {
       title: t('TABLE.START DATE'),
       dataIndex: 'startDate',
+      align: 'center',
+
       key: 'startDate',
       width: 80,
       sorter: {
@@ -257,6 +268,8 @@ const ProjectList = () => {
     {
       title: t('TABLE.END DATE'),
       dataIndex: 'endDate',
+      align: 'center',
+
       key: 'endDate',
       width: 80,
       sorter: {
@@ -275,6 +288,8 @@ const ProjectList = () => {
     {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
+      align: 'center',
+
       key: 'status',
       width: 60,
       ellipsis: {

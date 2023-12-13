@@ -25,6 +25,7 @@ import FormItem from 'antd/es/form/FormItem';
 const { Item } = Form;
 // const { RangePicker } = DatePicker;DetailEmployees
 // const { Text } = Typography;
+const { Option } = Select;
 const dateFormat = 'DD/MM/YYYY';
 
 function DetailEmployees() {
@@ -50,28 +51,31 @@ function DetailEmployees() {
 
   return (
     <>
-      <div id="employee_details" style={{ height: 100}}>
-       {employees ? (
-<>
-<Space className="w-100 justify-content-between">
-          <Breadcrumb items=
-          {[
-            { key: 'employees' },
-          { key:'employees_details', rout: `/employees/details/${id}`}
-        ]}
-         />
-          <Button onClick={() => navigate('/employees/update')}>
-            {t('BREADCRUMB.USERS_UPDATE')}
-          </Button>
-        </Space>
-        <div
-        style={{
-          maxHeight: '80vh',
-          maxWidth: '100%',
-          overflowY: 'auto',
-        }}
-      >
-        <Card title={t('EMPLOYEES.DETAILS')} className="details-card" style={{ borderRadius: '30px', overflowY: 'auto' }}>
+    <div id="employee_details" style={{ height: '100px' }}>
+      {employees ? (
+        <>
+          <Space className="w-100 justify-content-between">
+            <Breadcrumb
+              items={[
+                { key: 'employees' },
+                { key: 'employees_details', rout: `/employees/details/${id}` },
+              ]}
+            />
+            <Button onClick={() => navigate('/employees/update')}>
+              {t('BREADCRUMB.EMPLOYEES_UPDATE')}
+              
+            </Button>
+          </Space>
+          <div className="details-scroll-container"
+          style={{
+            borderRadius: '30px'
+            }}
+>
+            <Card
+
+              title={t('EMPLOYEES.DETAILS')}
+              className="details-card" 
+            >
             <Form>
             <Row gutter={[16, 16]}>
                  {/* AVATAR EMPLOYEE */}
@@ -85,8 +89,10 @@ function DetailEmployees() {
                               width: '100%',
                               height: '100%',
                               borderRadius: '50%',  
-                              // marginTop: '40px',  
+                              // marginTop: '40px', 
+                               objectFit: 'cover'
                             }}
+                            
                           />
                         </div>
                   

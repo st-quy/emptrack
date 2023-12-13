@@ -43,7 +43,9 @@ const EmployeesList = () => {
     status: '',
   });
   const [filteredData, setFilteredData] = useState([]);
-
+  const handleAvatarClick = () => {
+    setModalVisible(true);
+  };
   const paginationOptions = {
     total: data.filter((item) => !item.deletedAt).length,
     current: currentPage,
@@ -125,9 +127,9 @@ const EmployeesList = () => {
             isDelete = false;
             break;
           }
+          if (project.manager[0].id === employeeId) isDelete = false;
         }
 
-        if (project.manager[0].id === selectedEmployeesId) isDelete = false;
       });
 
       if (isDelete) {
@@ -184,7 +186,8 @@ const EmployeesList = () => {
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 50,
+      width: 20 ,
+      align: 'center',
       render: (text, record) => (
         <span>
           <Tooltip title={t('TABLE.DELETE')}>
@@ -208,7 +211,9 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.ID'),
       dataIndex: 'id',
       key: 'id',
-      width: 30,
+      width: 10,
+      align: 'center',
+
       ellipsis: {
         showTitle: false,
       },
@@ -221,47 +226,57 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
-      width: 60,
-      render: (avatar) => (
+      width: 20,
+      align: 'center',
+
+      render: (item) => (
         <span>
-          {avatar.map((avatar, index) => (
+          {item.map((_, index) => (
             <Image
               key={index}
-              src={avatar.url}
+              src={_.url}
               alt={`Avatar ${index + 1}`}
               style={{
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+              preview={{
+                mask: <EyeOutlined />,
+                src: _.url
               }}
             />
           ))}
         </span>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
+      )
     },
 
     {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
       key: 'name',
+      align: 'center',
+
       render: (text) => <a>{text}</a>,
-      width: 70,
+      width: 40,
     },
 
     {
-      title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'citizen_card',
-      key: 'citizen_card',
-      width: 90,
+      title: t('EMPLOYEES.EMAIL'),
+      dataIndex: 'email',
+      key: 'email',
+      align: 'center',
+
+      width: 40,
     },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       render: (isManager) => (
         <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
@@ -283,7 +298,9 @@ const EmployeesList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       ellipsis: {
         showTitle: false,
       },
@@ -305,15 +322,7 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.status === value,
       sorter: (a, b) => a.status.localeCompare(b.status),
     },
-    {
-      title: t('EMPLOYEES.POSITION'),
-      dataIndex: 'position',
-      key: 'position',
-      width: 80,
-      ellipsis: {
-        showTitle: false,
-      },
-    },
+  
   ];
 
   return (
