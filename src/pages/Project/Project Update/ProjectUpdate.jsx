@@ -21,11 +21,10 @@ import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
+import roleSelection from '../CreateProject/rolelist';
+import Schema from '../CreateProject/schema';
 import SelectField from './CustomSelect';
 import './ProjectUpdate.scss';
-import './rolelist';
-import roleSelection from './rolelist';
-import Schema from './schema';
 const { Text } = Typography;
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -91,7 +90,7 @@ const ProjectUpdate = () => {
     status: project?.status,
     technical: project?.technical,
   };
-  // console.log(members);
+
   const yupSync = {
     async validator({ field }, value) {
       await schema.validateSyncAt(field, { [field]: value });
@@ -186,7 +185,7 @@ const ProjectUpdate = () => {
 
           <Card
             className="card-create-project"
-            title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
+            title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
             style={{
               // maxHeight: '80vh',
               // maxWidth: '100%',
@@ -225,7 +224,12 @@ const ProjectUpdate = () => {
                         }
                         initialValue={values.name}
                         validateFirst
-                        rules={[yupSync]}
+                        rules={[
+                          yupSync,
+                          {
+                            required: true,
+                          },
+                        ]}
                         hasFeedback
                       >
                         <Input
@@ -248,7 +252,12 @@ const ProjectUpdate = () => {
                         }
                         initialValue={values.manager}
                         validateFirst
-                        rules={[yupSync]}
+                        rules={[
+                          yupSync,
+                          {
+                            required: true,
+                          },
+                        ]}
                         hasFeedback
                       >
                         <Select
@@ -270,18 +279,18 @@ const ProjectUpdate = () => {
                       <Form.Item
                         name="description"
                         label={t('PROJECTS.DESCRIPTION')}
-                        help={
-                          formik.errors.description &&
-                          formik.touched.description && (
-                            <div className="text-danger">
-                              {formik.errors.description}
-                            </div>
-                          )
-                        }
+                        // help={
+                        //   formik.errors.description &&
+                        //   formik.touched.description && (
+                        //     <div className="text-danger">
+                        //       {formik.errors.description}
+                        //     </div>
+                        //   )
+                        // }
                         initialValue={values.description}
-                        validateFirst
-                        rules={[yupSync]}
-                        hasFeedback
+                        // validateFirst
+                        // rules={[yupSync]}
+                        // hasFeedback
                       >
                         <TextArea
                           rows={4}
@@ -303,6 +312,11 @@ const ProjectUpdate = () => {
                             </div>
                           )
                         }
+                        rules={[
+                          {
+                            required: true,
+                          },
+                        ]}
                       >
                         <RangePicker
                           status={
@@ -328,7 +342,10 @@ const ProjectUpdate = () => {
                           className="w-100"
                         />
                       </Form.Item>
-                      <Form.Item label={t('PROJECTS.STATUS')}>
+                      <Form.Item
+                        label={t('PROJECTS.STATUS')}
+                        className="label-required"
+                      >
                         <Radio.Group
                           name="status"
                           value={formik.values.status}
@@ -357,7 +374,12 @@ const ProjectUpdate = () => {
                         }
                         initialValue={values.technical}
                         validateFirst
-                        rules={[yupSync]}
+                        rules={[
+                          yupSync,
+                          {
+                            required: true,
+                          },
+                        ]}
                         hasFeedback
                       >
                         <Input
