@@ -69,7 +69,7 @@
     "PROJECTS_CREATE": "Thêm dự án",
     "PROJECTS_UPDATE": "Cập nhật dự án",
     "PROJECTS_DETAILS": "Chi tiết dự án",
-    "EMPLOYEES_DETAILS":"Chi tiết nhân viên"
+    "EMPLOYEES_DETAILS": "Chi tiết nhân viên"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -77,7 +77,9 @@
     "CONFIRM_DELETE": "Bạn có chắc chắn muốn xóa {{name}} không?",
     "TITLE_DELETE": "Xóa {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Tạo access token",
-    "CHOOSE_LOCALTION": "Chọn địa điểm"
+    "CHOOSE_LOCALTION": "Chọn địa điểm",
+    "WARNING_DELETE_TITLE": "Cảnh báo xóa nhân viên",
+    "WARNING_DELETE": "Nhân viên không thể bị xóa vì đang tham gia trong một dự án.\n\n\nVui lòng gỡ nhân viên khỏi dự án trước khi tiến hành xóa."
   },
   "STATUS": {
     "CREATE": "Tạo",
@@ -224,7 +226,7 @@
     "EMAIL": "Email",
     "NAME": "Tên nhân viên",
     "PHONE": "Số điện thoại",
-    "BIRTH": "Năm sinh",
+    "BIRTH": "Ngày sinh",
     "AVATAR": "Ảnh đại diện",
     "CITIZEN_CARD": "Căn cước công dân",
     "GENDER": "Giới tính",
@@ -265,7 +267,7 @@
     "POSITION_REQUIRED": "Vui lòng chọn vị trí",
     "LINE_MANAGER_REQUIRED": "Vui lòng chọn người quản lí",
     "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
-    "BIRTH_REQUIRED": "Vui lòng chọn năm sinh",
+    "BIRTH_REQUIRED": "Vui lòng chọn ngày sinh",
     "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
     "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
     "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
@@ -274,7 +276,7 @@
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
     "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
     "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
-    "BIRTH_ENOUGH_AGE": "Vui lòng chọn năm sinh lớn hơn 18 tuổi",
+    "BIRTH_ENOUGH_AGE": "Vui lòng chọn ngày sinh lớn hơn 18 tuổi",
     "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
     "EMAIL_INVALID": "Email phải bao gồm kí tự @"
   },

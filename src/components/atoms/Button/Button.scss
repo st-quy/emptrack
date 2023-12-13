@@ -25,6 +25,11 @@
       border-color: #565564 !important;
       background: #565564 !important;
     }
+    &:disabled {
+      background-color: #0d0c22a1 !important;
+
+      color: #fff !important;
+    }
   }
 
   &.ant-btn-secondary {

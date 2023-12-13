@@ -77,7 +77,9 @@
     "CONFIRM_DELETE": "Are you sure you want to delete {{name}}?",
     "TITLE_DELETE": "Delete {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Generate access token",
-    "CHOOSE_LOCALTION": "Choose location"
+    "CHOOSE_LOCALTION": "Choose location",
+    "WARNING_DELETE_TITLE": "Warning delete employee",
+    "WARNING_DELETE": "Employee cannot be deleted because they are currently involved in a project. \n Please remove the employee from the project before proceeding with the deletion."
   },
   "STATUS": {
     "CREATE": "Create",
@@ -233,7 +235,7 @@
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
-    "IS_MANAGER": "Managed by?",
+    "IS_MANAGER": "Managed ?",
     "UPLOAD": "Click to Upload",
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
@@ -264,8 +266,9 @@
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
     "LINE_MANAGER_REQUIRED": "Please select the line manager",
-    "BIRTH_MAX": "Date of birth cannot be greater than current date",
-    "BIRTH_REQUIRED": "Please select year of birth",
+    "BIRTH_MAX": "Date of Birth cannot be greater than current date",
+    "BIRTH_REQUIRED": "Please select Date of Birth",
+    "BIRTH_ENOUGH_AGE": "Please choose a Date of Birth greater than 18 years old",
     "DESCRIPTION_REQUIRED": "Please enter description",
     "CITIZEN_CARD_REQUIRED": "Please enter citizen identification number",
     "CITIZEN_CARD_MATCH": "Citizen identification number must be 10 numbers",
