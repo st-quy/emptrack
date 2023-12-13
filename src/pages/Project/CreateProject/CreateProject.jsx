@@ -93,31 +93,46 @@ const CreateProject = () => {
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
         try {
-          await axiosInstance.post('projects', {
-            member,
-            name,
-            description,
-            status,
-            technical,
-            startDate,
-            endDate,
-            manager,
-          });
-          //show notif
-          Toast(
-            'success',
-            t('TOAST.CREATED_SUCCESS', {
-              field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-            }),
-            2,
-          );
-          //Clear form
-          formik.resetForm();
-          form.resetFields();
-          //Redirect to details page
-          setTimeout(() => {
-            navigate(`/projects`);
-          }, 2000);
+          await axiosInstance
+            .post('projects', {
+              member,
+              name,
+              description,
+              status,
+              technical,
+              startDate,
+              endDate,
+              manager,
+            })
+            .then((result) => {
+              const dataHistory = result.data.data.member.map(
+                (member) => `${member.name} Joined project`,
+              );
+              axiosInstance.post('tracking', {
+                project: result.data.data,
+                history: [
+                  {
+                    time: result.data.data.createdAt,
+                    value: [`Start project`, ...dataHistory],
+                  },
+                ],
+              });
+              //show notif
+              Toast(
+                'success',
+                t('TOAST.CREATED_SUCCESS', {
+                  field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+                }),
+                2,
+              );
+              //Clear form
+              formik.resetForm();
+              form.resetFields();
+              //Redirect to details page
+              setTimeout(() => {
+                navigate(`/projects`);
+              }, 2000);
+            });
         } catch (error) {
           Toast(
             'error',
@@ -127,12 +142,9 @@ const CreateProject = () => {
             2,
           );
         }
-      } else {
-        Toast('error', t('TOAST.CREATED_ERROR_SAME_NAME'), 3);
       }
     },
   });
-
   useEffect(() => {
     const fetchData = async () => {
       await axiosInstance.get('employees').then((res) => {
@@ -142,7 +154,6 @@ const CreateProject = () => {
     };
     fetchData();
   }, []);
-
   const getAvailableOptions = () => {
     const selectedOptions = members?.map((member) => member.member);
 
@@ -150,22 +161,29 @@ const CreateProject = () => {
       (option) => !selectedOptions.includes(option.id),
     );
   };
-
   return (
     <div id="project_create">
       <Space className="w-100 justify-content-between">
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
+      <div
+        style={{
+          maxHeight: '80vh',
+          maxWidth: '100%',
+          overflowY: 'auto',
+          borderRadius: '30px',
 
+        }}
+        >
       <Card
-        className="card-create-project"
+      
+        className="details-card"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
         style={{
           // maxHeight: '80vh',
           // maxWidth: '100%',
           // overflowY: 'auto',
-          borderRadius: '30px',
         }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
@@ -196,7 +214,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Input
@@ -218,7 +241,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Select
@@ -249,7 +277,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <TextArea
@@ -272,6 +305,11 @@ const CreateProject = () => {
                         </div>
                       )
                     }
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
                   >
                     <RangePicker
                       status={
@@ -293,7 +331,10 @@ const CreateProject = () => {
                       className="w-100"
                     />
                   </Form.Item>
-                  <Form.Item label={t('PROJECTS.STATUS')}>
+                  <Form.Item
+                    label={t('PROJECTS.STATUS')}
+                    className="label-required"
+                  >
                     <Radio.Group
                       name="status"
                       value={formik.values.status}
@@ -321,7 +362,12 @@ const CreateProject = () => {
                       )
                     }
                     validateFirst
-                    rules={[yupSync]}
+                    rules={[
+                      yupSync,
+                      {
+                        required: true,
+                      },
+                    ]}
                     hasFeedback
                   >
                     <Input
@@ -455,8 +501,8 @@ const CreateProject = () => {
           )}
         </Formik>
       </Card>
+      </div>
     </div>
   );
 };
-
 export default CreateProject;

@@ -1,28 +1,102 @@
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Input, Modal, Pagination, Space, Table, Tooltip } from 'antd';
-import { debounce } from 'lodash';
-// eslint-disable-next-line no-unused-vars
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  FieldTimeOutlined,
+} from '@ant-design/icons';
+import {
+  Card,
+  DatePicker,
+  Modal,
+  Pagination,
+  Select,
+  Space,
+  Table,
+  Tooltip,
+} from 'antd';
+import { filter } from 'lodash';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
-import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
+import { areAllSearchParamsEmpty } from '../../../helpers';
 import '../ProjectList/ProjectList.scss';
+
+const { RangePicker } = DatePicker;
 
 const ProjectList = () => {
   const [data, setData] = useState([]);
   const { t } = useTranslation();
-  // const [searchedText, setSearchedText] = useState('');
   const [deletedProjectId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [dataProject, setDataProject] = useState();
+  const [searchParam, setSearchParam] = useState({
+    manager: '',
+    project_name: '',
+    startDate: '',
+    endDate: '',
+    status: '',
+  });
 
+  const [filteredData, setFilteredData] = useState([]);
+
+  const searchData = (data, searchParams) => {
+    const { manager, project_name, startDate, endDate, status } = searchParams;
+    const start = moment(startDate, 'DD/MM/YYYY');
+    const end = moment(endDate, 'DD/MM/YYYY');
+
+    const filteredData = filter(data, (item) => {
+      const isManagerMatched =
+        !manager ||
+        item.manager.some((managerItem) => managerItem.name.includes(manager));
+      const isProjectNameMatched =
+        !project_name || item.name.includes(project_name);
+      const isStartDateMatched =
+        !startDate || moment(item.startDate, 'DD/MM/YYYY').isSameOrAfter(start);
+      const isEndDateMatched =
+        !endDate || moment(item.endDate, 'DD/MM/YYYY').isSameOrBefore(end);
+      const isStatusMatched = !status || item.status === status;
+
+      return (
+        isManagerMatched &&
+        isProjectNameMatched &&
+        isStartDateMatched &&
+        isEndDateMatched &&
+        isStatusMatched
+      );
+    });
+
+    return filteredData;
+  };
+
+  useEffect(() => {
+    const isAllEmpty = areAllSearchParamsEmpty(searchParam);
+    if (isAllEmpty) {
+      handleSearch();
+    }
+  }, [searchParam]);
+
+  useEffect(() => {
+    document.title = 'EMP | PROJECTS';
+  }, []);
+
+  const showDrawer = (record) => {
+    setDataProject(record);
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +104,7 @@ const ProjectList = () => {
           .get('projects')
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
+        setFilteredData(filterDeleted);
         setData(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -40,13 +115,12 @@ const ProjectList = () => {
 
   const handleDelete = (projectId) => {
     setSelectedProjectId(projectId);
-    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
     setShowDeleteModal(true);
   };
+
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance.delete(`projects/${selectedProjectId}`).then(() => {
-        //  message.success('Dự án đã được xóa thành công!');
         Toast(
           'success',
           t('TOAST.DELETED_SUCCESS', {
@@ -54,8 +128,6 @@ const ProjectList = () => {
           }),
           2,
         );
-        // Loại bỏ dự án đã bị xóa khỏi mảng data
-        setData(data.filter((item) => item.id !== selectedProjectId));
 
         setSelectedProjectId(null);
         setShowDeleteModal(false);
@@ -74,7 +146,11 @@ const ProjectList = () => {
     navigate(`details/${id}`);
   };
 
-
+  const handleSearch = () => {
+    setCurrentPage(1);
+    const filteredData = searchData(data, searchParam);
+    setFilteredData(filteredData);
+  };
 
   const columns = [
     {
@@ -86,7 +162,7 @@ const ProjectList = () => {
           <Tooltip title="Delete">
             <Button
               type="link"
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -97,10 +173,29 @@ const ProjectList = () => {
               onClick={() => handleView(record.id)}
             />
           </Tooltip>
+          <Tooltip title="History">
+            <Button
+              type="text"
+              icon={<FieldTimeOutlined />}
+              onClick={() => showDrawer(record)}
+            />
+          </Tooltip>
         </span>
       ),
     },
-
+    {
+      title: t('EMPLOYEES.ID'),
+      dataIndex: 'id',
+      key: 'id',
+      width: 30,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
+    },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
@@ -193,99 +288,120 @@ const ProjectList = () => {
     },
   ];
 
-  const [searchedText, setSearchedText] = useState('');
-  const debouncedSearch = debounce((value) => setSearchedText(value), 300);
-
   return (
     <div className="project_create" style={{ height: 100 }}>
-      {data.length > 0 ? (
-        <>
-          <Space className="w-100 justify-content-between">
-            <Breadcrumb items={[{ key: 'projects' }]} />
-            <Button onClick={() => navigate('/projects/create')}>
-              {t('BREADCRUMB.PROJECTS_CREATE')}
-            </Button>
-          </Space>
-          <Card
-            title={t('PROJECTS.LIST').toUpperCase()}
-            style={{ borderRadius: '30px' }}
-          >
-            <Input.Search
-              placeholder={t('TABLE.SEARCH') + '...'}
-              style={{ marginBottom: 8, width: 300, marginTop: 8 }}
-              onChange={(e) => setSearchedText(e.target.value)}
-            />
-            <Table
-              columns={columns}
-              dataSource={data
-                .filter(
-                  (item) =>
-                    (item.manager &&
-                      item.manager.some((manager) =>
-                        manager.name
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()),
-                      )) ||
-                    (item.member &&
-                      item.member.some(
-                        (member) =>
-                          member.name
-                            .toLowerCase()
-                            .includes(searchedText.toLowerCase()) ||
-                          member.role.some((m) =>
-                            m
-                              .toLowerCase()
-                              .includes(searchedText.toLowerCase()),
-                          ),
-                      )) ||
-                    item.technical
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.description
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.startDate
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.endDate
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.status
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()) ||
-                    item.name
-                      .toLowerCase()
-                      .includes(searchedText.toLowerCase()),
-                )
-                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-              scroll={{ y: 'calc(100vh - 400px)' }}
-              pagination={false}
-            />
-            <Pagination
-              total={data.filter((item) => !item.deletedAt).length}
-              current={currentPage}
-              pageSize={pageSize}
-              showSizeChanger
-              showTotal={(total) => t('TABLE.TOTAL', { total })}
-              className="my-3"
-              onChange={(page, pageSize) => {
-                setCurrentPage(page);
-                setPageSize(pageSize);
+      <>
+        <DrawerTracking open={open} onClose={onClose} data={dataProject} />
+        <Space className="w-100 justify-content-between">
+          <Breadcrumb items={[{ key: 'projects' }]} />
+          <Button onClick={() => navigate('/projects/create')}>
+            {t('BREADCRUMB.PROJECTS_CREATE')}
+          </Button>
+        </Space>
+        <Card
+          title={t('PROJECTS.LIST').toUpperCase()}
+          style={{ borderRadius: '30px' }}
+        >
+          <Space size={[8, 16]} wrap className="w-100 py-3">
+            <TextSearch
+              label={t('TEXT_SEARCH.MANAGER')}
+              func={(e) => {
+                setSearchParam({ ...searchParam, manager: e.target.value });
               }}
             />
-          </Card>
-          <Modal
-            title="Confirm Delete"
-            visible={showDeleteModal}
-            onOk={handleConfirmDelete}
-            onCancel={handleCancelDelete}
-          >
-            <p>Are you sure you want to delete this project?</p>
-          </Modal>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+            <TextSearch
+              label={t('TEXT_SEARCH.PROJECT_NAME')}
+              func={(e) => {
+                setSearchParam({
+                  ...searchParam,
+                  project_name: e.target.value,
+                });
+              }}
+            />
+            <RangePicker
+              onChange={(e) => {
+                if (e !== null && e.length > 0) {
+                  setSearchParam({
+                    ...searchParam,
+                    startDate: moment(e[0]['$d']).format('DD/MM/YYYY'),
+                    endDate: moment(e[1]['$d']).format('DD/MM/YYYY'),
+                  });
+                } else {
+                  setSearchParam({
+                    ...searchParam,
+                    startDate: '',
+                    endDate: '',
+                  });
+                }
+              }}
+              format={'DD/MM/YYYY'}
+            />
+            <Select
+              // defaultValue=""
+              style={{
+                width: 200,
+              }}
+              options={[
+                {
+                  value: 'active',
+                  label: 'Active',
+                },
+                {
+                  value: 'inactive',
+                  label: 'Inactive',
+                },
+              ]}
+              placeholder={t('TEXT_SEARCH.SELECT', {
+                label: t('TEXT_SEARCH.STATUS'),
+              })}
+              onChange={(e) => {
+                setSearchParam({
+                  ...searchParam,
+                  status: e,
+                });
+              }}
+              allowClear
+            />
+            <Button type="primary" onClick={() => handleSearch()}>
+              {t('BUTTON.SEARCH')}
+            </Button>
+          </Space>
+          <Table
+            columns={columns}
+            dataSource={
+              filteredData.length > 0
+                ? filteredData.slice(
+                    (currentPage - 1) * pageSize,
+                    currentPage * pageSize,
+                  )
+                : []
+            }
+            scroll={{ y: 'calc(100vh - 400px)' }}
+            pagination={false}
+          />
+          <Pagination
+            total={filteredData.filter((item) => !item.deletedAt).length}
+            current={currentPage}
+            pageSize={pageSize}
+            showSizeChanger
+            showTotal={(total) => t('TABLE.TOTAL', { total })}
+            className="my-3"
+            onChange={(page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            }}
+          />
+          {/* <SpinLoading /> */}
+        </Card>
+        <Modal
+          title={t('TABLE.COMFIRM_DELETE')}
+          visible={showDeleteModal}
+          onOk={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        >
+          <p>{t('PROJECTS.COMFIRM_DELETE_PROJECT')}</p>
+        </Modal>
+      </>
     </div>
   );
 };

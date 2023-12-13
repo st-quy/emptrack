@@ -22,6 +22,9 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   function (error) {
-    return Promise.reject(error);
+    if (401 === error.response.status) {
+  } else {
+      return Promise.reject(error);
+  }
   }
 );

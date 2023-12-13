@@ -11,7 +11,9 @@
     "USERNAME": "Tên đăng nhập",
     "USERNAME_INPUT": "Nhập tên đăng nhập",
     "WITH_GOOGLE": "Đăng nhập với google",
-    "WITH_EMAIL": "hoặc đăng nhập với email"
+    "WITH_EMAIL": "hoặc đăng nhập với email",
+    "ERROR": "Tài khoản không đúng",
+    "SUCCESS": "Đăng nhập thành công"
   },
   "BUTTON": {
     "SYNC": "Đồng bộ từ {{name}}",
@@ -22,7 +24,8 @@
     "OK": "Xác nhận",
     "UPDATE": "Cập nhật",
     "BACK_TO_HOME": "Quay lại trang chủ",
-    "ADD_MEMBER": "Thêm thành viên"
+    "ADD_MEMBER": "Thêm thành viên",
+    "SEARCH": "Tìm kiếm"
   },
   "TABLE": {
     "ACTIONS": "Hành động",
@@ -50,7 +53,9 @@
     "START DATE": "Ngày bắt đầu",
     "END DATE": "Ngày kết thúc",
     "TOTAL": "Tổng: {{total}} dự án",
-    "TOTAL_EMPLOYEES": "Tổng: {{total}} nhân viên"
+    "TOTAL_EMPLOYEES": "Tổng: {{total}} nhân viên",
+    "LIST_EMPLOYEES": "Danh sách nhân viên",
+    "COMFIRM_DELETE": "Xác nhận xoá"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -63,7 +68,8 @@
     "EMPLOYEES_CREATE": "Thêm nhân viên",
     "PROJECTS_CREATE": "Thêm dự án",
     "PROJECTS_UPDATE": "Cập nhật dự án",
-    "PROJECTS_DETAILS": "Chi tiết dự án"
+    "PROJECTS_DETAILS": "Chi tiết dự án",
+    "EMPLOYEES_DETAILS": "Chi tiết nhân viên"
   },
   "MODAL": {
     "SYNC_INFO": "Đồng bộ thông tin",
@@ -71,7 +77,9 @@
     "CONFIRM_DELETE": "Bạn có chắc chắn muốn xóa {{name}} không?",
     "TITLE_DELETE": "Xóa {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Tạo access token",
-    "CHOOSE_LOCALTION": "Chọn địa điểm"
+    "CHOOSE_LOCALTION": "Chọn địa điểm",
+    "WARNING_DELETE_TITLE": "Cảnh báo xóa nhân viên",
+    "WARNING_DELETE": "Nhân viên không thể bị xóa vì đang tham gia trong một dự án.\n\n\nVui lòng gỡ nhân viên khỏi dự án trước khi tiến hành xóa."
   },
   "STATUS": {
     "CREATE": "Tạo",
@@ -159,6 +167,9 @@
     "LIST": "Danh sách người dùng"
   },
   "PROJECTS": {
+    "COMFIRM_DELETE_PROJECT": "Bạn có chắc chắn muốn xóa dự án này ?",
+    "BASIC_INFORMATION": "Thông tin cơ bản",
+    "MEMBER_LIST": "Danh sách thành viên",
     "NAME": "Tên dự án",
     "MANAGER": "Quản lý dự án",
     "SELECT_MANAGER": "Chọn quản lý",
@@ -205,15 +216,18 @@
     "CREATED_ERROR": "{{field}} thêm không thành công",
     "UPDATED_SUCCESS": "Cập nhật {{field}} thành công",
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
-    "DELETED_SUCCESS": "Xóa {{field}} thành công"
+    "DELETED_SUCCESS": "Xóa {{field}} thành công",
+    "LOGIN_SUCCESS": "Đăng nhập thành công",
+    "LOGIN_ERROR": "Đăng nhập thất bại"
   },
   "EMPLOYEES": {
+    "COMFIRM_DELETE_EMPLOYEES": "Bạn có chắc chắn muốn xóa nhân viên này ?",
     "CREATE": "Tạo nhân viên",
     "CODE": "Mã nhân viên",
     "EMAIL": "Email",
     "NAME": "Tên nhân viên",
     "PHONE": "Số điện thoại",
-    "BIRTH": "Năm sinh",
+    "BIRTH": "Ngày sinh",
     "AVATAR": "Ảnh đại diện",
     "CITIZEN_CARD": "Căn cước công dân",
     "GENDER": "Giới tính",
@@ -236,7 +250,8 @@
     "EXP": "Năm kinh nghiệm",
     "ADD_SKILL": "Thêm kĩ năng",
     "REMOVE_SKILL": "Xóa kĩ năng",
-    "ADDRESS": "Địa chỉ"
+    "ADDRESS": "Địa chỉ",
+    "ID": "STT"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
@@ -253,7 +268,7 @@
     "POSITION_REQUIRED": "Vui lòng chọn vị trí",
     "LINE_MANAGER_REQUIRED": "Vui lòng chọn người quản lí",
     "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
-    "BIRTH_REQUIRED": "Vui lòng chọn năm sinh",
+    "BIRTH_REQUIRED": "Vui lòng chọn ngày sinh",
     "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
     "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
     "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
@@ -262,8 +277,20 @@
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
     "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
     "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
-    "BIRTH_ENOUGH_AGE": "Vui lòng chọn năm sinh lớn hơn 18 tuổi",
+    "BIRTH_ENOUGH_AGE": "Vui lòng chọn ngày sinh lớn hơn 18 tuổi",
     "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
     "EMAIL_INVALID": "Email phải bao gồm kí tự @"
+  },
+  "DRAWER": {
+    "TITLE": "Theo dõi lịch sử"
+  },
+  "TEXT_SEARCH": {
+    "MANAGER": "Người quản lí",
+    "PROJECT_NAME": "Tên dự án",
+    "START_DATE": "Ngày bắt đầu",
+    "END_DATE": "Ngày kết thúc",
+    "TYPE": "Nhập {{label}}",
+    "SELECT": "Chọn {{label}}",
+    "STATUS": "Trạng thái"
   }
 }

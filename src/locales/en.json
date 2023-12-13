@@ -9,7 +9,11 @@
     "EMAIL_INPUT": "Enter email",
     "EMAIL": "Email",
     "USERNAME": "Username",
-    "USERNAME_INPUT": "Enter username"
+    "USERNAME_INPUT": "Enter username",
+    "WITH_GOOGLE": "Login with google",
+    "WITH_EMAIL": "or login with email",
+    "ERROR": "Unauthorize",
+    "SUCCESS": "Login successfully"
   },
   "BUTTON": {
     "SYNC": "Sync from {{name}}",
@@ -20,7 +24,8 @@
     "OK": "Confirm",
     "UPDATE": "Update",
     "BACK_TO_HOME": "Back to home",
-    "ADD_MEMBER": "Add member"
+    "ADD_MEMBER": "Add member",
+    "SEARCH": "Search"
   },
   "TABLE": {
     "ACTIONS": "Actions",
@@ -47,8 +52,10 @@
     "DESCRIPTION": "DESCRIPTION",
     "START DATE": "Start date",
     "END DATE": "End date",
-    "TOTAL": "Sum: {{total}} project",
-    "TOTAL_EMPLOYEES": "Sum: {{total}} employees"
+    "TOTAL": "Total: {{total}} project",
+    "TOTAL_EMPLOYEES": "Total: {{total}} employees",
+    "LIST_EMPLOYEES": "List Employees",
+    "COMFIRM_DELETE": "Comfirm Delete"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -61,7 +68,8 @@
     "PROJECTS_CREATE": "Create project",
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
-    "PROJECTS_DETAILS": "Project details"
+    "PROJECTS_DETAILS": "Project details",
+    "EMPLOYEES_DETAILS":"Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -69,7 +77,9 @@
     "CONFIRM_DELETE": "Are you sure you want to delete {{name}}?",
     "TITLE_DELETE": "Delete {{name}}",
     "ACCESS_TOKEN_ENDPOINT": "Generate access token",
-    "CHOOSE_LOCALTION": "Choose location"
+    "CHOOSE_LOCALTION": "Choose location",
+    "WARNING_DELETE_TITLE": "Warning delete employee",
+    "WARNING_DELETE": "Employee cannot be deleted because they are currently involved in a project. \n Please remove the employee from the project before proceeding with the deletion."
   },
   "STATUS": {
     "CREATE": "Create",
@@ -125,7 +135,8 @@
     "CREATE": "Create",
     "CANCEL": "Cancel",
     "GENERATE_PASSWORD": "Generate password",
-    "CHANGE_PASSWORD": "Change password"
+    "CHANGE_PASSWORD": "Change password",
+    "SEARCH": "Search"
   },
   "TITLE": {
     "BASIC_INFORMATION": "Basic Information",
@@ -156,6 +167,9 @@
     "LIST": "List users"
   },
   "PROJECTS": {
+    "COMFIRM_DELETE_PROJECT": "Are you sure you want to delete this project ?",
+    "BASIC_INFORMATION": "Basic Information",
+    "MEMBER_LIST": "List members",
     "NAME": "Project name",
     "MANAGER": "Project manager",
     "SELECT_MANAGER": "Select manager",
@@ -170,7 +184,8 @@
     "STATUS_ACTIVE": "Active",
     "STATUS_INACTIVE": "Inactive",
     "TECHNICAL": "Technical",
-    "LIST": "List projects"
+    "LIST": "List projects",
+    "ROLE": "Role"
   },
   "ROLE": {
     "ADMIN": "Admin",
@@ -201,9 +216,12 @@
     "CREATED_ERROR": "{{field}} could not be created",
     "UPDATED_SUCCESS": "Updated {{field}} successfully",
     "CREATED_ERROR_SAME_NAME": "Project name already exists",
-    "DELETED_SUCCESS": "Deleted {{field}} successfully"
+    "DELETED_SUCCESS": "Deleted {{field}} successfully",
+    "LOGIN_SUCCESS": "Login successfully",
+    "LOGIN_ERROR": "Login error"
   },
   "EMPLOYEES": {
+    "COMFIRM_DELETE_EMPLOYEES": "Are you sure you want to delete this employees ?",
     "CREATE": "Create employee",
     "CODE": "Code employee",
     "EMAIL": "Email",
@@ -218,7 +236,7 @@
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
-    "IS_MANAGER": "Managed by?",
+    "IS_MANAGER": "Managed ?",
     "UPLOAD": "Click to Upload",
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
@@ -232,7 +250,8 @@
     "EXP": "Years Of Experience",
     "ADD_SKILL": "Add Skill",
     "REMOVE_SKILL": "Remove Skill",
-    "ADDRESS": "Address"
+    "ADDRESS": "Address",
+    "ID": "No."
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",
@@ -248,8 +267,9 @@
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
     "LINE_MANAGER_REQUIRED": "Please select the line manager",
-    "BIRTH_MAX": "Date of birth cannot be greater than current date",
-    "BIRTH_REQUIRED": "Please select year of birth",
+    "BIRTH_MAX": "Date of Birth cannot be greater than current date",
+    "BIRTH_REQUIRED": "Please select Date of Birth",
+    "BIRTH_ENOUGH_AGE": "Please choose a Date of Birth greater than 18 years old",
     "DESCRIPTION_REQUIRED": "Please enter description",
     "CITIZEN_CARD_REQUIRED": "Please enter citizen identification number",
     "CITIZEN_CARD_MATCH": "Citizen identification number must be 10 numbers",
@@ -261,5 +281,17 @@
     "BIRTH_ENOUGH_AGE": "Please select a year of birth greater than 18 years old",
     "SKILL": "Please enter at least 1 skill",
     "EMAIL_INVALID": "Email must include the @ character"
+  },
+  "DRAWER": {
+    "TITLE": "History Tracking"
+  },
+  "TEXT_SEARCH": {
+    "MANAGER": "Manager",
+    "PROJECT_NAME": "Project Name",
+    "START_DATE": "Start Date",
+    "END_DATE": "End Date",
+    "TYPE": "Enter {{label}}",
+    "SELECT": "Enter {{label}}",
+    "STATUS": "Status"
   }
 }
