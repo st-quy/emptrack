@@ -172,16 +172,18 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
+          borderRadius: '30px',
+
         }}
         >
       <Card
-        className="card-create-project"
+      
+        className="details-card"
         title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
         style={{
           // maxHeight: '80vh',
           // maxWidth: '100%',
           // overflowY: 'auto',
-          borderRadius: '30px',
         }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>

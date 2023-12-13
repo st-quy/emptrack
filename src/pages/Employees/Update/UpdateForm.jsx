@@ -30,6 +30,7 @@ import ImgCrop from 'antd-img-crop';
 
 
 
+
 const { Item } = Form;
 const { Option } = Select;
 
@@ -44,11 +45,11 @@ const UpdateForm = () => {
   const {id} = useParams();
   const [employeesData, setEmployeesData] = useState();
   const [skillData, setSkillData] = useState(skillDatas);
-
+  const [imageUrl, setImageUrl] = useState('');
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
- 
   const [showModal, setShowModal] = useState(false);
+
   const handlePic = async ({ fileList }) => {
     try {
       const formData = new FormData();
@@ -75,6 +76,8 @@ const UpdateForm = () => {
       });
 
       setFileList(updatedFileList);
+
+      handleRemove(employeesData.avatar)
     } catch (error) {
       console.error('Lỗi khi tải lên ảnh:', error);
     }
@@ -98,6 +101,7 @@ const UpdateForm = () => {
   const handleRemove = async (file) => {
     try {
       const publicId = file.public_id;
+      
       const timestamp = new Date().getTime();
       const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
       const signature = CryptoJS.SHA1(string).toString();
@@ -128,6 +132,7 @@ const UpdateForm = () => {
         .then((response) => {
           setEmployeesData(response.data);
           setSkillData(response.data);
+       
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -206,7 +211,7 @@ const UpdateForm = () => {
   };
   
   const handeEditImage=() => {
-
+   
   };
 
 
@@ -224,15 +229,18 @@ const UpdateForm = () => {
         </Button>     
       </Space>
       <div
-  style={{
-    maxHeight: '650px',
-    overflowY: 'auto',
-  }}
-></div>
+        className="details-card"
+        style={{
+          maxHeight: '80vh',
+          maxWidth: '100%',
+          overflowY: 'auto',
+          borderRadius: '30px'
+        }}
+        ></div>
 
       <Card
           title={
-            <span style={{ fontSize: '30px' }}>{t('EMPLOYEES.UPDATE')} </span>
+            <span style={{ fontSize: '30px', borderRadius: '30px'}}>{t('EMPLOYEES.UPDATE')} </span>
           }>
         <Form>
             <Row gutter={[16, 16]}>
@@ -471,7 +479,7 @@ const UpdateForm = () => {
                   />
                 </Item>
               </Col>    
-
+        {/* avatar  */}
               <Col span={12}>
                 <Form.Item
                   label={t('EMPLOYEES.AVATAR')}
@@ -489,22 +497,17 @@ const UpdateForm = () => {
           fileList={fileList}
           onChange={handlePic}
           onPreview={handlePreview}
-          onRemove={handleRemove}
-     
-        >
-        
+          onRemove={handleRemove}   
+        >    
           {fileList.length === 0 &&  (
             <img
               src={employeesData?.avatar[0].url}
               style={{ padding: '0 20px', width: '150%' }}
               alt="Uploaded Image"         
             />
-          )}
+          )} 
                </Upload>
-      
                 </ImgCrop>
-                        <div>         
-                      </div>  
                       </div>   
                       <Modal
                         open={showModal}
