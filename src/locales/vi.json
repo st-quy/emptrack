@@ -47,6 +47,7 @@
     "PROFILE": "Thông tin cá nhân",
     "GUIDELINE": "Tài liệu",
     "MANAGER": "Quản lí",
+    "NOT_MANAGER": "Không phải quản lí",
     "MEMBERS": "Thành viên",
     "TECHNICAL": "Kỹ thuật",
     "DESCRIPTION": "Mô tả",
@@ -55,7 +56,11 @@
     "TOTAL": "Tổng: {{total}} dự án",
     "TOTAL_EMPLOYEES": "Tổng: {{total}} nhân viên",
     "LIST_EMPLOYEES": "Danh sách nhân viên",
-    "COMFIRM_DELETE": "Xác nhận xoá"
+    "COMFIRM_DELETE": "Xác nhận xoá",
+    "PAGE": "Trang",
+    "HISTORY": "Lịch Sử",
+    "DELETE":"Xóa",
+    "VIEW": "Xem"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -141,7 +146,11 @@
     "ENDPOINT": "Endpoint",
     "SCHEDULE": "Lịch trình",
     "Action": "Tuỳ chỉnh",
-    "AVATAR": "ảnh"
+    "AVATAR": "ảnh",
+    "INCOME": "Thu nhập của ST United",
+    "STATISTIC_WORK": "Thống kê theo công việc",
+    "STATISTIC_POSITION": "Thống kê theo vị trí",
+    "STATISTIC_COMPANY": "Biến động công ty"
   },
   "USERS": {
     "NAME": "Tên",

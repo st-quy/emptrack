@@ -29,6 +29,22 @@ const EmployeesList = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
 
+
+const paginationOptions = {
+  total: data.filter((item) => !item.deletedAt).length,
+  current: currentPage,
+  pageSize: pageSize,
+  showSizeChanger: true,
+  showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+  className: 'my-3',
+  onChange: (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  },
+  locale: {
+    items_per_page: `/ ${t('TABLE.PAGE')}`,
+  },
+};
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
   }, []);
@@ -93,21 +109,21 @@ const EmployeesList = () => {
       width: 50,
       render: (text, record) => (
         <span>
-          <Tooltip title="Delete">
-            <Button
-              type="link"
-              icon={<DeleteOutlined style={{ color: 'red' }} />}
-              onClick={() => handleDelete(record.id)}
-            />
-          </Tooltip>
-          <Tooltip title="View">
-            <Button
-              type="link"
-              icon={<EyeOutlined />}
-              onClick={() => abc(record.id)}
-            />
-          </Tooltip>
-        </span>
+        <Tooltip title={t('TABLE.DELETE')}>
+          <Button
+            type="link"
+            icon={<DeleteOutlined style={{ color: 'red' }} />}
+            onClick={() => handleDelete(record.id)}
+          />
+        </Tooltip>
+        <Tooltip title={t('TABLE.VIEW')}>
+          <Button
+            type="link"
+            icon={<EyeOutlined />}
+            onClick={() => abc(record.id)}
+          />
+        </Tooltip>
+      </span>
       ),
     },
     {
@@ -172,8 +188,8 @@ const EmployeesList = () => {
         showTitle: false,
       },
       filters: [
-        { text: 'Manager', value: true },
-        { text: 'Non-Manager', value: false },
+        { text: t('TABLE.MANAGER'), value: true },
+        { text: t('TABLE.NOT_MANAGER'), value: false },
       ],
       onFilter: (value, record) => record.isManager === value,
     },
@@ -221,7 +237,7 @@ const EmployeesList = () => {
 
   return (
     <div className="project_create">
-      {data.length > 0 ? (
+      
         <>
           <Space className="w-100 justify-content-between">
             <Breadcrumb items={[{ key: 'employees' }]} />
@@ -263,7 +279,8 @@ const EmployeesList = () => {
               pagination={false}
               size="small"
             />
-            <Pagination
+            <Pagination {...paginationOptions} />
+            {/* <Pagination
               total={data.filter((item) => !item.deletedAt).length}
               current={currentPage}
               pageSize={pageSize}
@@ -274,20 +291,20 @@ const EmployeesList = () => {
                 setCurrentPage(page);
                 setPageSize(pageSize);
               }}
-            />
+            /> */}
           </Card>
           <Modal
             title={t('TABLE.COMFIRM_DELETE')}
             visible={showDeleteModal}
             onOk={handleConfirmDelete}
+            okText={t('BUTTON.OK')}
             onCancel={handleCancelDelete}
+            cancelText={t('ACTION.CANCEL') }
           >
             <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
           </Modal>
         </>
-      ) : (
-        <SpinLoading />
-      )}
+
     </div>
   );
 };

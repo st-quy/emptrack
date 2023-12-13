@@ -5,8 +5,10 @@ import LineChart from '../../components/charts/LineChart/LineChart';
 import WorkingPieChart from '../../components/charts/PieChart/WorkingPieChart';
 import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const breadcrumbItems = [{ key: 'dashboard' }];
   useEffect(() => {
     document.title = 'EMP | DASHBOARD';
@@ -20,7 +22,7 @@ const Dashboard = () => {
             <Row className="w-100">
               <Card
                 className="card-dashboard w-100"
-                title="Income of ST United Company"
+                title={t('TITLE.INCOME')}
               >
                 <LineChart idChart="line-chart" />
               </Card>
@@ -34,13 +36,13 @@ const Dashboard = () => {
               >
                 <Card
                   className="card-pie w-100"
-                  title="Thống kê theo công việc"
+                  title={t('TITLE.STATISTIC_WORK')}
                 >
                   <BoolPieChart />
                 </Card>
               </Col>
               <Col xs={24} sm={24} md={12} style={{ paddingLeft: '8px' }}>
-                <Card className="card-pie w-100" title="Thống kê theo vị trí">
+                <Card className="card-pie w-100" title={t('TITLE.STATISTIC_POSITION')}>
                   <WorkingPieChart />
                 </Card>
               </Col>
@@ -50,7 +52,7 @@ const Dashboard = () => {
         <Col xs={24} sm={24} md={24} lg={10}>
           <Card
             className="card-timeline w-100"
-            title="Biến động công ty"
+            title={t('TITLE.STATISTIC_COMPANY')}
           ></Card>
         </Col>
       </Row>

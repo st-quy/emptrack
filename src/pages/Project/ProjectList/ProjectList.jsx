@@ -44,7 +44,21 @@ const ProjectList = () => {
   const [open, setOpen] = useState(false);
   const [dataProject, setDataProject] = useState();
   const { RangePicker } = DatePicker;
-
+  const paginationOptions = {
+    total: data.filter((item) => !item.deletedAt).length,
+    current: currentPage,
+    pageSize: pageSize,
+    showSizeChanger: true,
+    showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+    className: 'my-3',
+    onChange: (page, pageSize) => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    },
+    locale: {
+      items_per_page: `/ ${t('TABLE.PAGE')}`,
+    },
+  };
   useEffect(() => {
     document.title = 'EMP | PROJECTS';
   }, []);
@@ -115,21 +129,21 @@ const ProjectList = () => {
       width: 60,
       render: (text, record) => (
         <span>
-          <Tooltip title="Delete">
+          <Tooltip title={t('TABLE.DELETE')}>
             <Button
               type="link"
               icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
-          <Tooltip title="View">
+          <Tooltip title={t('TABLE.VIEW')}>
             <Button
               type="link"
               icon={<EyeOutlined />}
               onClick={() => handleView(record.id)}
             />
           </Tooltip>
-          <Tooltip title="History">
+          <Tooltip title={t('TABLE.HISTORY')}>
             <Button
               type="text"
               icon={<FieldTimeOutlined />}
@@ -147,7 +161,10 @@ const ProjectList = () => {
       ellipsis: {
         showTitle: false,
       },
-      render: (id, record, index) => { ++index; return index; },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
     },
     {
       title: t('TABLE.MANAGER'),
@@ -227,6 +244,7 @@ const ProjectList = () => {
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
+              
             }}
           >
             {status}
@@ -234,10 +252,12 @@ const ProjectList = () => {
         </Tooltip>
       ),
       filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
+        
+        { text: t('PROJECTS.STATUS_ACTIVE'), value: 'active' },
+        { text: t('PROJECTS.STATUS_INACTIVE'), value: 'inactive' },
       ],
       onFilter: (value, record) => record.status === value,
+      
     },
   ];
 
@@ -251,7 +271,6 @@ const ProjectList = () => {
   });
 
   const handleSearch = () => {
-    // Sao chép dữ liệu ban đầu để không làm thay đổi dữ liệu gốc
     let filteredData = [...data];
 
     if (searchParam.manager) {
@@ -286,8 +305,6 @@ const ProjectList = () => {
       );
     }
     setData(filteredData);
-    // Sử dụng filteredData để làm việc với dữ liệu đã được lọc
-    // Ví dụ: setData(filteredData);
   };
   const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
@@ -328,6 +345,10 @@ const ProjectList = () => {
               }}
             />
             <RangePicker
+             placeholder={[
+              t('PROJECTS.TIME_START'),
+              t('PROJECTS.TIME_END'),
+            ]}
               onChange={(e) => {
                 if (e === null) {
                   setData(dataFirst);
@@ -342,7 +363,6 @@ const ProjectList = () => {
               format={'DD/MM/YYYY'}
             />
             <Select
-              // defaultValue=""
               style={{
                 width: 200,
               }}
@@ -374,11 +394,6 @@ const ProjectList = () => {
               {t('BUTTON.SEARCH')}
             </Button>
           </Space>
-          {/* <Input.Search
-              placeholder={t('TABLE.SEARCH') + '...'}
-              style={{ marginBottom: 8, width: 300, marginTop: 8 }}
-              onChange={(e) => setSearchedText(e.target.value)}
-            /> */}
           <Table
             columns={columns}
             dataSource={
@@ -386,8 +401,6 @@ const ProjectList = () => {
                 ? data
                     .filter(
                       (item) =>
-                        // !item.deletedAt &&
-                        // Chỉ hiển thị các dự án chưa bị xóa
                         (item.manager &&
                           item.manager.some((manager) =>
                             manager.name
@@ -429,25 +442,17 @@ const ProjectList = () => {
             scroll={{ y: 'calc(100vh - 400px)' }}
             pagination={false}
           />
-          <Pagination
-            total={data.filter((item) => !item.deletedAt).length}
-            current={currentPage}
-            pageSize={pageSize}
-            showSizeChanger
-            showTotal={(total) => t('TABLE.TOTAL', { total })}
-            className="my-3"
-            onChange={(page, pageSize) => {
-              setCurrentPage(page);
-              setPageSize(pageSize);
-            }}
-          />
-          {/* <SpinLoading /> */}
+          <Pagination {...paginationOptions} />
+
         </Card>
+
         <Modal
           title={t('TABLE.COMFIRM_DELETE')}
           visible={showDeleteModal}
           onOk={handleConfirmDelete}
+          okText={t('BUTTON.OK')}
           onCancel={handleCancelDelete}
+          cancelText={t('ACTION.CANCEL')}
         >
           <p>{t('PROJECTS.COMFIRM_DELETE_PROJECT')}</p>
         </Modal>

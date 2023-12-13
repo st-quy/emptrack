@@ -47,6 +47,7 @@
     "PROFILE": "Profile",
     "GUIDELINE": "Documents",
     "MANAGER": "Manager",
+    "NOT_MANAGER": "Not manager",
     "MEMBERS": "Members",
     "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
@@ -55,7 +56,11 @@
     "TOTAL": "Total: {{total}} project",
     "TOTAL_EMPLOYEES": "Total: {{total}} employees",
     "LIST_EMPLOYEES": "List Employees",
-    "COMFIRM_DELETE": "Comfirm Delete"
+    "COMFIRM_DELETE": "Comfirm Delete",
+    "PAGE": "Page",
+    "HISTORY": "History",
+    "DELETE":"Delete",
+    "VIEW": "View"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -142,7 +147,11 @@
     "ENDPOINT": "Endpoint",
     "SCHEDULE": "Schedule",
     "Action": "Action",
-    "AVATAR": "Avatar"
+    "AVATAR": "Avatar",
+    "INCOME": "Income of ST United Company",
+    "STATISTIC_WORK": "Statistics by Work",
+    "STATISTIC_POSITION": "Statistics by Position",
+    "STATISTIC_COMPANY": "Company fluctuations"
   },
   "USERS": {
     "NAME": "Name",
