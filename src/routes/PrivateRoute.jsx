@@ -7,8 +7,9 @@ import ProjectList from '../pages/Project/ProjectList/ProjectList.jsx';
 import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
 // Define routes accessible only to authenticated users
-import DetailsProject from '../pages/Project/Details/DetailsProject';
 import DetailEmployees from '../pages/Employees/Detail/DetailEmployees.jsx';
+import DetailsProject from '../pages/Project/Details/DetailsProject';
+import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
 const PrivateRoute = [
   {
     path: '/',
@@ -35,7 +36,7 @@ const PrivateRoute = [
           },
           {
             path: 'details/:id',
-            element: <DetailEmployees />, 
+            element: <DetailEmployees />,
           },
         ],
       },
@@ -53,6 +54,10 @@ const PrivateRoute = [
           {
             path: 'details/:id',
             element: <DetailsProject />,
+          },
+          {
+            path: 'update/:id', // Thêm parameter projectId vào URL
+            element: <ProjectUpdate />,
           },
         ],
       },

@@ -214,6 +214,7 @@
   "TOAST": {
     "CREATED_SUCCESS": "Thêm {{field}} thành công",
     "CREATED_ERROR": "{{field}} thêm không thành công",
+    "UPDATED_SUCCESS": "Cập nhật {{field}} thành công",
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",

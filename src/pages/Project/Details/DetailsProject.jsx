@@ -78,7 +78,7 @@ const DetailsProject = () => {
                 { key: 'projects_details', route: `/projects/details/${id}` },
               ]}
             />
-            <Button onClick={() => navigate(`/projects/details/${id}`)}>
+            <Button onClick={() => navigate(`/projects/update/${id}`)}>
               {t('BREADCRUMB.PROJECTS_UPDATE')}
             </Button>
           </Space>

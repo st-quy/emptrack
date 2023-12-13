@@ -13,6 +13,7 @@ import {
   Table,
   Tooltip,
 } from 'antd';
+import { filter } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +24,8 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
-import '../ProjectList/ProjectList.scss';
-import { filter } from 'lodash';
 import { areAllSearchParamsEmpty } from '../../../helpers';
+import '../ProjectList/ProjectList.scss';
 
 const { RangePicker } = DatePicker;
 
@@ -200,7 +200,7 @@ const ProjectList = () => {
         return index;
       },
     },
-     {
+    {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
       align: 'center',

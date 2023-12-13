@@ -1,4 +1,4 @@
-#project_create {
+#project_update {
   div.ant-col.ant-form-item-label {
     text-align: start;
   }
@@ -7,6 +7,7 @@
     display: block;
     margin-bottom: 15px;
   }
+
   .ant-typography::before {
     display: inline-block;
     margin-inline-end: 4px;
@@ -65,6 +66,7 @@
   .css-1jqq78o-placeholder {
     color: rgba(0, 0, 0, 0.88);
   }
+
   .label-required .ant-col.ant-form-item-label::before {
     display: inline-block;
     margin-inline-end: 4px;
