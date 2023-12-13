@@ -174,7 +174,8 @@ const EmployeesList = () => {
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 50,
+      width: 20 ,
+      align: 'center',
       render: (text, record) => (
         <span>
           <Tooltip title="Delete">
@@ -198,7 +199,9 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.ID'),
       dataIndex: 'id',
       key: 'id',
-      width: 30,
+      width: 10,
+      align: 'center',
+
       ellipsis: {
         showTitle: false,
       },
@@ -211,7 +214,9 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
-      width: 60,
+      width: 20,
+      align: 'center',
+
       render: (item) => (
         <span>
           {item.map((_, index) => (
@@ -239,21 +244,27 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
       key: 'name',
+      align: 'center',
+
       render: (text) => <a>{text}</a>,
-      width: 70,
+      width: 40,
     },
 
     {
-      title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'cccd',
-      key: 'cccd',
-      width: 90,
+      title: t('EMPLOYEES.EMAIL'),
+      dataIndex: 'email',
+      key: 'email',
+      align: 'center',
+
+      width: 40,
     },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       render: (isManager) => (
         <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
@@ -270,7 +281,9 @@ const EmployeesList = () => {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       ellipsis: {
         showTitle: false,
       },
@@ -295,15 +308,7 @@ const EmployeesList = () => {
       ],
       onFilter: (value, record) => record.status === value,
     },
-    {
-      title: t('EMPLOYEES.POSITION'),
-      dataIndex: 'position',
-      key: 'position',
-      width: 80,
-      ellipsis: {
-        showTitle: false,
-      },
-    },
+  
   ];
 
   return (
