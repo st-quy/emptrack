@@ -25,7 +25,11 @@
     "UPDATE": "Update",
     "BACK_TO_HOME": "Back to home",
     "ADD_MEMBER": "Add member",
-    "SEARCH": "Search"
+    "SEARCH": "Search",
+    "RESET": "Reset",
+    "SORT_ASC": "Click to sort",
+    "SORT_DESC": "Click to sort",
+    "SORT_CANCEL": "Click to cancel sorting"
   },
   "TABLE": {
     "ACTIONS": "Actions",
@@ -47,6 +51,7 @@
     "PROFILE": "Profile",
     "GUIDELINE": "Documents",
     "MANAGER": "Manager",
+    "NOT_MANAGER": "Not manager",
     "MEMBERS": "Members",
     "TECHNICAL": "Technical",
     "DESCRIPTION": "DESCRIPTION",
@@ -55,7 +60,11 @@
     "TOTAL": "Total: {{total}} project",
     "TOTAL_EMPLOYEES": "Total: {{total}} employees",
     "LIST_EMPLOYEES": "List Employees",
-    "COMFIRM_DELETE": "Comfirm Delete"
+    "COMFIRM_DELETE": "Comfirm Delete",
+    "PAGE": "Page",
+    "HISTORY": "History",
+    "DELETE":"Delete",
+    "VIEW": "View"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -65,6 +74,7 @@
     "PROFILE": "Profile",
     "EMPLOYEES_CREATE": "Create employees",
     "EMPLOYEES": "Employees",
+    "EMPLOYEES_UPDATE": "Update employees",
     "PROJECTS_CREATE": "Create project",
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
@@ -144,7 +154,11 @@
     "ENDPOINT": "Endpoint",
     "SCHEDULE": "Schedule",
     "Action": "Action",
-    "AVATAR": "Avatar"
+    "AVATAR": "Avatar",
+    "INCOME": "Income of ST United Company",
+    "STATISTIC_WORK": "Statistics by Work",
+    "STATISTIC_POSITION": "Statistics by Position",
+    "STATISTIC_COMPANY": "Company fluctuations"
   },
   "USERS": {
     "NAME": "Name",
@@ -236,7 +250,7 @@
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
-    "IS_MANAGER": "Managed ?",
+    "IS_MANAGER": "Manager ?",
     "UPLOAD": "Click to Upload",
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
@@ -278,7 +292,6 @@
     "EXP_REQUIRED": "Please enter year of experience",
     "ADDRESS_REQUIRED": "Please enter address",
     "EMAIL_REQUIRED": "Please enter email address",
-    "BIRTH_ENOUGH_AGE": "Please select a year of birth greater than 18 years old",
     "SKILL": "Please enter at least 1 skill",
     "EMAIL_INVALID": "Email must include the @ character"
   },

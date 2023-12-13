@@ -12,6 +12,8 @@ import {
   Space,
   Table,
   Tooltip,
+  Menu,
+  Dropdown,
 } from 'antd';
 import { filter } from 'lodash';
 import moment from 'moment';
@@ -85,7 +87,21 @@ const ProjectList = () => {
       handleSearch();
     }
   }, [searchParam]);
-
+  const paginationOptions = {
+    total: data.filter((item) => !item.deletedAt).length,
+    current: currentPage,
+    pageSize: pageSize,
+    showSizeChanger: true,
+    showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+    className: 'my-3',
+    onChange: (page, pageSize) => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    },
+    locale: {
+      items_per_page: `/ ${t('TABLE.PAGE')}`,
+    },
+  };
   useEffect(() => {
     document.title = 'EMP | PROJECTS';
   }, []);
@@ -161,21 +177,21 @@ const ProjectList = () => {
 
       render: (text, record) => (
         <span>
-          <Tooltip title="Delete">
+          <Tooltip title={t('TABLE.DELETE')}>
             <Button
               type="link"
               icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
-          <Tooltip title="View">
+          <Tooltip title={t('TABLE.VIEW')}>
             <Button
               type="link"
               icon={<EyeOutlined />}
               onClick={() => handleView(record.id)}
             />
           </Tooltip>
-          <Tooltip title="History">
+          <Tooltip title={t('TABLE.HISTORY')}>
             <Button
               type="text"
               icon={<FieldTimeOutlined />}
@@ -294,10 +310,7 @@ const ProjectList = () => {
           </span>
         </Tooltip>
       ),
-      filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
-      ],
+      sorter: (a, b) => a.status.localeCompare(b.status),
       onFilter: (value, record) => record.status === value,
     },
   ];
@@ -333,6 +346,7 @@ const ProjectList = () => {
               }}
             />
             <RangePicker
+              placeholder={[t('PROJECTS.TIME_START'), t('PROJECTS.TIME_END')]}
               onChange={(e) => {
                 if (e !== null && e.length > 0) {
                   setSearchParam({
@@ -351,18 +365,17 @@ const ProjectList = () => {
               format={'DD/MM/YYYY'}
             />
             <Select
-              // defaultValue=""
               style={{
                 width: 200,
               }}
               options={[
                 {
                   value: 'active',
-                  label: 'Active',
+                  label: t('PROJECTS.STATUS_ACTIVE'),
                 },
                 {
                   value: 'inactive',
-                  label: 'Inactive',
+                  label: t('PROJECTS.STATUS_INACTIVE'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
@@ -381,6 +394,11 @@ const ProjectList = () => {
             </Button>
           </Space>
           <Table
+          locale={{
+            triggerDesc: t('BUTTON.SORT_DESC'),
+            triggerAsc: t('BUTTON.SORT_ASC'),
+            cancelSort: t('BUTTON.SORT_CANCEL'),
+          }}
             columns={columns}
             dataSource={
               filteredData.length > 0
@@ -393,25 +411,16 @@ const ProjectList = () => {
             scroll={{ y: 'calc(100vh - 400px)' }}
             pagination={false}
           />
-          <Pagination
-            total={filteredData.filter((item) => !item.deletedAt).length}
-            current={currentPage}
-            pageSize={pageSize}
-            showSizeChanger
-            showTotal={(total) => t('TABLE.TOTAL', { total })}
-            className="my-3"
-            onChange={(page, pageSize) => {
-              setCurrentPage(page);
-              setPageSize(pageSize);
-            }}
-          />
-          {/* <SpinLoading /> */}
+          <Pagination {...paginationOptions} />
         </Card>
+
         <Modal
           title={t('TABLE.COMFIRM_DELETE')}
           visible={showDeleteModal}
           onOk={handleConfirmDelete}
+          okText={t('BUTTON.OK')}
           onCancel={handleCancelDelete}
+          cancelText={t('ACTION.CANCEL')}
         >
           <p>{t('PROJECTS.COMFIRM_DELETE_PROJECT')}</p>
         </Modal>
