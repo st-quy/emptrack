@@ -10,7 +10,6 @@ import {
   Select,
   Upload,
   Modal,
-  
 } 
 from 'antd';
 import React, { useState, useEffect } from 'react';
@@ -45,7 +44,6 @@ const UpdateForm = () => {
   const {id} = useParams();
   const [employeesData, setEmployeesData] = useState();
   const [skillData, setSkillData] = useState(skillDatas);
-  const [imageUrl, setImageUrl] = useState('');
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -121,9 +119,6 @@ const UpdateForm = () => {
     url: file.url,
     public_id: file.public_id,
   }));
-  //  const handleSubmit = () =>{
-
-  //  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,17 +154,15 @@ const UpdateForm = () => {
 
     return Promise.resolve();
   };
-  const handleUpdate = () => {
-    console.log(employeesData.avatar[0].url);
-    // const apiUrl = `employees/${id}`;  
-    // axios.patch(apiUrl, { skillData })
-    //   .then(response => {
-    //     console.log('Data updated successfully:', response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error updating data:', error);
-    //     console.log('Error details:', error.response.data); // In ra thông tin lỗi chi tiết
-    //   }); 
+  const handleUpdate = () => { 
+    axios.patch(`employees/${id}`,{ skillData })
+      .then(response => {
+        console.log('Data updated successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error updating data:', error);
+      }); 
+      
   };
  
   const handleChange = (name, value) => {
@@ -210,9 +203,7 @@ const UpdateForm = () => {
     });
   };
   
-  const handeEditImage=() => {
-   
-  };
+  
 
 
   return (
@@ -283,7 +274,7 @@ const UpdateForm = () => {
                   placeholder={t('EMPLOYEES.NAME')}
                   defaultValue={employeesData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  name='name'
+                  name='name1'
                 />
                 </Form.Item>
               </Col>
@@ -310,7 +301,7 @@ const UpdateForm = () => {
                   placeholder={t('EMPLOYEES.EMAIL')}
                   defaultValue={employeesData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
-                  name="email"
+                  name="email1"
                 />
               </Form.Item>
             </Col>
@@ -337,7 +328,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.PHONE')}  
                     defaultValue={employeesData.phone}    
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    name="phone"        
+                    name="phone1"        
                   />
                 </Form.Item>
               </Col>
@@ -361,6 +352,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.GENDER')}
                     defaultValue={employeesData.gender}
                     onChange={(value) => handleChange('gender', value)}
+                    name="gender"
                     style={{
                      width: '100%',
                     }}
@@ -421,7 +413,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.CITIZEN_CARD')}   
                     defaultValue={employeesData.citizen_card} 
                     onChange={(e) => handleChange('citizen_card', e.target.value)}
-                    name="citizen_card"          
+                    name="citizen_card1"          
                   />
                   
                 </Form.Item>
@@ -475,7 +467,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.DESCRIPTION')}
                     defaultValue={employeesData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
-                    name="description" 
+                    name="description1" 
                   />
                 </Item>
               </Col>    
@@ -483,7 +475,6 @@ const UpdateForm = () => {
               <Col span={12}>
                 <Form.Item
                   label={t('EMPLOYEES.AVATAR')}
-                  status={fileList.length === 0 && 'error'}
                   required
                   hasFeedback
                   labelCol={{ span: 24 }}
@@ -520,7 +511,7 @@ const UpdateForm = () => {
                           style={{ width: '100%', maxHeight: '550px' }}
                         />
                       </Modal>
-                      <Button onClick={handeEditImage} >chỉnh sửa ảnh</Button> 
+                    
           </div>
 
           
@@ -555,7 +546,7 @@ const UpdateForm = () => {
                     style={{ width: '100%' }}
                     defaultValue={employeesData.isManager}
                     onChange={(value) => handleChange('is_manager', value)}
-                    name="is_manager"
+                    name="is_manager1"
                   >
                     <Option value={true}>{t('EMPLOYEES.YES')}</Option>
                     <Option value={false}>{t('EMPLOYEES.NO')}</Option>
@@ -582,7 +573,7 @@ const UpdateForm = () => {
                     defaultValue={employeesData.status}
                     style={{ width: '100%' }}
                     onChange={(value) => handleChange('status', value)}
-                    name='status'
+                    name='status1'
                   >
                     <Select.Option value="active">{t('EMPLOYEES.ACTIVE')}</Select.Option>
                     <Select.Option value="inactive">{t('EMPLOYEES.INACTIVE')}</Select.Option>
@@ -608,7 +599,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.POSITION')}
                     defaultValue={employeesData.position}
                     onChange={(e) => handleChange('position', e.target.value)}
-                    name="position"
+                    name="position1"
                   />
                 </Item>
               </Col>
@@ -636,7 +627,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.LINE_MANAGER')}  
                     defaultValue={employeesData.lineManager}       
                     onChange={(e) => handleChange('lineManager', e.target.value)}
-                    name="lineManager"  
+                    name="lineManager1"  
                   />
                 </Item>
               </Col>   
@@ -671,7 +662,7 @@ const UpdateForm = () => {
       placeholder={t('EMPLOYEES.EXP')}
       name={`skills[${index}].exp`}
       value={skillData.exp}
-          onChange={(e) => handleChangeSkill(index, 'exp', e.target.value)}
+      onChange={(e) => handleChangeSkill(index, 'exp', e.target.value)}
 
           />
              <Button type="primary" onClick={() => RemoveSkill(index)}>
