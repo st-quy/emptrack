@@ -63,7 +63,7 @@
     "COMFIRM_DELETE": "Comfirm Delete",
     "PAGE": "Page",
     "HISTORY": "History",
-    "DELETE":"Delete",
+    "DELETE": "Delete",
     "VIEW": "View"
   },
   "BREADCRUMB": {
@@ -79,7 +79,7 @@
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
     "PROJECTS_DETAILS": "Project details",
-    "EMPLOYEES_DETAILS":"Employees details"
+    "EMPLOYEES_DETAILS": "Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",
@@ -195,8 +195,9 @@
     "TIME_START": "Date Start",
     "TIME_END": "Date End",
     "STATUS": "Status",
-    "STATUS_ACTIVE": "Active",
-    "STATUS_INACTIVE": "Inactive",
+    "STATUS_PENDING": "Pending ",
+    "STATUS_IN_PROGRESS": "In progress",
+    "STATUS_COMPLETED": "Completed",
     "TECHNICAL": "Technical",
     "LIST": "List projects",
     "ROLE": "Role"

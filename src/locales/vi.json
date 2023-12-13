@@ -63,7 +63,7 @@
     "COMFIRM_DELETE": "Xác nhận xoá",
     "PAGE": "Trang",
     "HISTORY": "Lịch Sử",
-    "DELETE":"Xóa",
+    "DELETE": "Xóa",
     "VIEW": "Xem"
   },
   "BREADCRUMB": {
@@ -196,8 +196,9 @@
     "TIME_START": "Ngày bắt đầu",
     "TIME_END": "Ngày kết thúc",
     "STATUS": "Trạng thái",
-    "STATUS_ACTIVE": "Đang hoạt động",
-    "STATUS_INACTIVE": "Chưa hoạt động",
+    "STATUS_PENDING": "Chờ xử lý",
+    "STATUS_IN_PROGRESS": "Đang thực hiện",
+    "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
     "LIST": "Danh sách dự án"
   },
