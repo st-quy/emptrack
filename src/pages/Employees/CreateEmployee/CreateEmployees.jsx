@@ -3,10 +3,12 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
   Modal,
   Row,
   Select,
   Space,
+  Typography,
   Upload,
 } from 'antd';
 import ImgCrop from 'antd-img-crop';
@@ -22,19 +24,25 @@ import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
+import moment from 'moment';
 import './CreateEmployees.scss';
 import ValidationSchema from './ValidationSchema';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 const { Item } = Form;
 const { Option } = Select;
 import roleList from '../../Project/CreateProject/rolelist';
 
-  const CreateEmployee = () => {
-    const navigate = useNavigate();
+const CreateEmployee = () => {
+  const navigate = useNavigate();
 
-    const [form] = Form.useForm();
-    const [form2] = Form.useForm();
-    const { TextArea } = Input;
-    const { t } = useTranslation();
+  const [form] = Form.useForm();
+  const { TextArea } = Input;
+  const { t } = useTranslation();
+
+  const selectAfterOptions = [
+    { value: 'years', label: 'years' },
+    { value: 'months', label: 'months' },
+  ];
 
   const formik = useFormik({
     initialValues: {
@@ -50,17 +58,22 @@ import roleList from '../../Project/CreateProject/rolelist';
       position: '',
       lineManager: '',
       address: '',
-      skills: [{ skillname: '', exp: '' }],
+      skills: [{ skillname: '', exp: '', addonAfter: 'years' }],
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-
+      const formattedBirth = moment(values.birth).format('DD-MM-YYYY');
       if (values.skills.length === 0) {
         return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
       } else if (fileList.length > 0) {
         axiosInstance
-          .post('employees', { ...values, code, avatar: fileImg })
-          .then(() => {
+          .post('employees', {
+            ...values,
+            birth: formattedBirth,
+            code,
+            avatar: fileImg,
+          })
+          .then((response) => {
             Toast(
               'success',
               t('TOAST.CREATED_SUCCESS', {
@@ -75,7 +88,6 @@ import roleList from '../../Project/CreateProject/rolelist';
 
         formik.resetForm();
         form.resetFields();
-        form2.resetFields();
         setTimeout(() => {
           navigate('/employees');
         }, 2000);
@@ -85,91 +97,95 @@ import roleList from '../../Project/CreateProject/rolelist';
     },
   });
 
-    const breadcrumbItems = [
-      { key: 'EMPLOYEES', route: '/employees' },
-      { key: 'EMPLOYEES_CREATE', route: '/employees/create' },
-    ];
+  const breadcrumbItems = [
+    { key: 'EMPLOYEES', route: '/employees' },
+    { key: 'EMPLOYEES_CREATE', route: '/employees/create' },
+  ];
 
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [code, setCode] = useState('');
   const [employeeOptions, setEmployeeOptions] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
-    const handlePic = async ({ fileList }) => {
-      try {
-        const formData = new FormData();
-        formData.append('file', fileList[0].originFileObj);
-        formData.append('upload_preset', 'hvmlst6p');
-        formData.append('cloud_name', 'do32v7ajg');
+  const handlePic = async ({ fileList }) => {
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('file', fileList[0].originFileObj);
+      formData.append('upload_preset', 'hvmlst6p');
+      formData.append('cloud_name', 'do32v7ajg');
 
-        const response = await axios.post(
-          'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
-          formData,
-        );
-        const imageUrl = response.data.secure_url;
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
+        formData,
+      );
+      const imageUrl = response.data.secure_url;
 
-        const updatedFileList = fileList.map((file) => {
-          if (file.uid === fileList[0].uid) {
-            return {
-              ...file,
-              status: 'done',
-              url: imageUrl,
-              public_id: response.data.public_id,
-            };
-          }
-          return file;
-        });
+      const updatedFileList = fileList.map((file) => {
+        if (file.uid === fileList[0].uid) {
+          return {
+            ...file,
+            status: 'done',
+            url: imageUrl,
+            public_id: response.data.public_id,
+          };
+        }
+        return file;
+      });
 
-        setFileList(updatedFileList);
-      } catch (error) {
-        console.error('Lỗi khi tải lên ảnh:', error);
-      }
-    };
+      setFileList(updatedFileList);
+      setUploading(false);
+    } catch (error) {
+      console.error('Lỗi khi tải lên ảnh:', error);
+      setUploading(false);
+    }
+  };
 
-    const handlePreview = async (file) => {
-      setPreviewImage(file.url);
-      setShowModal(true);
-    };
+  const handlePreview = async (file) => {
+    setPreviewImage(file.url);
+    setShowModal(true);
+  };
 
-    const handlePreviewCancel = () => {
-      setPreviewImage(null);
-      setShowModal(false);
-    };
+  const handlePreviewCancel = () => {
+    setPreviewImage(null);
+    setShowModal(false);
+  };
 
-    const apiKey = '722147886179251';
-    const apiSecret = 'xYvEodr_5WS06SyphifPtymGRio';
-    const deleteUrl = 'https://api.cloudinary.com/v1_1/do32v7ajg/image/destroy';
+  const apiKey = '722147886179251';
+  const apiSecret = 'xYvEodr_5WS06SyphifPtymGRio';
+  const deleteUrl = 'https://api.cloudinary.com/v1_1/do32v7ajg/image/destroy';
 
-    const handleRemove = async (file) => {
-      try {
-        const publicId = file.public_id;
-        const timestamp = new Date().getTime();
-        const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
-        const signature = CryptoJS.SHA1(string).toString();
-        const formData = new FormData();
-        formData.append('public_id', publicId);
-        formData.append('api_key', apiKey);
-        formData.append('signature', signature);
-        formData.append('timestamp', timestamp);
-        axios.post(deleteUrl, formData);
-        setFileList([]);
-      } catch (error) {
-        console.log('Error deleting image from Cloudinary:', error);
-      }
-    };
+  const handleRemove = async (file) => {
+    try {
+      const publicId = file.public_id;
+      const timestamp = new Date().getTime();
+      const string = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
+      const signature = CryptoJS.SHA1(string).toString();
+      const formData = new FormData();
+      formData.append('public_id', publicId);
+      formData.append('api_key', apiKey);
+      formData.append('signature', signature);
+      formData.append('timestamp', timestamp);
+      axios.post(deleteUrl, formData);
+      setFileList([]);
+    } catch (error) {
+      console.log('Error deleting image from Cloudinary:', error);
+    }
+  };
 
-    const fileImg = fileList.map((file) => ({
-      url: file.url,
-      public_id: file.public_id,
-    }));
+  const fileImg = fileList.map((file) => ({
+    url: file.url,
+    public_id: file.public_id,
+  }));
 
-    const addSkill = () => {
-      formik.setFieldValue('skills', [
-        ...formik.values.skills,
-        { skillname: '', exp: '' },
-      ]);
-    };
+  const addSkill = () => {
+    formik.setFieldValue('skills', [
+      ...formik.values.skills,
+      { skillname: '', exp: '' },
+    ]);
+  };
 
   const removeSkill = (index) => {
     const newSkills = [...formik.values.skills];
@@ -178,34 +194,26 @@ import roleList from '../../Project/CreateProject/rolelist';
   };
   useEffect(() => {
     const generateCode = async () => {
-      try {
-        const response = await axiosInstance.get('employees');
-        const employees = response.data;
-        const dl = 'DL2023';
-        const newCode = dl + (employees.length + 1).toString().padStart(2, '0');
-        const filteredEmployees = employees.filter(
-          (employee) => employee.isManager,
-        );
-        setEmployeeOptions(filteredEmployees);
-        setCode(newCode);
-      } catch (error) {
-        console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
-      }
+      axiosInstance
+        .get('employees')
+        .then((response) => {
+          const employees = response.data;
+          const dl = 'DL2023';
+          const newCode =
+            dl + (employees.length + 1).toString().padStart(2, '0');
+          const filteredEmployees = employees.filter(
+            (employee) => employee.isManager,
+          );
+          setEmployeeOptions(filteredEmployees);
+          setCode(newCode);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
     };
 
-      generateCode();
-    }, []);
-    const [detailVisible, setDetailVisible] = useState(false);
-    const [selectedDetail, setSelectedDetail] = useState(null);
-
-    const showDetailModal = (detail) => {
-      setSelectedDetail(detail);
-      setDetailVisible(true);
-    };
-
-    const hideDetailModal = () => {
-      setDetailVisible(false);
-    };
+    generateCode();
+  }, []);
 
   return (
     <div id="employees">
@@ -223,7 +231,7 @@ import roleList from '../../Project/CreateProject/rolelist';
           overflowY: 'auto',
         }}
       >
-        <Card title={t('EMPLOYEES.CODE')} className="first-card">
+        <Card title={t('EMPLOYEES.CREATE')} className="card">
           <Form form={form}>
             <Row gutter={[16, 0]}>
               {/* CODE EMPLOYEE */}
@@ -258,8 +266,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.name && formik.touched.name
                       ? 'error'
                       : formik.touched.name
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.name &&
@@ -294,8 +302,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.phone && formik.touched.phone
                       ? 'error'
                       : formik.touched.phone
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.phone &&
@@ -330,8 +338,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.gender && formik.touched.gender
                       ? 'error'
                       : formik.touched.gender
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.gender &&
@@ -379,8 +387,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.birth && formik.touched.birth
                       ? 'error'
                       : formik.touched.birth
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.birth &&
@@ -397,6 +405,7 @@ import roleList from '../../Project/CreateProject/rolelist';
                     onBlur={formik.handleBlur}
                     placeholder={t('EMPLOYEES.BIRTH')}
                     style={{ width: '100%' }}
+                    format={'DD-MM-YYYY'}
                   />
                 </Item>
               </Col>
@@ -416,8 +425,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.citizen_card && formik.touched.citizen_card
                       ? 'error'
                       : formik.touched.citizen_card
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.citizen_card &&
@@ -453,8 +462,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.address && formik.touched.address
                       ? 'error'
                       : formik.touched.address
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.address &&
@@ -489,8 +498,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.email && formik.touched.email
                       ? 'error'
                       : formik.touched.email
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.email &&
@@ -528,7 +537,11 @@ import roleList from '../../Project/CreateProject/rolelist';
                         onPreview={handlePreview}
                         onRemove={handleRemove}
                       >
-                        {fileList.length === 0 && '+ Upload'}
+                        {uploading ? (
+                          <SpinLoading />
+                        ) : (
+                          fileList.length === 0 && '+ Upload'
+                        )}
                       </Upload>
                     </ImgCrop>
                     {previewImage && (
@@ -563,8 +576,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.description && formik.touched.description
                       ? 'error'
                       : formik.touched.description
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.description &&
@@ -586,10 +599,9 @@ import roleList from '../../Project/CreateProject/rolelist';
                 </Form.Item>
               </Col>
             </Row>
-          </Form>
-        </Card>
-        <Card title={t('EMPLOYEES.DETAILS')} className="second-card">
-          <Form form={form2}>
+            <Typography.Title level={5}>
+              {t('EMPLOYEES.DETAILS')}
+            </Typography.Title>
             <Row gutter={[16, 0]}>
               {/* IS_MANAGER EMPLOYEE */}
               <Col span={12}>
@@ -606,8 +618,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.isManager && formik.touched.isManager
                       ? 'error'
                       : formik.touched.isManager
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.isManager &&
@@ -649,8 +661,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.status && formik.touched.status
                       ? 'error'
                       : formik.touched.status
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.status &&
@@ -691,8 +703,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.position && formik.touched.position
                       ? 'error'
                       : formik.touched.position
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.position &&
@@ -734,8 +746,8 @@ import roleList from '../../Project/CreateProject/rolelist';
                     formik.errors.lineManager && formik.touched.lineManager
                       ? 'error'
                       : formik.touched.lineManager
-                        ? 'success'
-                        : ''
+                      ? 'success'
+                      : ''
                   }
                   help={
                     formik.errors.lineManager &&
@@ -745,13 +757,6 @@ import roleList from '../../Project/CreateProject/rolelist';
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  {/* <Input
-                    size="large"
-                    placeholder={t('EMPLOYEES.LINE_MANAGER')}
-                    value={formik.values.lineManager}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  /> */}
                   <Select
                     size="large"
                     value={formik.values.lineManager}
@@ -774,80 +779,122 @@ import roleList from '../../Project/CreateProject/rolelist';
                 </Item>
               </Col>
               {/* SKILLS EMPLOYEE */}
-              <Col span={24}>
-                <Form.Item
-                  label={t('EMPLOYEES.SKILLS')}
-                  required
-                  labelCol={{ span: 24 }}
-                  wrapperCol={{ span: 24 }}
-                >
-                  {formik.values.skills.map((skill, index) => (
-                    <div key={index}>
-                      <Form.Item
-                        validateStatus={
-                          formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                            ? 'error'
-                            : ''
-                        }
-                        help={
-                          formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                            ? formik.errors.skills[index].skillname
-                            : ''
-                        }
-                        hasFeedback
-                      >
-                        <Input
-                          size="large"
-                          placeholder={t('EMPLOYEES.SKILL_NAME')}
-                          name={`skills[${index}].skillname`}
-                          value={formik.values.skills[index].skillname}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </Form.Item>
 
-                      <Form.Item
-                        validateStatus={
-                          formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                            ? 'error'
-                            : ''
-                        }
-                        help={
-                          formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                            ? formik.errors.skills[index].exp
-                            : ''
-                        }
-                        hasFeedback
+              <Form.Item
+                label={t('EMPLOYEES.SKILLS')}
+                required
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
+              >
+                <Button onClick={addSkill} className="buttonSkills btn-skills">
+                  {t('EMPLOYEES.ADD_SKILL')}
+                </Button>
+                <Row>
+                  {formik.values.skills.map((skill, index) => (
+                    <Col key={index}>
+                      <div
+                        style={{
+                          marginRight: '10px',
+                          marginBottom: '10px',
+                        }}
                       >
-                        <Input
-                          size="large"
-                          placeholder={t('EMPLOYEES.EXP')}
-                          name={`skills[${index}].exp`}
-                          value={formik.values.skills[index].exp}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </Form.Item>
-                      <Button onClick={() => removeSkill(index)}>
-                        {t('EMPLOYEES.REMOVE_SKILL')}
-                      </Button>
-                    </div>
+                        <Form.Item
+                          validateStatus={
+                            formik.errors.skills &&
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
+                              ? 'error'
+                              : ''
+                          }
+                          help={
+                            formik.errors.skills &&
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
+                              ? formik.errors.skills[index].skillname
+                              : ''
+                          }
+                          hasFeedback
+                        >
+                          <Input
+                            size="large"
+                            placeholder={t('EMPLOYEES.SKILL_NAME')}
+                            name={`skills[${index}].skillname`}
+                            value={formik.values.skills[index].skillname}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          validateStatus={
+                            formik.errors.skills &&
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
+                              ? 'error'
+                              : ''
+                          }
+                          help={
+                            formik.errors.skills &&
+                            formik.errors.skills[index] &&
+                            formik.touched.skills &&
+                            formik.touched.skills[index]
+                              ? formik.errors.skills[index].exp
+                              : ''
+                          }
+                          hasFeedback
+                        >
+                          <Input
+                            size="large"
+                            placeholder={t('EMPLOYEES.EXP')}
+                            name={`skills[${index}].exp`}
+                            value={formik.values.skills[index].exp}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            type="number"
+                            style={{
+                              webkitAppearance: 'none',
+                              MozAppearance: 'textfield',
+                            }}
+                            min={1}
+                            max={30}
+                            addonAfter={
+                              <Select
+                                defaultValue="years"
+                                style={{ width: 70 }}
+                                onChange={(value) => {
+                                  formik.setFieldValue(
+                                    `skills[${index}].addonAfter`,
+                                    value,
+                                  );
+                                }}
+                              >
+                                {selectAfterOptions.map((option) => (
+                                  <Option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </Option>
+                                ))}
+                              </Select>
+                            }
+                          />
+                        </Form.Item>
+
+                        <Button
+                          onClick={() => removeSkill(index)}
+                          className="buttonSkills btn-skills"
+                        >
+                          {t('EMPLOYEES.REMOVE_SKILL')}
+                        </Button>
+                      </div>
+                    </Col>
                   ))}
-                </Form.Item>
-                <Button onClick={addSkill}>{t('EMPLOYEES.ADD_SKILL')}</Button>
-              </Col>
+                </Row>
+              </Form.Item>
             </Row>
           </Form>
         </Card>
@@ -856,4 +903,4 @@ import roleList from '../../Project/CreateProject/rolelist';
   );
 };
 
-  export default CreateEmployee;
+export default CreateEmployee;

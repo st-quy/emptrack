@@ -5,36 +5,34 @@ import {
 } from '@ant-design/icons';
 import {
   Card,
-  Input,
+  DatePicker,
+  Modal,
   Pagination,
+  Select,
   Space,
   Table,
   Tooltip,
-  Modal,
-  message,
-  DatePicker,
-  Select,
+  Menu,
+  Dropdown,
 } from 'antd';
-import { debounce } from 'lodash';
-// eslint-disable-next-line no-unused-vars
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
-import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 import '../ProjectList/ProjectList.scss';
-import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
-import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
-import moment from 'moment';
+import { filter } from 'lodash';
+import { areAllSearchParamsEmpty } from '../../../helpers';
+const { RangePicker } = DatePicker;
 
 const ProjectList = () => {
-  const [dataFirst, setDataList] = useState([]);
   const [data, setData] = useState([]);
   const { t } = useTranslation();
-  // const [searchedText, setSearchedText] = useState('');
   const [deletedProjectId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -43,7 +41,51 @@ const ProjectList = () => {
   const [pageSize, setPageSize] = useState(10);
   const [open, setOpen] = useState(false);
   const [dataProject, setDataProject] = useState();
-  const { RangePicker } = DatePicker;
+  const [searchParam, setSearchParam] = useState({
+    manager: '',
+    project_name: '',
+    startDate: '',
+    endDate: '',
+    status: '',
+  });
+
+  const [filteredData, setFilteredData] = useState([]);
+
+  const searchData = (data, searchParams) => {
+    const { manager, project_name, startDate, endDate, status } = searchParams;
+    const start = moment(startDate, 'DD/MM/YYYY');
+    const end = moment(endDate, 'DD/MM/YYYY');
+
+    const filteredData = filter(data, (item) => {
+      const isManagerMatched =
+        !manager ||
+        item.manager.some((managerItem) => managerItem.name.includes(manager));
+      const isProjectNameMatched =
+        !project_name || item.name.includes(project_name);
+      const isStartDateMatched =
+        !startDate || moment(item.startDate, 'DD/MM/YYYY').isSameOrAfter(start);
+      const isEndDateMatched =
+        !endDate || moment(item.endDate, 'DD/MM/YYYY').isSameOrBefore(end);
+      const isStatusMatched = !status || item.status === status;
+
+      return (
+        isManagerMatched &&
+        isProjectNameMatched &&
+        isStartDateMatched &&
+        isEndDateMatched &&
+        isStatusMatched
+      );
+    });
+
+    return filteredData;
+  };
+
+  useEffect(() => {
+    const isAllEmpty = areAllSearchParamsEmpty(searchParam);
+    if (isAllEmpty) {
+      handleSearch();
+    }
+  }, [searchParam]);
   const paginationOptions = {
     total: data.filter((item) => !item.deletedAt).length,
     current: currentPage,
@@ -77,8 +119,8 @@ const ProjectList = () => {
           .get('projects')
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
+        setFilteredData(filterDeleted);
         setData(filterDeleted);
-        setDataList(filterDeleted);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -88,13 +130,12 @@ const ProjectList = () => {
 
   const handleDelete = (projectId) => {
     setSelectedProjectId(projectId);
-    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
     setShowDeleteModal(true);
   };
+
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance.delete(`projects/${selectedProjectId}`).then(() => {
-        //  message.success('Dự án đã được xóa thành công!');
         Toast(
           'success',
           t('TOAST.DELETED_SUCCESS', {
@@ -102,8 +143,6 @@ const ProjectList = () => {
           }),
           2,
         );
-        // Loại bỏ dự án đã bị xóa khỏi mảng data
-        setData(data.filter((item) => item.id !== selectedProjectId));
 
         setSelectedProjectId(null);
         setShowDeleteModal(false);
@@ -120,6 +159,12 @@ const ProjectList = () => {
 
   const handleView = (id) => {
     navigate(`details/${id}`);
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+    const filteredData = searchData(data, searchParam);
+    setFilteredData(filteredData);
   };
 
   const columns = [
@@ -244,69 +289,16 @@ const ProjectList = () => {
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
-              
             }}
           >
             {status}
           </span>
         </Tooltip>
       ),
-      filters: [
-        
-        { text: t('PROJECTS.STATUS_ACTIVE'), value: 'active' },
-        { text: t('PROJECTS.STATUS_INACTIVE'), value: 'inactive' },
-      ],
+      sorter: (a, b) => a.status.localeCompare(b.status),
       onFilter: (value, record) => record.status === value,
-      
     },
   ];
-
-  const [searchedText, setSearchedText] = useState('');
-  const [searchParam, setSearchParam] = useState({
-    manager: '',
-    project_name: '',
-    startDate: '',
-    endDate: '',
-    status: '',
-  });
-
-  const handleSearch = () => {
-    let filteredData = [...data];
-
-    if (searchParam.manager) {
-      filteredData = filteredData.filter((val) =>
-        val.manager.some((manager) =>
-          manager.name.includes(searchParam.manager),
-        ),
-      );
-    }
-
-    if (searchParam.project_name) {
-      filteredData = filteredData.filter((val) =>
-        val.name.includes(searchParam.project_name),
-      );
-    }
-
-    if (searchParam.startDate && searchParam.endDate) {
-      const start = moment(searchParam.startDate, 'DD/MM/YYYY');
-      const end = moment(searchParam.endDate, 'DD/MM/YYYY');
-      filteredData = filteredData.filter((item) => {
-        const itemStartDate = moment(item.startDate, 'DD/MM/YYYY');
-        const itemEndDate = moment(item.endDate, 'DD/MM/YYYY');
-        return (
-          itemStartDate.isSameOrBefore(start) && itemEndDate.isSameOrBefore(end)
-        );
-      });
-    }
-
-    if (searchParam.status) {
-      filteredData = filteredData.filter((val) =>
-        val.status.toUpperCase().includes(searchParam.status.toUpperCase()),
-      );
-    }
-    setData(filteredData);
-  };
-  const debouncedSearch = debounce((value) => setSearchedText(value), 300);
 
   return (
     <div className="project_create" style={{ height: 100 }}>
@@ -326,18 +318,12 @@ const ProjectList = () => {
             <TextSearch
               label={t('TEXT_SEARCH.MANAGER')}
               func={(e) => {
-                if (!e.target.value) {
-                  setData(dataFirst);
-                }
                 setSearchParam({ ...searchParam, manager: e.target.value });
               }}
             />
             <TextSearch
               label={t('TEXT_SEARCH.PROJECT_NAME')}
               func={(e) => {
-                if (!e.target.value) {
-                  setData(dataFirst);
-                }
                 setSearchParam({
                   ...searchParam,
                   project_name: e.target.value,
@@ -345,18 +331,19 @@ const ProjectList = () => {
               }}
             />
             <RangePicker
-             placeholder={[
-              t('PROJECTS.TIME_START'),
-              t('PROJECTS.TIME_END'),
-            ]}
+              placeholder={[t('PROJECTS.TIME_START'), t('PROJECTS.TIME_END')]}
               onChange={(e) => {
-                if (e === null) {
-                  setData(dataFirst);
-                } else {
+                if (e !== null && e.length > 0) {
                   setSearchParam({
                     ...searchParam,
                     startDate: moment(e[0]['$d']).format('DD/MM/YYYY'),
                     endDate: moment(e[1]['$d']).format('DD/MM/YYYY'),
+                  });
+                } else {
+                  setSearchParam({
+                    ...searchParam,
+                    startDate: '',
+                    endDate: '',
                   });
                 }
               }}
@@ -368,21 +355,18 @@ const ProjectList = () => {
               }}
               options={[
                 {
-                  value: 'Active',
-                  label: 'Active',
+                  value: 'active',
+                  label: t('PROJECTS.STATUS_ACTIVE'),
                 },
                 {
-                  value: 'Inactive',
-                  label: 'Inactive',
+                  value: 'inactive',
+                  label: t('PROJECTS.STATUS_INACTIVE'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
                 label: t('TEXT_SEARCH.STATUS'),
               })}
               onChange={(e) => {
-                if (!e) {
-                  setData(dataFirst);
-                }
                 setSearchParam({
                   ...searchParam,
                   status: e,
@@ -395,55 +379,24 @@ const ProjectList = () => {
             </Button>
           </Space>
           <Table
+          locale={{
+            triggerDesc: t('BUTTON.SORT_DESC'),
+            triggerAsc: t('BUTTON.SORT_ASC'),
+            cancelSort: t('BUTTON.SORT_CANCEL'),
+          }}
             columns={columns}
             dataSource={
-              data.length > 0
-                ? data
-                    .filter(
-                      (item) =>
-                        (item.manager &&
-                          item.manager.some((manager) =>
-                            manager.name
-                              .toLowerCase()
-                              .includes(searchedText.toLowerCase()),
-                          )) ||
-                        (item.member &&
-                          item.member.some(
-                            (member) =>
-                              member.name
-                                .toLowerCase()
-                                .includes(searchedText.toLowerCase()) ||
-                              member.role
-                                .toLowerCase()
-                                .includes(searchedText.toLowerCase()),
-                          )) ||
-                        item.technical
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()) ||
-                        item.description
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()) ||
-                        item.startDate
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()) ||
-                        item.endDate
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()) ||
-                        item.status
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()) ||
-                        item.name
-                          .toLowerCase()
-                          .includes(searchedText.toLowerCase()),
-                    )
-                    .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+              filteredData.length > 0
+                ? filteredData.slice(
+                    (currentPage - 1) * pageSize,
+                    currentPage * pageSize,
+                  )
                 : []
             }
             scroll={{ y: 'calc(100vh - 400px)' }}
             pagination={false}
           />
           <Pagination {...paginationOptions} />
-
         </Card>
 
         <Modal
