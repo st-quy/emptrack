@@ -221,6 +221,8 @@ import roleList from '../../Project/CreateProject/rolelist';
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
+          borderRadius: '30px',
+
         }}
       >
         <Card title={t('BUTTON.ADD_MEMBER')} className="details-card" style={{ borderRadius: '30px' }}>

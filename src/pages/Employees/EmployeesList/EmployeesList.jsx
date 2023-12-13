@@ -28,7 +28,9 @@ const EmployeesList = () => {
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
-
+  const handleAvatarClick = () => {
+    setModalVisible(true);
+  };
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
   }, []);
@@ -125,25 +127,27 @@ const EmployeesList = () => {
       dataIndex: 'avatar',
       key: 'avatar',
       width: 60,
-      render: (avatar) => (
+      render: (item) => (
         <span>
-          {avatar.map((avatar, index) => (
+          {item.map((_, index) => (
             <Image
               key={index}
-              src={avatar.url}
+              src={_.url}
               alt={`Avatar ${index + 1}`}
               style={{
                 width: '60px', 
                 height: '60px', 
                 borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+              preview={{
+                mask: <EyeOutlined />,
+                src: _.url
               }}
             />
           ))}
         </span>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
+      )
     },
     
     {
@@ -156,8 +160,8 @@ const EmployeesList = () => {
     
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'citizen_card',
-      key: 'citizen_card',
+      dataIndex: 'cccd',
+      key: 'cccd',
       width: 90,
     },
     {
@@ -229,12 +233,14 @@ const EmployeesList = () => {
               {t('BREADCRUMB.EMPLOYEES_CREATE')}
             </Button>
           </Space>
+          
           <Card
             title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
             style={{
               width: '100%',
               margin: 'auto',
               borderRadius: '30px',
+
             }}
           >
             <Input.Search
@@ -260,21 +266,22 @@ const EmployeesList = () => {
                 })
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
               scroll={{ y: 'calc(100vh - 370px)' }}
+              
               pagination={false}
               size="small"
             />
             <Pagination
-              total={data.filter((item) => !item.deletedAt).length}
-              current={currentPage}
-              pageSize={pageSize}
-              showSizeChanger
-              showTotal={(total) => t('TABLE.TOTAL_EMPLOYEES', { total })}
-              className="my-3"
-              onChange={(page, pageSize) => {
-                setCurrentPage(page);
-                setPageSize(pageSize);
-              }}
-            />
+            total={data.filter((item) => !item.deletedAt).length}
+            current={currentPage}
+            pageSize={pageSize}
+            showSizeChanger
+            showTotal={(total) => t('TABLE.TOTAL', { total })}
+            className="my-3"
+            onChange={(page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            }}
+          />
           </Card>
           <Modal
             title={t('TABLE.COMFIRM_DELETE')}

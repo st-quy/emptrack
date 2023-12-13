@@ -51,7 +51,7 @@ function DetailEmployees() {
 
   return (
     <>
-    <div id="employee_details" style={{ height: 100 }}>
+    <div id="employee_details" style={{ height: '100px' }}>
       {employees ? (
         <>
           <Space className="w-100 justify-content-between">
@@ -63,13 +63,18 @@ function DetailEmployees() {
             />
             <Button onClick={() => navigate('/employees/update')}>
               {t('BREADCRUMB.USERS_UPDATE')}
+              
             </Button>
           </Space>
-          <div className="details-scroll-container">
+          <div className="details-scroll-container"
+          style={{
+            borderRadius: '30px'
+            }}
+>
             <Card
+
               title={t('EMPLOYEES.DETAILS')}
-              className="details-card"
-              style={{ borderRadius: '30px' }}
+              className="details-card" 
             >
             <Form>
             <Row gutter={[16, 16]}>
@@ -84,8 +89,10 @@ function DetailEmployees() {
                               width: '100%',
                               height: '100%',
                               borderRadius: '50%',  
-                              // marginTop: '40px',  
+                              // marginTop: '40px', 
+                               objectFit: 'cover'
                             }}
+                            
                           />
                         </div>
                   

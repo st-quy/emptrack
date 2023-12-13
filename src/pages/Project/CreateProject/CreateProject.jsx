@@ -172,6 +172,8 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
+          borderRadius: '30px',
+
         }}
         >
       <Card
@@ -182,7 +184,6 @@ const CreateProject = () => {
           // maxHeight: '80vh',
           // maxWidth: '100%',
           // overflowY: 'auto',
-          borderRadius: '30px',
         }}
       >
         <Formik initialValues={initialValues} validationSchema={schema}>
