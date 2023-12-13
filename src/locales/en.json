@@ -69,7 +69,7 @@
     "PROJECTS_UPDATE": "Update project",
     "PROJECTS": "Projects",
     "PROJECTS_DETAILS": "Project details",
-    "EMPLOYEES_DETAIL": "Employees details"
+    "EMPLOYEES_DETAILS":"Employees details"
   },
   "MODAL": {
     "SYNC_INFO": "Sync Information",

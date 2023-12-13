@@ -196,7 +196,7 @@ const ProjectList = () => {
         return index;
       },
     },
-    {
+     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
       key: 'manager',

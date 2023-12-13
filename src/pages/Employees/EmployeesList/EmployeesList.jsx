@@ -42,7 +42,9 @@ const EmployeesList = () => {
     status: '',
   });
   const [filteredData, setFilteredData] = useState([]);
-
+  const handleAvatarClick = () => {
+    setModalVisible(true);
+  };
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
   }, []);
@@ -210,25 +212,27 @@ const EmployeesList = () => {
       dataIndex: 'avatar',
       key: 'avatar',
       width: 60,
-      render: (avatar) => (
+      render: (item) => (
         <span>
-          {avatar.map((avatar, index) => (
+          {item.map((_, index) => (
             <Image
               key={index}
-              src={avatar.url}
+              src={_.url}
               alt={`Avatar ${index + 1}`}
               style={{
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+              preview={{
+                mask: <EyeOutlined />,
+                src: _.url
               }}
             />
           ))}
         </span>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
+      )
     },
 
     {
@@ -241,8 +245,8 @@ const EmployeesList = () => {
 
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'citizen_card',
-      key: 'citizen_card',
+      dataIndex: 'cccd',
+      key: 'cccd',
       width: 90,
     },
     {
@@ -312,12 +316,14 @@ const EmployeesList = () => {
               {t('BREADCRUMB.EMPLOYEES_CREATE')}
             </Button>
           </Space>
+          
           <Card
             title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
             style={{
               width: '100%',
               margin: 'auto',
               borderRadius: '30px',
+
             }}
           >
             <Space size={[8, 16]} wrap className="w-100 py-3">
@@ -377,6 +383,7 @@ const EmployeesList = () => {
                   : []
               }
               scroll={{ y: 'calc(100vh - 370px)' }}
+              
               pagination={false}
               size="small"
             />
