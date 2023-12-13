@@ -9,7 +9,7 @@ import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 // Define routes accessible only to authenticated users
 import DetailsProject from '../pages/Project/Details/DetailsProject';
 import DetailEmployees from '../pages/Employees/Detail/DetailEmployees.jsx';
-import UpdateForm from '../pages/Employees/UpdateForm.jsx';
+import UpdateForm from '../pages/Employees/Update/UpdateForm.jsx';
 const PrivateRoute = [
   {
     path: '/',

@@ -10,19 +10,22 @@ import {
   Select,
   Upload,
   Modal,
+  
 } 
 from 'antd';
 import React, { useState, useEffect } from 'react';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { useTranslation } from 'react-i18next';
 import Card from 'antd/es/card/Card';
 import { useParams } from 'react-router-dom';
-import { axiosInstance } from '../../config/axios';
+import { axiosInstance } from '../../../config/axios';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import ImgCrop from 'antd-img-crop';
+
+
 
 
 
@@ -114,14 +117,15 @@ const UpdateForm = () => {
     url: file.url,
     public_id: file.public_id,
   }));
-   const handleSubmit = () =>{
+  //  const handleSubmit = () =>{
 
-   }
+  //  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await axiosInstance.get(`employees/${id}`).then((response) => {
+        await axiosInstance.get(`employees/${id}`)
+        .then((response) => {
           setEmployeesData(response.data);
           setSkillData(response.data);
         });
@@ -201,7 +205,10 @@ const UpdateForm = () => {
     });
   };
   
-  
+  const handeEditImage=() => {
+
+  };
+
 
   return (
     <div>
@@ -476,34 +483,41 @@ const UpdateForm = () => {
                 >
                  <div>
       <div>
-      <ImgCrop rotationSlider>
-      <Upload
-        listType="picture-card"
-        fileList={fileList}
-        onChange={handlePic}
-        onPreview={handlePreview}
-        onRemove={handleRemove}
-      >
-        Click to upload
-      </Upload>
-      <Img src={employeesData?.avatar[0].url} style={{ padding: '0 20px', width: '50%' }} />
-    </ImgCrop>
-            <div>         
-          </div>  
-          </div>
-          
-          <Modal
+              <ImgCrop rotationSlider>
+              <Upload
+          listType="picture-card"
+          fileList={fileList}
+          onChange={handlePic}
+          onPreview={handlePreview}
+          onRemove={handleRemove}
+     
+        >
+        
+          {fileList.length === 0 &&  (
+            <img
+              src={employeesData?.avatar[0].url}
+              style={{ padding: '0 20px', width: '150%' }}
+              alt="Uploaded Image"         
+            />
+          )}
+               </Upload>
+      
+                </ImgCrop>
+                        <div>         
+                      </div>  
+                      </div>   
+                      <Modal
                         open={showModal}
                         footer={null}
-                        onCancel={handlePreviewCancel}
-                        
+                        onCancel={handlePreviewCancel}                       
                       >
                         <img
-                          src={previewImage}
+                          src={previewImage}                        
                           alt="Preview"
                           style={{ width: '100%', maxHeight: '550px' }}
                         />
                       </Modal>
+                      <Button onClick={handeEditImage} >chỉnh sửa ảnh</Button> 
           </div>
 
           
@@ -528,7 +542,7 @@ const UpdateForm = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'vui lòng nhập người quản lí ',
+                      message: 'vui lòng nhập người quản lí',
                     },
                   ]}  
                 >

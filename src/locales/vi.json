@@ -69,7 +69,8 @@
         "PROJECTS_CREATE": "Thêm dự án",
         "PROJECTS_UPDATE": "Cập nhật dự án",
         "PROJECTS_DETAILS": "Chi tiết dự án",
-        "EMPLOYEES_DETAILS": "Chi tiết nhân viên"
+        "EMPLOYEES_DETAILS": "Chi tiết nhân viên",
+        "EMPLOYEES_UPDATE": " Cập nhập thông tin nhân viên"
     },
     "MODAL": {
         "SYNC_INFO": "Đồng bộ thông tin",
@@ -248,7 +249,10 @@
         "ADD_SKILL": "Thêm kĩ năng",
         "REMOVE_SKILL": "Xóa kĩ năng",
         "ADDRESS": "Địa chỉ",
-        "ID": "STT"
+        "ID": "STT",
+        "NO": "Không",
+        "YES": "Có",
+        "UPDATE": "Cập nhật thông tin nhân viên"
     },
     "EMPLOYEE_VALIDATION": {
         "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
