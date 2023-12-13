@@ -74,7 +74,6 @@ const CreateEmployee = () => {
             avatar: fileImg,
           })
           .then((response) => {
-            console.log(response.data);
             Toast(
               'success',
               t('TOAST.CREATED_SUCCESS', {
@@ -226,10 +225,13 @@ const CreateEmployee = () => {
         <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
       </Space>
       <div
-        style={{
+        className="details-card" 
+              style={{
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
+          borderRadius: '30px'
+          
         }}
       >
         <Card title={t('EMPLOYEES.CREATE')} className="card">

@@ -4,12 +4,13 @@ import {
   Card,
   Image,
   Input,
+  Modal,
   Pagination,
+  Select,
   Space,
   Table,
   Tag,
   Tooltip,
-  Modal,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +18,12 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import { axiosInstance } from '../../../config/axios';
 import { Toast } from '../../../components/toast/Toast';
+import { axiosInstance } from '../../../config/axios';
+import { filter } from 'lodash';
+import { areAllSearchParamsEmpty } from '../../../helpers';
+import TextSearch from '../../../components/atoms/TextSearch/TextSearch';
+
 const EmployeesList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,7 +33,18 @@ const EmployeesList = () => {
   const [deletedEmployeesId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployeesId, setSelectedEmployeesId] = useState(null);
-
+  const [allProjects, setAllProjects] = useState([]);
+  const [searchParam, setSearchParam] = useState({
+    name: '',
+    email: '',
+    // isManager: '',
+    position: '',
+    status: '',
+  });
+  const [filteredData, setFilteredData] = useState([]);
+  const handleAvatarClick = () => {
+    setModalVisible(true);
+  };
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
   }, []);
@@ -41,23 +57,85 @@ const EmployeesList = () => {
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
         setData(filterDeleted);
+        setFilteredData(filterDeleted);
+        await axiosInstance.get('/projects').then((res) => {
+          const filterDeletedProjects = res.data.filter(
+            (item) => !item.deletedAt,
+          );
+          setAllProjects(filterDeletedProjects);
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, [deletedEmployeesId]);
-  const handleDelete = (projectId) => {
-    setSelectedEmployeesId(projectId);
-    // setCurrentPage(1); // Đặt lại trang hiện tại về 1 khi xóa dự án
-    setShowDeleteModal(true);
+
+  const searchData = (data, searchParams) => {
+    const { name, email, isManager, position, status } = searchParams;
+
+    const filteredData = filter(data, (item) => {
+      const isNameMatched = !name || item.name.includes(name);
+      const isEmailMatched = !email || item.email.includes(email);
+      // const isManagerMatched = !isManager || item.isManager === isManager;
+      const isPositionMatched = !position || item.position.includes(position);
+      const isStatusMatched = !status || item.status === status;
+
+      return (
+        isNameMatched &&
+        isEmailMatched &&
+        // isManagerMatched &&
+        isPositionMatched &&
+        isStatusMatched
+      );
+    });
+
+    return filteredData;
   };
+
+  useEffect(() => {
+    const isAllEmpty = areAllSearchParamsEmpty(searchParam);
+    if (isAllEmpty) {
+      handleSearch();
+    }
+  }, [searchParam]);
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+    const filteredData = searchData(data, searchParam);
+    setFilteredData(filteredData);
+  };
+
+  const handleDelete = async (employeeId) => {
+    try {
+      let isDelete = true;
+      allProjects.map((project) => {
+        for (let index = 0; index < project.member.length; index++) {
+          if (project.member[index].id === employeeId) {
+            isDelete = false;
+            break;
+          }
+        }
+
+        if (project.manager[0].id === selectedEmployeesId) isDelete = false;
+      });
+
+      if (isDelete) {
+        setSelectedEmployeesId(employeeId);
+        setShowDeleteModal(true);
+      } else {
+        warningDelete();
+      }
+    } catch (error) {
+      console.error('Error get all projects:', error);
+    }
+  };
+
   const handleConfirmDelete = async () => {
     try {
       await axiosInstance
         .delete(`employees/${selectedEmployeesId}`)
         .then(() => {
-          //  message.success('Dự án đã được xóa thành công!');
           Toast(
             'success',
             t('TOAST.DELETED_SUCCESS', {
@@ -80,12 +158,18 @@ const EmployeesList = () => {
     setSelectedEmployeesId(null);
     setShowDeleteModal(false);
   };
-  const abc = (id) => {
-    console.log(
-      "fdfsf"
-    )
+
+  const handleView = (id) => {
     navigate(`/employees/details/${id}`);
   };
+
+  const warningDelete = () => {
+    Modal.warning({
+      title: t('MODAL.WARNING_DELETE_TITLE'),
+      content: t('MODAL.WARNING_DELETE'),
+    });
+  };
+
   const columns = [
     {
       title: t('TABLE.ACTIONS'),
@@ -104,7 +188,7 @@ const EmployeesList = () => {
             <Button
               type="link"
               icon={<EyeOutlined />}
-              onClick={() => abc(record.id)}
+              onClick={() => handleView(record.id)}
             />
           </Tooltip>
         </span>
@@ -118,34 +202,39 @@ const EmployeesList = () => {
       ellipsis: {
         showTitle: false,
       },
-      render: (id, record, index) => { ++index; return index; },
+      render: (id, record, index) => {
+        ++index;
+        return index;
+      },
     },
     {
       title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
       width: 60,
-      render: (avatar) => (
+      render: (item) => (
         <span>
-          {avatar.map((avatar, index) => (
+          {item.map((_, index) => (
             <Image
               key={index}
-              src={avatar.url}
+              src={_.url}
               alt={`Avatar ${index + 1}`}
               style={{
-                width: '60px', 
-                height: '60px', 
+                width: '60px',
+                height: '60px',
                 borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+              preview={{
+                mask: <EyeOutlined />,
+                src: _.url
               }}
             />
           ))}
         </span>
-      ),
-      ellipsis: {
-        showTitle: false,
-      },
+      )
     },
-    
+
     {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
@@ -153,11 +242,11 @@ const EmployeesList = () => {
       render: (text) => <a>{text}</a>,
       width: 70,
     },
-    
+
     {
       title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'citizen_card',
-      key: 'citizen_card',
+      dataIndex: 'cccd',
+      key: 'cccd',
       width: 90,
     },
     {
@@ -217,8 +306,6 @@ const EmployeesList = () => {
     },
   ];
 
-  const [searchedText, setSearchedText] = useState('');
-
   return (
     <div className="project_create">
       {data.length > 0 ? (
@@ -229,42 +316,79 @@ const EmployeesList = () => {
               {t('BREADCRUMB.EMPLOYEES_CREATE')}
             </Button>
           </Space>
+          
           <Card
             title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
             style={{
               width: '100%',
               margin: 'auto',
               borderRadius: '30px',
+
             }}
           >
-            <Input.Search
-              placeholder="Tìm kiếm..."
-              style={{ marginTop: 8, marginBottom: 8, width: 300 }}
-              onChange={(e) => setSearchedText(e.target.value)}
-            />
+            <Space size={[8, 16]} wrap className="w-100 py-3">
+              <TextSearch
+                label={t('EMPLOYEES.NAME')}
+                func={(e) => {
+                  setSearchParam({ ...searchParam, name: e.target.value });
+                }}
+              />
+              <TextSearch
+                label={t('EMPLOYEES.EMAIL')}
+                func={(e) => {
+                  setSearchParam({
+                    ...searchParam,
+                    email: e.target.value,
+                  });
+                }}
+              />
+              <Select
+                // defaultValue=""
+                style={{
+                  width: 200,
+                }}
+                options={[
+                  {
+                    value: 'active',
+                    label: 'Active',
+                  },
+                  {
+                    value: 'inactive',
+                    label: 'Inactive',
+                  },
+                ]}
+                placeholder={t('TEXT_SEARCH.SELECT', {
+                  label: t('TEXT_SEARCH.STATUS'),
+                })}
+                onChange={(e) => {
+                  setSearchParam({
+                    ...searchParam,
+                    status: e,
+                  });
+                }}
+                allowClear
+              />
+              <Button type="primary" onClick={() => handleSearch()}>
+                {t('BUTTON.SEARCH')}
+              </Button>
+            </Space>
             <Table
               columns={columns}
-              dataSource={data
-                .filter((item) => {
-                  return Object.values(item)
-                    .filter(
-                      (value) =>
-                        typeof value === 'string' || typeof value === 'number',
+              dataSource={
+                filteredData
+                  ? filteredData.slice(
+                      (currentPage - 1) * pageSize,
+                      currentPage * pageSize,
                     )
-                    .some((value) =>
-                      value
-                        .toString()
-                        .toLowerCase()
-                        .includes(searchedText.toLowerCase()),
-                    );
-                })
-                .slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+                  : []
+              }
               scroll={{ y: 'calc(100vh - 370px)' }}
+              
               pagination={false}
               size="small"
             />
             <Pagination
-              total={data.filter((item) => !item.deletedAt).length}
+              total={filteredData.filter((item) => !item.deletedAt).length}
               current={currentPage}
               pageSize={pageSize}
               showSizeChanger
