@@ -5,13 +5,14 @@ import Select from 'react-select';
 export default function SelectField(props) {
   const { t } = useTranslation();
   let deValue;
-  if (props.index < props.defaultValue.length) {
-    deValue = props.defaultValue[props.index].role?.map((r) => {
-      return {
-        value: r,
-        label: r,
-      };
-    });
+  if (props.index < props.members.length) {
+    // deValue = props.members[props.index].role?.map((r) => {
+    //   return {
+    //     value: r,
+    //     label: r,
+    //   };
+    // });
+    deValue = props.members[props.index].role;
   }
 
   const [field, state, { setValue, setTouched }] = useField(props.field.name);
@@ -32,10 +33,8 @@ export default function SelectField(props) {
 
   return (
     <Select
-  
       defaultValue={deValue}
       options={props.options}
-    
       isMulti
       onChange={onChange}
       onBlur={setTouched}

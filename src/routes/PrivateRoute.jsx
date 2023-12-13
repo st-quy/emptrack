@@ -9,7 +9,6 @@ import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 // Define routes accessible only to authenticated users
 import DetailsProject from '../pages/Project/Details/DetailsProject';
 import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
-import ViewProject from '../pages/Project/ViewProject/ViewProject.jsx';
 const PrivateRoute = [
   {
     path: '/',
@@ -52,7 +51,7 @@ const PrivateRoute = [
             element: <DetailsProject />,
           },
           {
-            path: 'update/:projectId', // Thêm parameter projectId vào URL
+            path: 'update/:id', // Thêm parameter projectId vào URL
             element: <ProjectUpdate />,
           },
         ],
