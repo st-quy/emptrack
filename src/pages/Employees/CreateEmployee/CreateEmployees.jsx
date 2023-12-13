@@ -9,14 +9,16 @@ import {
   Select,
   Space,
   Typography,
+  Divider,
   Upload,
 } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import Card from 'antd/es/card/Card';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,7 +32,7 @@ import ValidationSchema from './ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 const { Item } = Form;
 const { Option } = Select;
-import roleList from '../../Project/CreateProject/rolelist';
+let index = 0;
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -62,7 +64,10 @@ const CreateEmployee = () => {
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-      const formattedBirth = moment(values.birth).format('DD-MM-YYYY');
+      const day = values.birth.$D;
+      const month = values.birth.$M + 1;
+      const year = values.birth.$y;
+      const formattedBirth = `${day}-${month}-${year}`;
       if (values.skills.length === 0) {
         return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
       } else if (fileList.length > 0) {
@@ -96,6 +101,32 @@ const CreateEmployee = () => {
       }
     },
   });
+  const [items, setItems] = useState([]);
+  const [position, setPosition] = useState('');
+  const inputRef = useRef(null);
+  const onPositionChange = (event) => {
+    setPosition(event.target.value);
+  };
+  const addItem = (e) => {
+    if (position !== '') {
+      e.preventDefault();
+      axiosInstance
+        .post('position', { name: position })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+      setItems([...items, position]);
+      setPosition('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    } else {
+      return Toast('error', t('EMPLOYEE_VALIDATION.ADD_POSITION'), 2);
+    }
+  };
 
   const breadcrumbItems = [
     { key: 'EMPLOYEES', route: '/employees' },
@@ -212,7 +243,20 @@ const CreateEmployee = () => {
         });
     };
 
+    const getPosition = async () => {
+      axiosInstance
+        .get('position')
+        .then((response) => {
+          const items = response.data.map((item) => item.name);
+          setItems(items);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
+
     generateCode();
+    getPosition();
   }, []);
 
   return (
@@ -225,13 +269,12 @@ const CreateEmployee = () => {
         <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
       </Space>
       <div
-        className="details-card" 
-              style={{
+        className="details-card"
+        style={{
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px'
-          
+          borderRadius: '30px',
         }}
       >
         <Card title={t('EMPLOYEES.CREATE')} className="card">
@@ -568,25 +611,6 @@ const CreateEmployee = () => {
                 <Form.Item
                   label={t('EMPLOYEES.DESCRIPTION')}
                   name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter the description',
-                    },
-                  ]}
-                  hasFeedback
-                  validateStatus={
-                    formik.errors.description && formik.touched.description
-                      ? 'error'
-                      : formik.touched.description
-                      ? 'success'
-                      : ''
-                  }
-                  help={
-                    formik.errors.description &&
-                    formik.touched.description &&
-                    formik.errors.description
-                  }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
@@ -686,7 +710,7 @@ const CreateEmployee = () => {
                     style={{ width: '100%' }}
                   >
                     <Option value="active">{t('EMPLOYEES.ACTIVE')}</Option>
-                    <Option value="unactive">{t('EMPLOYEES.UNACTIVE')}</Option>
+                    <Option value="inactive">{t('EMPLOYEES.UNACTIVE')}</Option>
                   </Select>
                 </Item>
               </Col>
@@ -719,23 +743,47 @@ const CreateEmployee = () => {
                 >
                   <Select
                     size="large"
-                    value={formik.values.position}
                     placeholder={t('EMPLOYEES.POSITION')}
                     onChange={(value) => {
                       formik.setFieldValue('position', value);
                     }}
-                    onBlur={formik.handleBlur}
-                    style={{ width: '100%' }}
-                  >
-                    {roleList &&
-                      roleList.map((e, index) => {
-                        return (
-                          <Option key={index} value={e.value}>
-                            {e.label}
-                          </Option>
-                        );
-                      })}
-                  </Select>
+                    dropdownRender={(menu) => (
+                      <>
+                        {menu}
+                        <Divider
+                          style={{
+                            margin: '10px 0',
+                          }}
+                        />
+                        <Space
+                          style={{
+                            padding: '0 8px 5px',
+                          }}
+                        >
+                          <Input
+                            style={{ width: '500px' }}
+                            size="large"
+                            placeholder={t('EMPLOYEES.POSITION')}
+                            ref={inputRef}
+                            value={position}
+                            onChange={onPositionChange}
+                            onKeyDown={(e) => e.stopPropagation()}
+                          />
+                          <Button
+                            type="text"
+                            icon={<PlusOutlined />}
+                            onClick={addItem}
+                          >
+                            {t('EMPLOYEES.ADD_POSITION')}
+                          </Button>
+                        </Space>
+                      </>
+                    )}
+                    options={items.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                  />
                 </Item>
               </Col>
               {/* LINE_MANAGER EMPLOYEE */}
@@ -743,20 +791,6 @@ const CreateEmployee = () => {
                 <Item
                   label={t('EMPLOYEES.LINE_MANAGER')}
                   name="lineManager"
-                  required
-                  hasFeedback
-                  validateStatus={
-                    formik.errors.lineManager && formik.touched.lineManager
-                      ? 'error'
-                      : formik.touched.lineManager
-                      ? 'success'
-                      : ''
-                  }
-                  help={
-                    formik.errors.lineManager &&
-                    formik.touched.lineManager &&
-                    formik.errors.lineManager
-                  }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >

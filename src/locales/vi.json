@@ -232,7 +232,7 @@
     "GENDER": "Giới tính",
     "STATUS": "Trạng thái",
     "SKILLS": "Kĩ năng",
-    "POSITION": "Vị trí",
+    "POSITION": "Chức vụ",
     "LINE_MANAGER": "Được quản lí bởi?",
     "DESCRIPTION": "Mô tả",
     "IS_MANAGER": "Người quản lí?",
@@ -250,7 +250,8 @@
     "ADD_SKILL": "Thêm kĩ năng",
     "REMOVE_SKILL": "Xóa kĩ năng",
     "ADDRESS": "Địa chỉ",
-    "ID": "STT"
+    "ID": "STT",
+    "ADD_POSITION": "Thêm chức vụ"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
@@ -264,11 +265,9 @@
     "GENDER_REQUIRED": "Vui lòng chọn giới tính",
     "STATUS_REQUIRED": "Vui lòng chọn trạng thái",
     "IS_MANAGER_REQUIRED": "Bạn có phải người quản lí không?",
-    "POSITION_REQUIRED": "Vui lòng chọn vị trí",
-    "LINE_MANAGER_REQUIRED": "Vui lòng chọn người quản lí",
+    "POSITION_REQUIRED": "Vui lòng chọn chức vụ",
     "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
     "BIRTH_REQUIRED": "Vui lòng chọn ngày sinh",
-    "DESCRIPTION_REQUIRED": "Vui lòng nhập mô tả",
     "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
     "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
     "AVATAR": "Vui lòng chọn ảnh đại diện",
@@ -278,7 +277,8 @@
     "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
     "BIRTH_ENOUGH_AGE": "Vui lòng chọn ngày sinh lớn hơn 18 tuổi",
     "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
-    "EMAIL_INVALID": "Email phải bao gồm kí tự @"
+    "EMAIL_INVALID": "Email phải bao gồm kí tự @",
+    "ADD_POSITION": "Vui lòng nhập tên chức vụ trước khi thêm"
   },
   "DRAWER": {
     "TITLE": "Theo dõi lịch sử"
