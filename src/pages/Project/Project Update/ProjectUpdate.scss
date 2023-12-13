@@ -2,35 +2,58 @@
   div.ant-col.ant-form-item-label {
     text-align: start;
   }
-  // .ant-table {
-  //   margin-top: 20px;
-  // }
-
-  // .ant-space {
-  //   column-gap: 55px;
-
-  //   @media screen and (min-width: 1300px) {
-  //     column-gap: 100px;
-  //   }
-
-  //   @media screen and (min-width: 1800px) {
-  //     column-gap: 150px;
-  //   }
-  // }
 
   .ant-typography {
     display: block;
     margin-bottom: 15px;
   }
-  // .ant-space-item:not(:last-child) {
-  //   width: 100%;
-  // }
-  // .ant-form-item {
-  //   width: 100%;
-  // }
+
   .members-select {
     padding: 4px 11px;
     border: 1px solid #d9d9d9;
     border-radius: 6px;
+    height: 38px;
+  }
+  .css-13cymwt-control {
+    border-color: #d9d9d9;
+    border-width: 1px;
+    border-radius: 6px;
+    // min-height: 31.33px;
+  }
+  // .css-t3ipsp-control {
+  //   min-height: 31.33px !important;
+  //   max-height: 31.33px !important;
+  // }
+  .css-1i837h3-ValueContainer2,
+  .css-art2ul-ValueContainer2 {
+    padding: 0;
+    padding-left: 10px;
+    display: flex;
+  }
+  .css-1i837h3-ValueContainer2 {
+    padding-left: 3px;
+  }
+  .css-1xc3v61-indicatorContainer {
+    padding: 1px;
+    color: rgba(0, 0, 0, 0.88);
+  }
+  .css-1u9des2-indicatorSeparator {
+    width: 0;
+  }
+  .css-w9q2zk-Input2 {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  .css-tj5bde-Svg {
+    transform: scale(0.75);
+  }
+  .css-1p3m7a8-multiValue {
+    border-radius: 7px;
+  }
+  .css-1jqq78o-placeholder {
+    color: rgba(0, 0, 0, 0.88);
   }
 }

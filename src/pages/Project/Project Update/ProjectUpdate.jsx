@@ -62,12 +62,6 @@ const ProjectUpdate = () => {
           setProject(res.data);
           setMembers(
             res.data.member.map((mem) => {
-              // let role = mem.role.map((m) => {
-              //   return {
-              //     value: m,
-              //     label: m,
-              //   };
-              // });
               return {
                 member: mem.id,
                 role: mem.role.map((m) => {
@@ -182,7 +176,7 @@ const ProjectUpdate = () => {
     );
   };
   return (
-    <div id="project_create">
+    <div id="project_update">
       {project ? (
         <>
           <Space className="w-100 justify-content-between">
