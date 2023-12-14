@@ -240,8 +240,9 @@
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
     "GENDER_UNKNOWN": "Unknown",
-    "ACTIVE": "Active",
-    "UNACTIVE": "Unactive",
+    "ASSIGNED": "Assigned",
+    "UNASSIGNED": "Unassigned",
+    "OFF": "Off",
     "MANAGER": "Yes",
     "NOT_MANAGER": "No",
     "DETAILS": "Detail employees",
@@ -272,13 +273,14 @@
     "CITIZEN_CARD_REQUIRED": "Please enter citizen identification number",
     "CITIZEN_CARD_MATCH": "Citizen identification number must be 10 numbers",
     "AVATAR": "Please select avatar",
-    "SKILL_REQUIRED": "Please enter skill name",
+    "SKILL_REQUIRED": "Please select skill name",
     "EXP_REQUIRED": "Please enter year of experience",
     "ADDRESS_REQUIRED": "Please enter address",
     "EMAIL_REQUIRED": "Please enter email address",
     "SKILL": "Please enter at least 1 skill",
     "EMAIL_INVALID": "Email must include the @ character",
-    "ADD_POSITION": "Please enter a position before adding"
+    "ADD_POSITION": "Please enter a position before adding",
+    "ADD_SKILL": "Please enter a skill before adding"
   },
   "DRAWER": {
     "TITLE": "History Tracking"

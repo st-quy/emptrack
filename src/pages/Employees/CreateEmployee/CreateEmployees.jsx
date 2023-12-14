@@ -32,7 +32,6 @@ import ValidationSchema from './ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 const { Item } = Form;
 const { Option } = Select;
-let index = 0;
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -60,7 +59,7 @@ const CreateEmployee = () => {
       position: '',
       lineManager: '',
       address: '',
-      skills: [{ skillname: '', exp: '', addonAfter: 'years' }],
+      skills: [{ skillname: null, exp: '', addonAfter: 'years' }],
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
@@ -99,16 +98,23 @@ const CreateEmployee = () => {
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
+      console.log(values);
     },
   });
   const [items, setItems] = useState([]);
   const [position, setPosition] = useState('');
+  const [listSkills, setListSkills] = useState([]);
+  const [inputSkill, setInputSkill] = useState('');
   const inputRef = useRef(null);
   const onPositionChange = (event) => {
     setPosition(event.target.value);
   };
+  const onSkillChange = (event) => {
+    setInputSkill(event.target.value);
+  };
   const addItem = (e) => {
-    if (position !== '') {
+    const trimmedInputPosition = position.trim();
+    if (trimmedInputPosition !== '') {
       e.preventDefault();
       axiosInstance
         .post('position', { name: position })
@@ -120,6 +126,28 @@ const CreateEmployee = () => {
         });
       setItems([...items, position]);
       setPosition('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    } else {
+      return Toast('error', t('EMPLOYEE_VALIDATION.ADD_POSITION'), 2);
+    }
+  };
+
+  const addSkillToServer = (e) => {
+    const trimmedInputSkill = inputSkill.trim();
+    if (trimmedInputSkill !== '') {
+      e.preventDefault();
+      axiosInstance
+        .post('skill', { name: inputSkill })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+      setListSkills([...listSkills, inputSkill]);
+      setInputSkill('');
       setTimeout(() => {
         inputRef.current?.focus();
       }, 0);
@@ -214,7 +242,7 @@ const CreateEmployee = () => {
   const addSkill = () => {
     formik.setFieldValue('skills', [
       ...formik.values.skills,
-      { skillname: '', exp: '' },
+      { skillname: null, exp: '', addonAfter: 'years' },
     ]);
   };
 
@@ -254,9 +282,21 @@ const CreateEmployee = () => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
         });
     };
+    const getSkill = async () => {
+      axiosInstance
+        .get('skill')
+        .then((response) => {
+          const items = response.data.map((item) => item.name);
+          setListSkills(items);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
 
     generateCode();
     getPosition();
+    getSkill();
   }, []);
 
   return (
@@ -709,8 +749,11 @@ const CreateEmployee = () => {
                     placeholder={t('EMPLOYEES.STATUS')}
                     style={{ width: '100%' }}
                   >
-                    <Option value="active">{t('EMPLOYEES.ACTIVE')}</Option>
-                    <Option value="inactive">{t('EMPLOYEES.UNACTIVE')}</Option>
+                    <Option value="unassigned">
+                      {t('EMPLOYEES.UNASSIGNED')}
+                    </Option>
+                    <Option value="assigned ">{t('EMPLOYEES.ASSIGNED')}</Option>
+                    <Option value="off">{t('EMPLOYEES.OFF')}</Option>
                   </Select>
                 </Item>
               </Col>
@@ -815,123 +858,167 @@ const CreateEmployee = () => {
                   </Select>
                 </Item>
               </Col>
+
               {/* SKILLS EMPLOYEE */}
-
-              <Form.Item
-                label={t('EMPLOYEES.SKILLS')}
-                required
-                labelCol={{ span: 24 }}
-                wrapperCol={{ span: 24 }}
-              >
-                <Button onClick={addSkill} className="buttonSkills btn-skills">
-                  {t('EMPLOYEES.ADD_SKILL')}
-                </Button>
-                <Row>
-                  {formik.values.skills.map((skill, index) => (
-                    <Col key={index}>
-                      <div
-                        style={{
-                          marginRight: '10px',
-                          marginBottom: '10px',
-                        }}
-                      >
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].skillname
-                              : ''
-                          }
-                          hasFeedback
+              <Row>
+                <Form.Item label={t('EMPLOYEES.SKILLS')} required>
+                  <Button
+                    onClick={addSkill}
+                    className="buttonSkills btn-skills"
+                  >
+                    {t('EMPLOYEES.ADD_SKILL')}
+                  </Button>
+                </Form.Item>
+                <Col span={24} style={{ display: 'flex', width: '100%' }}>
+                  <Space wrap className="w-100">
+                    {formik.values.skills.map((skill, index) => (
+                      <Col key={index}>
+                        <div
+                          style={{
+                            marginRight: '10px',
+                            marginBottom: '10px',
+                          }}
                         >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.SKILL_NAME')}
-                            name={`skills[${index}].skillname`}
-                            value={formik.values.skills[index].skillname}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                        </Form.Item>
-
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].exp
-                              : ''
-                          }
-                          hasFeedback
-                        >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.EXP')}
-                            name={`skills[${index}].exp`}
-                            value={formik.values.skills[index].exp}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            type="number"
-                            style={{
-                              webkitAppearance: 'none',
-                              MozAppearance: 'textfield',
-                            }}
-                            min={1}
-                            max={30}
-                            addonAfter={
-                              <Select
-                                defaultValue="years"
-                                style={{ width: 70 }}
-                                onChange={(value) => {
-                                  formik.setFieldValue(
-                                    `skills[${index}].addonAfter`,
-                                    value,
-                                  );
-                                }}
-                              >
-                                {selectAfterOptions.map((option) => (
-                                  <Option
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </Option>
-                                ))}
-                              </Select>
+                          <Form.Item
+                            style={{ width: '200px' }}
+                            validateStatus={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? 'error'
+                                : ''
                             }
-                          />
-                        </Form.Item>
+                            help={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? formik.errors.skills[index].skillname
+                                : ''
+                            }
+                            hasFeedback
+                          >
+                            <Select
+                              size="large"
+                              placeholder={t('EMPLOYEES.SKILL_NAME')}
+                              name={`skills[${index}].skillname`}
+                              value={formik.values.skills[index].skillname}
+                              onChange={(value) => {
+                                formik.setFieldValue(
+                                  `skills[${index}].skillname`,
+                                  value,
+                                );
+                              }}
+                              dropdownRender={(menu) => (
+                                <>
+                                  {menu}
+                                  <Divider
+                                    style={{
+                                      margin: '10px 0',
+                                    }}
+                                  />
 
-                        <Button
-                          onClick={() => removeSkill(index)}
-                          className="buttonSkills btn-skills"
-                        >
-                          {t('EMPLOYEES.REMOVE_SKILL')}
-                        </Button>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </Form.Item>
+                                  <Input
+                                    size="large"
+                                    value={inputSkill}
+                                    ref={inputRef}
+                                    onChange={onSkillChange}
+                                    onKeyDown={(e) => e.stopPropagation()}
+                                  />
+                                  <Button
+                                    type="text"
+                                    icon={<PlusOutlined />}
+                                    onClick={addSkillToServer}
+                                    style={{
+                                      width: '100%',
+                                      paddingLeft: '0px',
+                                      paddingRight: '0px',
+                                    }}
+                                  >
+                                    {t('EMPLOYEES.ADD_SKILL')}
+                                  </Button>
+                                </>
+                              )}
+                              options={listSkills.map((item) => ({
+                                label: item,
+                                value: item,
+                              }))}
+                            />
+                          </Form.Item>
+
+                          <Form.Item
+                            validateStatus={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? 'error'
+                                : ''
+                            }
+                            help={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? formik.errors.skills[index].exp
+                                : ''
+                            }
+                            hasFeedback
+                          >
+                            <Input
+                              size="large"
+                              placeholder={t('EMPLOYEES.EXP')}
+                              name={`skills[${index}].exp`}
+                              value={formik.values.skills[index].exp}
+                              onChange={formik.handleChange}
+                              type="number"
+                              style={{
+                                webkitAppearance: 'none',
+                                MozAppearance: 'textfield',
+                              }}
+                              min={1}
+                              max={30}
+                              addonAfter={
+                                <Select
+                                  style={{ width: 70 }}
+                                  name={`skills[${index}].addonAfter`}
+                                  value={
+                                    formik.values.skills[index].addonAfter ||
+                                    'years'
+                                  }
+                                  onChange={(value) => {
+                                    formik.setFieldValue(
+                                      `skills[${index}].addonAfter`,
+                                      value,
+                                    );
+                                  }}
+                                >
+                                  {selectAfterOptions.map((option) => (
+                                    <Option
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </Option>
+                                  ))}
+                                </Select>
+                              }
+                            />
+                          </Form.Item>
+
+                          <Button
+                            onClick={() => removeSkill(index)}
+                            className="buttonSkills btn-skills"
+                          >
+                            {t('EMPLOYEES.REMOVE_SKILL')}
+                          </Button>
+                        </div>
+                      </Col>
+                    ))}
+                  </Space>
+                </Col>
+              </Row>
             </Row>
           </Form>
         </Card>

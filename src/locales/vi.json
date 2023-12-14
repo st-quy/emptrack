@@ -240,8 +240,9 @@
     "GENDER_MEN": "Nam",
     "GENDER_WOMEN": "Nữ",
     "GENDER_UNKNOWN": "Chưa rõ",
-    "ACTIVE": "Hoạt động",
-    "UNACTIVE": "Không hoạt động",
+    "ASSIGNED": "Đã phân công",
+    "UNASSIGNED": "Chưa phân công",
+    "OFF": "Đang nghỉ",
     "MANAGER": "Có",
     "NOT_MANAGER": "Không",
     "DETAILS": "Chi tiết nhân viên",
@@ -271,14 +272,15 @@
     "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
     "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
     "AVATAR": "Vui lòng chọn ảnh đại diện",
-    "SKILL_REQUIRED": "Vui lòng nhập tên kĩ năng",
+    "SKILL_REQUIRED": "Vui lòng chọn kĩ năng",
     "EXP_REQUIRED": "Vui lòng nhập số năm kinh nghiệm",
     "ADDRESS_REQUIRED": "Vui lòng nhập địa chỉ",
     "EMAIL_REQUIRED": "Vui lòng nhập địa chỉ email",
     "BIRTH_ENOUGH_AGE": "Vui lòng chọn ngày sinh lớn hơn 18 tuổi",
     "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
     "EMAIL_INVALID": "Email phải bao gồm kí tự @",
-    "ADD_POSITION": "Vui lòng nhập tên chức vụ trước khi thêm"
+    "ADD_POSITION": "Vui lòng nhập tên chức vụ trước khi thêm",
+    "ADD_SKILL": "Vui lòng nhập tên kĩ năng trước khi thêm"
   },
   "DRAWER": {
     "TITLE": "Theo dõi lịch sử"
