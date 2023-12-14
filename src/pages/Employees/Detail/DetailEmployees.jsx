@@ -65,15 +65,13 @@ function DetailEmployees() {
                 {t('BREADCRUMB.EMPLOYEES_UPDATE')}
               </Button>
             </Space>
-            <div
-              className="details-scroll-container"
-              style={{
-                borderRadius: '30px',
-              }}
-            >
+           
               <Card
                 title={t('EMPLOYEES.DETAILS').toUpperCase()}
                 className="card-detail-employees"
+                style={{
+                  borderRadius: '30px',
+                }}
               >
              {employees ? <>
               <Form
@@ -391,7 +389,7 @@ function DetailEmployees() {
               </Card>
             </div>{' '}
           
-      </div>
+    
     </>
   );
 }

@@ -235,7 +235,7 @@ const CreateEmployee = () => {
         }}
       > */}
         <Card  title={t('EMPLOYEES.CREATE')} className="card-create-employees"
-        style={{borderRadius: '30px 30px 0 0'}}>
+        style={{borderRadius: '30px'}}>
           
           <Form form={form}>
             <Row gutter={[16, 0]}>
