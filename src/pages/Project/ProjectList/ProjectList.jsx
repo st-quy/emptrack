@@ -211,7 +211,8 @@ const ProjectList = () => {
       },
       render: (id, record, index) => {
         ++index;
-        return index;
+        return (currentPage - 1) * pageSize + index;
+        ;
       },
     },
     {
