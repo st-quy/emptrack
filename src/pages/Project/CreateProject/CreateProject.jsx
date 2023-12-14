@@ -5,7 +5,6 @@ import {
   DatePicker,
   Form,
   Input,
-  Radio,
   Row,
   Select,
   Space,
@@ -53,7 +52,7 @@ const CreateProject = () => {
     //UI render 1 row member
     members: members,
     dateRange: { startDate: '', endDate: '' },
-    status: 'pending',
+    status: 'progress',
     technical: '',
   };
 
@@ -172,19 +171,12 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px', 
+          borderRadius: '30px',
         }}
       >
         <Card
           className="card-create-project"
           title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-          style={
-            {
-              // maxHeight: '80vh',
-              // maxWidth: '100%',
-              // overflowY: 'auto',
-            }
-          }
         >
           <Formik initialValues={initialValues} validationSchema={schema}>
             {({ values }) => (
@@ -270,17 +262,6 @@ const CreateProject = () => {
                     <Form.Item
                       name="description"
                       label={t('PROJECTS.DESCRIPTION')}
-                      // help={
-                      //   formik.errors.description &&
-                      //   formik.touched.description && (
-                      //     <div className="text-danger">
-                      //       {formik.errors.description}
-                      //     </div>
-                      //   )
-                      // }
-                      // validateFirst
-                      // rules={[yupSync]}
-                      // hasFeedback
                     >
                       <TextArea
                         rows={4}
@@ -352,28 +333,6 @@ const CreateProject = () => {
                         placeholder={t('PROJECTS.TECHNICAL')}
                         onChange={formik.handleChange}
                       />
-                    </Form.Item>
-                    <Form.Item
-                      label={t('PROJECTS.STATUS')}
-                      className="label-required"
-                    >
-                      <Radio.Group
-                        name="status"
-                        value={formik.values.status}
-                        onChange={(e) =>
-                          formik.setFieldValue('status', e.target.value)
-                        }
-                      >
-                        <Radio value="pending">
-                          {t('PROJECTS.STATUS_PENDING')}
-                        </Radio>
-                        <Radio value="progress">
-                          {t('PROJECTS.STATUS_IN_PROGRESS')}
-                        </Radio>
-                        <Radio value="completed">
-                          {t('PROJECTS.STATUS_COMPLETED')}
-                        </Radio>
-                      </Radio.Group>
                     </Form.Item>
                   </Col>
                 </Row>
