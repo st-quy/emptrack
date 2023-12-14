@@ -222,7 +222,7 @@ const CreateEmployee = () => {
         style={{ justifyContent: 'space-between', width: '100%' }}
       >
         <Breadcrumb items={breadcrumbItems} />
-        <Button onClick={formik.handleSubmit}>{t('EMPLOYEES.CREATE')}</Button>
+        <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
       <div
         className="details-card" 

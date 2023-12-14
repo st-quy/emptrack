@@ -25,7 +25,11 @@
     "UPDATE": "Cập nhật",
     "BACK_TO_HOME": "Quay lại trang chủ",
     "ADD_MEMBER": "Thêm thành viên",
-    "SEARCH": "Tìm kiếm"
+    "SEARCH": "Tìm kiếm",
+    "RESET": "Đặt lại",
+    "SORT_ASC": "Nhấn để sắp xếp",
+    "SORT_DESC": "Nhấn để sắp xếp",
+    "SORT_CANCEL": "Nhấn để hủy Sắp xếp"
   },
   "TABLE": {
     "ACTIONS": "Hành động",
@@ -47,6 +51,7 @@
     "PROFILE": "Thông tin cá nhân",
     "GUIDELINE": "Tài liệu",
     "MANAGER": "Quản lí",
+    "NOT_MANAGER": "Không phải quản lí",
     "MEMBERS": "Thành viên",
     "TECHNICAL": "Kỹ thuật",
     "DESCRIPTION": "Mô tả",
@@ -55,7 +60,11 @@
     "TOTAL": "Tổng: {{total}} dự án",
     "TOTAL_EMPLOYEES": "Tổng: {{total}} nhân viên",
     "LIST_EMPLOYEES": "Danh sách nhân viên",
-    "COMFIRM_DELETE": "Xác nhận xoá"
+    "COMFIRM_DELETE": "Xác nhận xoá",
+    "PAGE": "Trang",
+    "HISTORY": "Lịch Sử",
+    "DELETE": "Xóa",
+    "VIEW": "Xem"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -65,6 +74,7 @@
     "PROFILE": "Thông tin cá nhân",
     "EMPLOYEES": "Nhân viên",
     "PROJECTS": "Dự án",
+    "EMPLOYEES_UPDATE": "Cập nhật nhân viên",
     "EMPLOYEES_CREATE": "Thêm nhân viên",
     "PROJECTS_CREATE": "Thêm dự án",
     "PROJECTS_UPDATE": "Cập nhật dự án",
@@ -143,7 +153,11 @@
     "ENDPOINT": "Endpoint",
     "SCHEDULE": "Lịch trình",
     "Action": "Tuỳ chỉnh",
-    "AVATAR": "ảnh"
+    "AVATAR": "ảnh",
+    "INCOME": "Thu nhập của ST United",
+    "STATISTIC_WORK": "Thống kê theo công việc",
+    "STATISTIC_POSITION": "Thống kê theo vị trí",
+    "STATISTIC_COMPANY": "Biến động công ty"
   },
   "USERS": {
     "NAME": "Tên",
@@ -182,8 +196,9 @@
     "TIME_START": "Ngày bắt đầu",
     "TIME_END": "Ngày kết thúc",
     "STATUS": "Trạng thái",
-    "STATUS_ACTIVE": "Đang hoạt động",
-    "STATUS_INACTIVE": "Chưa hoạt động",
+    "STATUS_PENDING": "Chờ xử lý",
+    "STATUS_IN_PROGRESS": "Đang thực hiện",
+    "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
     "LIST": "Danh sách dự án"
   },
@@ -214,6 +229,7 @@
   "TOAST": {
     "CREATED_SUCCESS": "Thêm {{field}} thành công",
     "CREATED_ERROR": "{{field}} thêm không thành công",
+    "UPDATED_SUCCESS": "Cập nhật {{field}} thành công",
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",

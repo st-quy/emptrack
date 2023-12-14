@@ -13,6 +13,7 @@ import {
   Table,
   Tooltip,
 } from 'antd';
+import { filter } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +24,8 @@ import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import DrawerTracking from '../../../components/molecules/Drawer/DrawerTracking';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
-import '../ProjectList/ProjectList.scss';
-import { filter } from 'lodash';
 import { areAllSearchParamsEmpty } from '../../../helpers';
+import '../ProjectList/ProjectList.scss';
 
 const { RangePicker } = DatePicker;
 
@@ -85,7 +85,21 @@ const ProjectList = () => {
       handleSearch();
     }
   }, [searchParam]);
-
+  const paginationOptions = {
+    total: data.filter((item) => !item.deletedAt).length,
+    current: currentPage,
+    pageSize: pageSize,
+    showSizeChanger: true,
+    showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+    className: 'my-3',
+    onChange: (page, pageSize) => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    },
+    locale: {
+      items_per_page: `/ ${t('TABLE.PAGE')}`,
+    },
+  };
   useEffect(() => {
     document.title = 'EMP | PROJECTS';
   }, []);
@@ -161,21 +175,21 @@ const ProjectList = () => {
 
       render: (text, record) => (
         <span>
-          <Tooltip title="Delete">
+          <Tooltip title={t('TABLE.DELETE')}>
             <Button
               type="link"
               icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
-          <Tooltip title="View">
+          <Tooltip title={t('TABLE.VIEW')}>
             <Button
               type="link"
               icon={<EyeOutlined />}
               onClick={() => handleView(record.id)}
             />
           </Tooltip>
-          <Tooltip title="History">
+          <Tooltip title={t('TABLE.HISTORY')}>
             <Button
               type="text"
               icon={<FieldTimeOutlined />}
@@ -200,7 +214,7 @@ const ProjectList = () => {
         return index;
       },
     },
-     {
+    {
       title: t('TABLE.MANAGER'),
       dataIndex: 'manager',
       align: 'center',
@@ -283,21 +297,27 @@ const ProjectList = () => {
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
-              backgroundColor: status === 'active' ? 'green' : 'red',
+              backgroundColor:
+                status === 'completed'
+                  ? 'green'
+                  : status === 'progress'
+                  ? 'orange'
+                  : 'gray',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
             }}
           >
-            {status}
+            {status === 'pending'
+              ? t('PROJECTS.STATUS_PENDING')
+              : status === 'progress'
+              ? t('PROJECTS.STATUS_IN_PROGRESS')
+              : t('PROJECTS.STATUS_COMPLETED')}
           </span>
         </Tooltip>
       ),
-      filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
-      ],
+      sorter: (a, b) => a.status.localeCompare(b.status),
       onFilter: (value, record) => record.status === value,
     },
   ];
@@ -333,6 +353,7 @@ const ProjectList = () => {
               }}
             />
             <RangePicker
+              placeholder={[t('PROJECTS.TIME_START'), t('PROJECTS.TIME_END')]}
               onChange={(e) => {
                 if (e !== null && e.length > 0) {
                   setSearchParam({
@@ -351,18 +372,21 @@ const ProjectList = () => {
               format={'DD/MM/YYYY'}
             />
             <Select
-              // defaultValue=""
               style={{
                 width: 200,
               }}
               options={[
                 {
-                  value: 'active',
-                  label: 'Active',
+                  value: 'pending',
+                  label: t('PROJECTS.STATUS_PENDING'),
                 },
                 {
-                  value: 'inactive',
-                  label: 'Inactive',
+                  value: 'progress',
+                  label: t('PROJECTS.STATUS_IN_PROGRESS'),
+                },
+                {
+                  value: 'completed',
+                  label: t('PROJECTS.STATUS_COMPLETED'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
@@ -381,6 +405,11 @@ const ProjectList = () => {
             </Button>
           </Space>
           <Table
+            locale={{
+              triggerDesc: t('BUTTON.SORT_DESC'),
+              triggerAsc: t('BUTTON.SORT_ASC'),
+              cancelSort: t('BUTTON.SORT_CANCEL'),
+            }}
             columns={columns}
             dataSource={
               filteredData.length > 0
@@ -393,25 +422,16 @@ const ProjectList = () => {
             scroll={{ y: 'calc(100vh - 400px)' }}
             pagination={false}
           />
-          <Pagination
-            total={filteredData.filter((item) => !item.deletedAt).length}
-            current={currentPage}
-            pageSize={pageSize}
-            showSizeChanger
-            showTotal={(total) => t('TABLE.TOTAL', { total })}
-            className="my-3"
-            onChange={(page, pageSize) => {
-              setCurrentPage(page);
-              setPageSize(pageSize);
-            }}
-          />
-          {/* <SpinLoading /> */}
+          <Pagination {...paginationOptions} />
         </Card>
+
         <Modal
           title={t('TABLE.COMFIRM_DELETE')}
           visible={showDeleteModal}
           onOk={handleConfirmDelete}
+          okText={t('BUTTON.OK')}
           onCancel={handleCancelDelete}
+          cancelText={t('ACTION.CANCEL')}
         >
           <p>{t('PROJECTS.COMFIRM_DELETE_PROJECT')}</p>
         </Modal>

@@ -8,9 +8,9 @@ const Schema = () => {
       .trim()
       .max(60, t('VALIDATE.MAX', { field: t('PROJECTS.NAME'), number: '60' }))
       .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.NAME') })),
-    description: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
+    // description: Yup.string()
+    //   .trim()
+    //   .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
     technical: Yup.string()
       .trim()
       .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),

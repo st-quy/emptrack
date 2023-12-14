@@ -62,7 +62,7 @@ function DetailEmployees() {
               ]}
             />
             <Button onClick={() => navigate('/employees/update')}>
-              {t('BREADCRUMB.USERS_UPDATE')}
+              {t('BREADCRUMB.EMPLOYEES_UPDATE')}
               
             </Button>
           </Space>
