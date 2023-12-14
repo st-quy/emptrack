@@ -233,7 +233,8 @@
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",
-    "LOGIN_ERROR": "Đăng nhập thất bại"
+    "LOGIN_ERROR": "Đăng nhập thất bại",
+    "DUPLICATE_FIELD": "{{field}} đã tồn tại"
   },
   "EMPLOYEES": {
     "COMFIRM_DELETE_EMPLOYEES": "Bạn có chắc chắn muốn xóa nhân viên này ?",
@@ -310,5 +311,8 @@
     "TYPE": "Nhập {{label}}",
     "SELECT": "Chọn {{label}}",
     "STATUS": "Trạng thái"
+  },
+  "CARD": {
+    "PROJECT_SUMMARY": "Tóm tắt dự án"
   }
 }

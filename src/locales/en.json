@@ -233,7 +233,8 @@
     "CREATED_ERROR_SAME_NAME": "Project name already exists",
     "DELETED_SUCCESS": "Deleted {{field}} successfully",
     "LOGIN_SUCCESS": "Login successfully",
-    "LOGIN_ERROR": "Login error"
+    "LOGIN_ERROR": "Login error",
+    "DUPLICATE_FIELD": "{{field}} already exists"
   },
   "EMPLOYEES": {
     "COMFIRM_DELETE_EMPLOYEES": "Are you sure you want to delete this employees ?",
@@ -310,5 +311,8 @@
     "TYPE": "Enter {{label}}",
     "SELECT": "Enter {{label}}",
     "STATUS": "Status"
+  },
+  "CARD": {
+    "PROJECT_SUMMARY": "Project Summary"
   }
 }

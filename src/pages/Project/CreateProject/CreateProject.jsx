@@ -142,6 +142,14 @@ const CreateProject = () => {
             2,
           );
         }
+      } else {
+        Toast(
+          'warning',
+          t('TOAST.DUPLICATE_FIELD', {
+            field: t('PROJECTS.NAME'),
+          }),
+          2,
+        );
       }
     },
   });
@@ -172,7 +180,7 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px', 
+          borderRadius: '30px',
         }}
       >
         <Card
