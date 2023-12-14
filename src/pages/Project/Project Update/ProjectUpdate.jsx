@@ -66,7 +66,7 @@ const ProjectUpdate = () => {
                 role: mem.role.map((m) => {
                   return {
                     value: m,
-                    label: m,
+                    label: m[0].toUpperCase() + m.slice(1),
                   };
                 }),
               };

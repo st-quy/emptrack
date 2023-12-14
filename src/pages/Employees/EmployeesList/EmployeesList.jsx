@@ -129,7 +129,6 @@ const EmployeesList = () => {
           }
           if (project.manager[0].id === employeeId) isDelete = false;
         }
-
       });
 
       if (isDelete) {
@@ -186,7 +185,7 @@ const EmployeesList = () => {
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 20 ,
+      width: 20,
       align: 'center',
       render: (text, record) => (
         <span>
@@ -219,7 +218,7 @@ const EmployeesList = () => {
       },
       render: (id, record, index) => {
         ++index;
-        return index;
+        return (currentPage - 1) * pageSize + index;
       },
     },
     {
@@ -240,16 +239,16 @@ const EmployeesList = () => {
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
-                objectFit: 'cover'
+                objectFit: 'cover',
               }}
               preview={{
                 mask: <EyeOutlined />,
-                src: _.url
+                src: _.url,
               }}
             />
           ))}
         </span>
-      )
+      ),
     },
 
     {
@@ -322,7 +321,6 @@ const EmployeesList = () => {
       onFilter: (value, record) => record.status === value,
       sorter: (a, b) => a.status.localeCompare(b.status),
     },
-  
   ];
 
   return (
