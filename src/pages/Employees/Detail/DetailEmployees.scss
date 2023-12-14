@@ -55,9 +55,7 @@
   //   border-radius: 30px;
   // }
   
-  .details-card .ant-card-head {
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 1;
-  } 
+  .card-detail-employees .ant-card-body {
+    height: 500px;
+    overflow: auto;
+  }

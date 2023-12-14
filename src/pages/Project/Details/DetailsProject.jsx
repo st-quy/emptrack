@@ -69,8 +69,7 @@ const DetailsProject = () => {
   ];
   return (
     <div id="details-project">
-      {project ? (
-        <>
+      
           <Space className="w-100 justify-content-between">
             <Breadcrumb
               items={[
@@ -78,7 +77,7 @@ const DetailsProject = () => {
                 { key: 'projects_details', route: `/projects/details/${id}` },
               ]}
             />
-            <Button onClick={() => navigate(`/projects/details/${id}`)}>
+            <Button onClick={() => navigate(`/projects/update/${id}`)}>
               {t('BREADCRUMB.PROJECTS_UPDATE')}
             </Button>
           </Space>
@@ -86,9 +85,9 @@ const DetailsProject = () => {
           <Card
             className="card-detail-project"
             title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
-            style={{ borderRadius: '30px' }}
+            style={{ borderRadius: '30px ' }}
           >
-            <Form
+            {project ? <><Form
               labelCol={{
                 sm: { span: 24 },
                 md: { span: 24 },
@@ -149,11 +148,14 @@ const DetailsProject = () => {
                   </Form.Item>
                   <Form.Item label={t('PROJECTS.STATUS')}>
                     <Radio.Group name="status" value={project?.status}>
-                      <Radio value="active">
-                        {t('PROJECTS.STATUS_ACTIVE')}
+                      <Radio value="pending">
+                        {t('PROJECTS.STATUS_PENDING')}
                       </Radio>
-                      <Radio value="inactive">
-                        {t('PROJECTS.STATUS_INACTIVE')}
+                      <Radio value="progress">
+                        {t('PROJECTS.STATUS_IN_PROGRESS')}
+                      </Radio>
+                      <Radio value="completed">
+                        {t('PROJECTS.STATUS_COMPLETED')}
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
@@ -192,11 +194,10 @@ const DetailsProject = () => {
                 </Row>
               ))}
             </Form>
+            </> : <SpinLoading />}
+            
           </Card>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+      
     </div>
   );
 };

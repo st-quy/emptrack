@@ -4,6 +4,7 @@ import {
   Card,
   Image,
   Input,
+  Popover,
   Modal,
   Pagination,
   Select,
@@ -45,6 +46,21 @@ const EmployeesList = () => {
   const handleAvatarClick = () => {
     setModalVisible(true);
   };
+  const paginationOptions = {
+    total: data.filter((item) => !item.deletedAt).length,
+    current: currentPage,
+    pageSize: pageSize,
+    showSizeChanger: true,
+    showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+    className: 'my-3',
+    onChange: (page, pageSize) => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    },
+    locale: {
+      items_per_page: `/ ${t('TABLE.PAGE')}`,
+    },
+  };
   useEffect(() => {
     document.title = 'EMP | EMPLOYEES';
   }, []);
@@ -82,11 +98,7 @@ const EmployeesList = () => {
       const isStatusMatched = !status || item.status === status;
 
       return (
-        isNameMatched &&
-        isEmailMatched &&
-        // isManagerMatched &&
-        isPositionMatched &&
-        isStatusMatched
+        isNameMatched && isEmailMatched && isPositionMatched && isStatusMatched
       );
     });
 
@@ -115,9 +127,8 @@ const EmployeesList = () => {
             isDelete = false;
             break;
           }
+          if (project.manager[0].id === employeeId) isDelete = false;
         }
-
-        if (project.manager[0].id === selectedEmployeesId) isDelete = false;
       });
 
       if (isDelete) {
@@ -143,7 +154,6 @@ const EmployeesList = () => {
             }),
             2,
           );
-          // Loại bỏ dự án đã bị xóa khỏi mảng data
           setData(data.filter((item) => item.id !== selectedEmployeesId));
 
           setSelectedEmployeesId(null);
@@ -167,6 +177,7 @@ const EmployeesList = () => {
     Modal.warning({
       title: t('MODAL.WARNING_DELETE_TITLE'),
       content: t('MODAL.WARNING_DELETE'),
+      okText: t('BUTTON.OK'),
     });
   };
 
@@ -174,17 +185,18 @@ const EmployeesList = () => {
     {
       title: t('TABLE.ACTIONS'),
       key: 'action',
-      width: 50,
+      width: 20,
+      align: 'center',
       render: (text, record) => (
         <span>
-          <Tooltip title="Delete">
+          <Tooltip title={t('TABLE.DELETE')}>
             <Button
               type="link"
               icon={<DeleteOutlined style={{ color: 'red' }} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
-          <Tooltip title="View">
+          <Tooltip title={t('TABLE.VIEW')}>
             <Button
               type="link"
               icon={<EyeOutlined />}
@@ -198,20 +210,24 @@ const EmployeesList = () => {
       title: t('EMPLOYEES.ID'),
       dataIndex: 'id',
       key: 'id',
-      width: 30,
+      width: 10,
+      align: 'center',
+
       ellipsis: {
         showTitle: false,
       },
       render: (id, record, index) => {
         ++index;
-        return index;
+        return (currentPage - 1) * pageSize + index;
       },
     },
     {
       title: t('EMPLOYEES.AVATAR'),
       dataIndex: 'avatar',
       key: 'avatar',
-      width: 60,
+      width: 20,
+      align: 'center',
+
       render: (item) => (
         <span>
           {item.map((_, index) => (
@@ -223,54 +239,67 @@ const EmployeesList = () => {
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
-                objectFit: 'cover'
+                objectFit: 'cover',
               }}
               preview={{
                 mask: <EyeOutlined />,
-                src: _.url
+                src: _.url,
               }}
             />
           ))}
         </span>
-      )
+      ),
     },
 
     {
       title: t('EMPLOYEES.NAME'),
       dataIndex: 'name',
       key: 'name',
+      align: 'center',
+
       render: (text) => <a>{text}</a>,
-      width: 70,
+      width: 40,
     },
 
     {
-      title: t('EMPLOYEES.CITIZEN_CARD'),
-      dataIndex: 'cccd',
-      key: 'cccd',
-      width: 90,
+      title: t('EMPLOYEES.EMAIL'),
+      dataIndex: 'email',
+      key: 'email',
+      align: 'center',
+
+      width: 40,
     },
     {
       title: t('TABLE.MANAGER'),
       dataIndex: 'isManager',
       key: 'isManager',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       render: (isManager) => (
         <Tag color={isManager ? 'green' : 'red'}>{isManager ? '✔' : '✘'} </Tag>
       ),
       ellipsis: {
         showTitle: false,
       },
-      filters: [
-        { text: 'Manager', value: true },
-        { text: 'Non-Manager', value: false },
-      ],
       onFilter: (value, record) => record.isManager === value,
+      sorter: (a, b) => {
+        if (a.isManager === b.isManager) {
+          return 0;
+        } else if (a.isManager) {
+          return -1;
+        } else {
+          return 1;
+        }
+      },
     },
     {
       title: t('STATUS.STATUS'),
       dataIndex: 'status',
       key: 'status',
-      width: 80,
+      align: 'center',
+
+      width: 20,
       ellipsis: {
         showTitle: false,
       },
@@ -289,129 +318,105 @@ const EmployeesList = () => {
           </span>
         </Tooltip>
       ),
-      filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
-      ],
       onFilter: (value, record) => record.status === value,
-    },
-    {
-      title: t('EMPLOYEES.POSITION'),
-      dataIndex: 'position',
-      key: 'position',
-      width: 80,
-      ellipsis: {
-        showTitle: false,
-      },
+      sorter: (a, b) => a.status.localeCompare(b.status),
     },
   ];
 
   return (
     <div className="project_create">
-      {data.length > 0 ? (
-        <>
-          <Space className="w-100 justify-content-between">
-            <Breadcrumb items={[{ key: 'employees' }]} />
-            <Button onClick={() => navigate('/employees/create')}>
-              {t('BREADCRUMB.EMPLOYEES_CREATE')}
-            </Button>
-          </Space>
-          
-          <Card
-            title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
-            style={{
-              width: '100%',
-              margin: 'auto',
-              borderRadius: '30px',
-
-            }}
-          >
-            <Space size={[8, 16]} wrap className="w-100 py-3">
-              <TextSearch
-                label={t('EMPLOYEES.NAME')}
-                func={(e) => {
-                  setSearchParam({ ...searchParam, name: e.target.value });
-                }}
-              />
-              <TextSearch
-                label={t('EMPLOYEES.EMAIL')}
-                func={(e) => {
-                  setSearchParam({
-                    ...searchParam,
-                    email: e.target.value,
-                  });
-                }}
-              />
-              <Select
-                // defaultValue=""
-                style={{
-                  width: 200,
-                }}
-                options={[
-                  {
-                    value: 'active',
-                    label: 'Active',
-                  },
-                  {
-                    value: 'inactive',
-                    label: 'Inactive',
-                  },
-                ]}
-                placeholder={t('TEXT_SEARCH.SELECT', {
-                  label: t('TEXT_SEARCH.STATUS'),
-                })}
-                onChange={(e) => {
-                  setSearchParam({
-                    ...searchParam,
-                    status: e,
-                  });
-                }}
-                allowClear
-              />
-              <Button type="primary" onClick={() => handleSearch()}>
-                {t('BUTTON.SEARCH')}
-              </Button>
-            </Space>
-            <Table
-              columns={columns}
-              dataSource={
-                filteredData
-                  ? filteredData.slice(
-                      (currentPage - 1) * pageSize,
-                      currentPage * pageSize,
-                    )
-                  : []
-              }
-              scroll={{ y: 'calc(100vh - 370px)' }}
-              
-              pagination={false}
-              size="small"
-            />
-            <Pagination
-              total={filteredData.filter((item) => !item.deletedAt).length}
-              current={currentPage}
-              pageSize={pageSize}
-              showSizeChanger
-              showTotal={(total) => t('TABLE.TOTAL_EMPLOYEES', { total })}
-              className="my-3"
-              onChange={(page, pageSize) => {
-                setCurrentPage(page);
-                setPageSize(pageSize);
+      <>
+        <Space className="w-100 justify-content-between">
+          <Breadcrumb items={[{ key: 'employees' }]} />
+          <Button onClick={() => navigate('/employees/create')}>
+            {t('BREADCRUMB.EMPLOYEES_CREATE')}
+          </Button>
+        </Space>
+        <Card
+          title={t('TABLE.LIST_EMPLOYEES').toUpperCase()}
+          style={{
+            width: '100%',
+            margin: 'auto',
+            borderRadius: '30px',
+          }}
+        >
+          <Space size={[8, 16]} wrap className="w-100 py-3">
+            <TextSearch
+              label={t('EMPLOYEES.NAME')}
+              func={(e) => {
+                setSearchParam({ ...searchParam, name: e.target.value });
               }}
             />
-          </Card>
-          <Modal
-            title={t('TABLE.COMFIRM_DELETE')}
-            visible={showDeleteModal}
-            onOk={handleConfirmDelete}
-            onCancel={handleCancelDelete}
-          >
-            <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
-          </Modal>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+            <TextSearch
+              label={t('EMPLOYEES.EMAIL')}
+              func={(e) => {
+                setSearchParam({
+                  ...searchParam,
+                  email: e.target.value,
+                });
+              }}
+            />
+            <Select
+              style={{
+                width: 200,
+              }}
+              options={[
+                {
+                  value: 'active',
+                  label: t('PROJECTS.STATUS_ACTIVE'),
+                },
+                {
+                  value: 'inactive',
+                  label: t('PROJECTS.STATUS_INACTIVE'),
+                },
+              ]}
+              placeholder={t('TEXT_SEARCH.SELECT', {
+                label: t('TEXT_SEARCH.STATUS'),
+              })}
+              onChange={(e) => {
+                setSearchParam({
+                  ...searchParam,
+                  status: e,
+                });
+              }}
+              allowClear
+            />
+            <Button type="primary" onClick={() => handleSearch()}>
+              {t('BUTTON.SEARCH')}
+            </Button>
+          </Space>
+          <Table
+            locale={{
+              triggerDesc: t('BUTTON.SORT_DESC'),
+              triggerAsc: t('BUTTON.SORT_ASC'),
+              cancelSort: t('BUTTON.SORT_CANCEL'),
+            }}
+            columns={columns}
+            dataSource={
+              filteredData
+                ? filteredData.slice(
+                    (currentPage - 1) * pageSize,
+                    currentPage * pageSize,
+                  )
+                : []
+            }
+            scroll={{ y: 'calc(100vh - 370px)' }}
+            pagination={false}
+            size="small"
+          />
+          <Pagination {...paginationOptions} />
+        </Card>
+        <Modal
+          title={t('TABLE.COMFIRM_DELETE')}
+          visible={showDeleteModal}
+          onOk={handleConfirmDelete}
+          okText={t('BUTTON.OK')}
+          onCancel={handleCancelDelete}
+          cancelText={t('ACTION.CANCEL')}
+        >
+          <p>{t('EMPLOYEES.COMFIRM_DELETE_EMPLOYEES')}</p>
+        </Modal>
+      </>
     </div>
   );
 };

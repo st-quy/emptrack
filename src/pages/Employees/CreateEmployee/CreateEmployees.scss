@@ -1,8 +1,9 @@
 #employees {
-  .card {
-    border-radius: 30px;
-  }
-
+ 
+.card-create-employees .ant-card-body{
+  height: 500px;
+  overflow: auto;
+}
   .buttonSkills {
     height: 35px;
     border-radius: 12px;
