@@ -69,8 +69,7 @@ const DetailsProject = () => {
   ];
   return (
     <div id="details-project">
-      {project ? (
-        <>
+      
           <Space className="w-100 justify-content-between">
             <Breadcrumb
               items={[
@@ -86,9 +85,9 @@ const DetailsProject = () => {
           <Card
             className="card-detail-project"
             title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
-            style={{ borderRadius: '30px' }}
+            style={{ borderRadius: '30px ' }}
           >
-            <Form
+            {project ? <><Form
               labelCol={{
                 sm: { span: 24 },
                 md: { span: 24 },
@@ -195,11 +194,10 @@ const DetailsProject = () => {
                 </Row>
               ))}
             </Form>
+            </> : <SpinLoading />}
+            
           </Card>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+      
     </div>
   );
 };

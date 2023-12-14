@@ -52,7 +52,7 @@ function DetailEmployees() {
   return (
     <>
     <div id="employee_details" style={{ height: '100px' }}>
-      {employees ? (
+
         <>
           <Space className="w-100 justify-content-between">
             <Breadcrumb
@@ -66,17 +66,22 @@ function DetailEmployees() {
               
             </Button>
           </Space>
-          <div className="details-scroll-container"
+          {/* <div className="details-scroll-container"
           style={{
             borderRadius: '30px'
             }}
->
+> */}
             <Card
 
               title={t('EMPLOYEES.DETAILS')}
-              className="details-card" 
+              className="card-detail-employees" 
+              style={{
+                borderRadius: '30px'
+                }}
             >
-            <Form>
+            {employees ? <>
+            
+              <Form>
             <Row gutter={[16, 16]}>
                  {/* AVATAR EMPLOYEE */}
                  <Col span={12}>
@@ -341,10 +346,9 @@ function DetailEmployees() {
                 
               </Row>
             </Form>
+            </> : <SpinLoading />}
           </Card>
-         </div> </>
-          
-       ): <SpinLoading />}
+          </>
       </div>
     </>
   );

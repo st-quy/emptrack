@@ -172,7 +172,7 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px',
+          borderRadius: '30px', 
         }}
       >
         <Card
