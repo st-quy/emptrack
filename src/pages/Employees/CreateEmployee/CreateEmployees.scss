@@ -5,7 +5,7 @@
   overflow: auto;
 }
   .buttonSkills {
-    height: 30px;
+    height: 35px;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 500;
@@ -22,11 +22,10 @@
     outline: none;
   }
   .btn-skills {
-    background: #ee9ca7;
-    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
-    width: 130px;
-    height: 40px;
-    line-height: 42px;
+    background: linear-gradient(to bottom, #14141c, #0d0c22);
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
     padding: 0;
     border: none;
   }
@@ -42,7 +41,7 @@
     content: '';
     right: 0;
     top: 0;
-    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    background: linear-gradient(to bottom, #14141c, #0d0c22);
     transition: all 0.3s ease;
   }
   .btn-skills:before {
@@ -72,7 +71,7 @@
     content: '';
     left: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    background: linear-gradient(to bottom, #14141c, #0d0c22);
     transition: all 0.3s ease;
   }
   .btn-skills span:before {

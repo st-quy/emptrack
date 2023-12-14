@@ -256,8 +256,9 @@
     "GENDER_MEN": "Men",
     "GENDER_WOMEN": "Women",
     "GENDER_UNKNOWN": "Unknown",
-    "ACTIVE": "Active",
-    "UNACTIVE": "Unactive",
+    "ASSIGNED": "Assigned",
+    "UNASSIGNED": "Unassigned",
+    "OFF": "Off",
     "MANAGER": "Yes",
     "NOT_MANAGER": "No",
     "DETAILS": "Detail employees",
@@ -267,7 +268,8 @@
     "REMOVE_SKILL": "Remove Skill",
     "ADDRESS": "Address",
     "ID": "No.",
-    "SKILLS_LIST":"Skills list"
+    "ADD_POSITION": "Add position",
+    "SKILLS_LIST": "Skills list"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",
@@ -282,20 +284,20 @@
     "STATUS_REQUIRED": "Please select a status",
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
-    "LINE_MANAGER_REQUIRED": "Please select the line manager",
     "BIRTH_MAX": "Date of Birth cannot be greater than current date",
     "BIRTH_REQUIRED": "Please select Date of Birth",
     "BIRTH_ENOUGH_AGE": "Please choose a Date of Birth greater than 18 years old",
-    "DESCRIPTION_REQUIRED": "Please enter description",
     "CITIZEN_CARD_REQUIRED": "Please enter citizen identification number",
     "CITIZEN_CARD_MATCH": "Citizen identification number must be 10 numbers",
     "AVATAR": "Please select avatar",
-    "SKILL_REQUIRED": "Please enter skill name",
+    "SKILL_REQUIRED": "Please select skill name",
     "EXP_REQUIRED": "Please enter year of experience",
     "ADDRESS_REQUIRED": "Please enter address",
     "EMAIL_REQUIRED": "Please enter email address",
     "SKILL": "Please enter at least 1 skill",
-    "EMAIL_INVALID": "Email must include the @ character"
+    "EMAIL_INVALID": "Email must include the @ character",
+    "ADD_POSITION": "Please enter a position before adding",
+    "ADD_SKILL": "Please enter a skill before adding"
   },
   "DRAWER": {
     "TITLE": "History Tracking"

@@ -27,9 +27,6 @@ const ValidationSchema = () => {
       t('EMPLOYEE_VALIDATION.IS_MANAGER_REQUIRED'),
     ),
     position: Yup.string().required(t('EMPLOYEE_VALIDATION.POSITION_REQUIRED')),
-    lineManager: Yup.string().required(
-      t('EMPLOYEE_VALIDATION.LINE_MANAGER_REQUIRED'),
-    ),
     birth: Yup.date()
       .max(new Date(), t('EMPLOYEE_VALIDATION.BIRTH_MAX'))
       .test('age', t('EMPLOYEE_VALIDATION.BIRTH_ENOUGH_AGE'), function (value) {
@@ -42,9 +39,6 @@ const ValidationSchema = () => {
         return value <= minBirthDate;
       })
       .required(t('EMPLOYEE_VALIDATION.BIRTH_REQUIRED')),
-    description: Yup.string().required(
-      t('EMPLOYEE_VALIDATION.DESCRIPTION_REQUIRED'),
-    ),
     address: Yup.string().required(t('EMPLOYEE_VALIDATION.ADDRESS_REQUIRED')),
     citizen_card: Yup.string()
       .matches(/^[0-9]{10}$/, t('EMPLOYEE_VALIDATION.CITIZEN_CARD_MATCH'))
