@@ -172,11 +172,11 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px',
+          borderRadius: '30px', 
         }}
       >
         <Card
-          className="details-card"
+          className="card-create-project"
           title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
           style={
             {

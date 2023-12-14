@@ -50,8 +50,7 @@ function DetailEmployees() {
   return (
     <>
       <div id="employee_details" style={{ height: '100px' }}>
-        {employees ? (
-          <>
+       
             <Space className="w-100 justify-content-between">
               <Breadcrumb
                 items={[
@@ -66,17 +65,16 @@ function DetailEmployees() {
                 {t('BREADCRUMB.EMPLOYEES_UPDATE')}
               </Button>
             </Space>
-            <div
-              className="details-scroll-container"
-              style={{
-                borderRadius: '30px',
-              }}
-            >
+           
               <Card
                 title={t('EMPLOYEES.DETAILS').toUpperCase()}
-                className="details-card"
+                className="card-detail-employees"
+                style={{
+                  borderRadius: '30px',
+                }}
               >
-                <Form
+             {employees ? <>
+              <Form
                   labelCol={{
                     sm: { span: 24 },
                     md: { span: 24 },
@@ -387,13 +385,11 @@ function DetailEmployees() {
                     </Row>
                   ))}
                 </Form>
+             </> : <SpinLoading/>}
               </Card>
             </div>{' '}
-          </>
-        ) : (
-          <SpinLoading />
-        )}
-      </div>
+          
+    
     </>
   );
 }

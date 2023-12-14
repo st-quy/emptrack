@@ -224,7 +224,7 @@ const CreateEmployee = () => {
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
-      <div
+      {/* <div
         className="details-card" 
               style={{
           maxHeight: '80vh',
@@ -233,8 +233,10 @@ const CreateEmployee = () => {
           borderRadius: '30px'
           
         }}
-      >
-        <Card title={t('EMPLOYEES.CREATE')} className="card">
+      > */}
+        <Card  title={t('EMPLOYEES.CREATE')} className="card-create-employees"
+        style={{borderRadius: '30px'}}>
+          
           <Form form={form}>
             <Row gutter={[16, 0]}>
               {/* CODE EMPLOYEE */}
@@ -900,8 +902,9 @@ const CreateEmployee = () => {
               </Form.Item>
             </Row>
           </Form>
+          
         </Card>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

@@ -176,15 +176,14 @@ const ProjectUpdate = () => {
   };
   return (
     <div id="project_update">
-      {project ? (
-        <>
+      
           <Space className="w-100 justify-content-between">
             <Breadcrumb items={breadcrumbItems} />
             <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
           </Space>
 
           <Card
-            className="card-create-project"
+            className="card-update-project"
             title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
             style={{
               // maxHeight: '80vh',
@@ -193,6 +192,7 @@ const ProjectUpdate = () => {
               borderRadius: '30px',
             }}
           >
+          {project ? <>
             <Formik initialValues={initialValues} validationSchema={schema}>
               {({ values }) => (
                 <Form
@@ -519,11 +519,9 @@ const ProjectUpdate = () => {
                 </Form>
               )}
             </Formik>
+          </>: <SpinLoading/>}
           </Card>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+        
     </div>
   );
 };
