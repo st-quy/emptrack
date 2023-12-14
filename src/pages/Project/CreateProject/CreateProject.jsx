@@ -176,7 +176,7 @@ const CreateProject = () => {
         }}
       >
         <Card
-          className="details-card"
+          className="card-create-project"
           title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
           style={
             {
