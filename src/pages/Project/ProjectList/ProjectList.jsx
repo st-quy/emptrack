@@ -12,8 +12,6 @@ import {
   Space,
   Table,
   Tooltip,
-  Menu,
-  Dropdown,
 } from 'antd';
 import { filter } from 'lodash';
 import moment from 'moment';
@@ -299,14 +297,23 @@ const ProjectList = () => {
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
-              backgroundColor: status === 'active' ? 'green' : 'red',
+              backgroundColor:
+                status === 'completed'
+                  ? 'green'
+                  : status === 'progress'
+                  ? 'orange'
+                  : 'gray',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
             }}
           >
-            {status}
+            {status === 'pending'
+              ? t('PROJECTS.STATUS_PENDING')
+              : status === 'progress'
+              ? t('PROJECTS.STATUS_IN_PROGRESS')
+              : t('PROJECTS.STATUS_COMPLETED')}
           </span>
         </Tooltip>
       ),
@@ -370,12 +377,16 @@ const ProjectList = () => {
               }}
               options={[
                 {
-                  value: 'active',
-                  label: t('PROJECTS.STATUS_ACTIVE'),
+                  value: 'pending',
+                  label: t('PROJECTS.STATUS_PENDING'),
                 },
                 {
-                  value: 'inactive',
-                  label: t('PROJECTS.STATUS_INACTIVE'),
+                  value: 'progress',
+                  label: t('PROJECTS.STATUS_IN_PROGRESS'),
+                },
+                {
+                  value: 'completed',
+                  label: t('PROJECTS.STATUS_COMPLETED'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
@@ -394,11 +405,11 @@ const ProjectList = () => {
             </Button>
           </Space>
           <Table
-          locale={{
-            triggerDesc: t('BUTTON.SORT_DESC'),
-            triggerAsc: t('BUTTON.SORT_ASC'),
-            cancelSort: t('BUTTON.SORT_CANCEL'),
-          }}
+            locale={{
+              triggerDesc: t('BUTTON.SORT_DESC'),
+              triggerAsc: t('BUTTON.SORT_ASC'),
+              cancelSort: t('BUTTON.SORT_CANCEL'),
+            }}
             columns={columns}
             dataSource={
               filteredData.length > 0

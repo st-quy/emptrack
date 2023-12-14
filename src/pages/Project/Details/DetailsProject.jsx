@@ -149,11 +149,14 @@ const DetailsProject = () => {
                   </Form.Item>
                   <Form.Item label={t('PROJECTS.STATUS')}>
                     <Radio.Group name="status" value={project?.status}>
-                      <Radio value="active">
-                        {t('PROJECTS.STATUS_ACTIVE')}
+                      <Radio value="pending">
+                        {t('PROJECTS.STATUS_PENDING')}
                       </Radio>
-                      <Radio value="inactive">
-                        {t('PROJECTS.STATUS_INACTIVE')}
+                      <Radio value="progress">
+                        {t('PROJECTS.STATUS_IN_PROGRESS')}
+                      </Radio>
+                      <Radio value="completed">
+                        {t('PROJECTS.STATUS_COMPLETED')}
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
