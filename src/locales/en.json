@@ -247,7 +247,7 @@
     "CITIZEN_CARD": "Citizen Indentity Card",
     "GENDER": "Gender",
     "STATUS": "Status",
-    "SKILLS": "Skills",
+    "SKILLS": "Skill",
     "POSITION": "Position",
     "LINE_MANAGER": "Line Manager",
     "DESCRIPTION": "Description",
@@ -262,11 +262,12 @@
     "NOT_MANAGER": "No",
     "DETAILS": "Detail employees",
     "SKILL_NAME": "Skill name",
-    "EXP": "Years Of Experience",
+    "EXP": "Experience",
     "ADD_SKILL": "Add Skill",
     "REMOVE_SKILL": "Remove Skill",
     "ADDRESS": "Address",
-    "ID": "No."
+    "ID": "No.",
+    "SKILLS_LIST":"Skills list"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",

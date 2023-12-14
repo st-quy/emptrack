@@ -262,11 +262,12 @@
     "NOT_MANAGER": "Không",
     "DETAILS": "Chi tiết nhân viên",
     "SKILL_NAME": "Tên kĩ năng",
-    "EXP": "Năm kinh nghiệm",
+    "EXP": "Kinh nghiệm",
     "ADD_SKILL": "Thêm kĩ năng",
     "REMOVE_SKILL": "Xóa kĩ năng",
     "ADDRESS": "Địa chỉ",
-    "ID": "STT"
+    "ID": "STT",
+    "SKILLS_LIST":"Danh sách kĩ năng"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
