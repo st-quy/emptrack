@@ -36,7 +36,7 @@ const Login = () => {
     return <Navigate to="/" />;
   }
   useEffect(() => {
-    document.title = 'EMP | LOGIN';
+    document.title = 'EMP | Login';
   }, []);
 
   const handleClick = () => {

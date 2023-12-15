@@ -29,7 +29,8 @@
     "RESET": "Đặt lại",
     "SORT_ASC": "Nhấn để sắp xếp",
     "SORT_DESC": "Nhấn để sắp xếp",
-    "SORT_CANCEL": "Nhấn để hủy Sắp xếp"
+    "SORT_CANCEL": "Nhấn để hủy Sắp xếp",
+    "ADD": "Thêm"
   },
   "TABLE": {
     "ACTIONS": "Hành động",
@@ -64,7 +65,17 @@
     "PAGE": "Trang",
     "HISTORY": "Lịch Sử",
     "DELETE": "Xóa",
-    "VIEW": "Xem"
+    "VIEW": "Xem",
+    "TEAM_MANAGER": "Quản lý team",
+    "END_DATE": "Ngày kết thúc",
+    "STATUS": "Trạng thái",
+    "PROGRESS": "Tiến độ",
+    "BIRTHDATE_BUDDIES": "Sinh nhật sắp tới",
+    "INCOME": "Thu nhập",
+    "YEAR": "Năm",
+    "ACCESS_FROM": "Truy cập từ",
+    "JOINED": "Tham gia",
+    "READY_JOIN": "Sắp tham gia"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -157,7 +168,8 @@
     "INCOME": "Thu nhập của ST United",
     "STATISTIC_WORK": "Thống kê theo công việc",
     "STATISTIC_POSITION": "Thống kê theo vị trí",
-    "STATISTIC_COMPANY": "Biến động công ty"
+    "STATISTIC_COMPANY": "Biến động công ty",
+    "TOTAL_EMPLOYEES": "Tổng nhân viên"
   },
   "USERS": {
     "NAME": "Tên",
@@ -231,9 +243,11 @@
     "CREATED_ERROR": "{{field}} thêm không thành công",
     "UPDATED_SUCCESS": "Cập nhật {{field}} thành công",
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
+    "CREATED_ERROR_SAME_TECH": "Công nghệ đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",
-    "LOGIN_ERROR": "Đăng nhập thất bại"
+    "LOGIN_ERROR": "Đăng nhập thất bại",
+    "DUPLICATE_FIELD": "{{field}} đã tồn tại"
   },
   "EMPLOYEES": {
     "COMFIRM_DELETE_EMPLOYEES": "Bạn có chắc chắn muốn xóa nhân viên này ?",
@@ -269,7 +283,9 @@
     "ADDRESS": "Địa chỉ",
     "ID": "STT",
     "ADD_POSITION": "Thêm chức vụ",
-    "SKILLS_LIST": "Danh sách kĩ năng"
+    "SKILLS_LIST": "Danh sách kĩ năng",
+    "YEARS": "Năm",
+    "MONTHS": "Tháng"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
@@ -310,5 +326,8 @@
     "TYPE": "Nhập {{label}}",
     "SELECT": "Chọn {{label}}",
     "STATUS": "Trạng thái"
+  },
+  "CARD": {
+    "PROJECT_SUMMARY": "Tóm tắt dự án"
   }
 }

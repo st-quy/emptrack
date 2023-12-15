@@ -11,9 +11,9 @@ const Schema = () => {
     // description: Yup.string()
     //   .trim()
     //   .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.DESCRIPTION') })),
-    technical: Yup.string()
-      .trim()
-      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') })),
+    technical: Yup.array()
+      .required(t('VALIDATE.REQUIRED', { field: t('PROJECTS.TECHNICAL') }))
+      .min(1, t('VALIDATE.MINONE', { field: t('PROJECTS.TECHNICAL') })),
     dateRange: Yup.object().shape({
       startDate: Yup.string().required(
         t('VALIDATE.REQUIRED', { field: t('PROJECTS.TIME_START') }),

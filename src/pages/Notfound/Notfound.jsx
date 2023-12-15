@@ -3,11 +3,14 @@ import Button from '../../components/atoms/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import './Notfound.scss';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 const NotFound = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  useEffect(() => {
+    document.title = 'EMP | Not Found';
+  }, []);
   return (
     <Row id="notfound-container">
       <Col md={12} className="notfound-children">

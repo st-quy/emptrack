@@ -41,8 +41,8 @@ const CreateEmployee = () => {
   const { t } = useTranslation();
 
   const selectAfterOptions = [
-    { value: 'years', label: 'years' },
-    { value: 'months', label: 'months' },
+    { value: 'years', label: t('EMPLOYEES.YEARS') },
+    { value: 'months', label: t('EMPLOYEES.MONTHS') },
   ];
 
   const formik = useFormik({
@@ -745,7 +745,7 @@ const CreateEmployee = () => {
                   <Option value="unassigned">
                     {t('EMPLOYEES.UNASSIGNED')}
                   </Option>
-                  <Option value="assigned">{t('EMPLOYEES.ASSIGNED')}</Option>
+                  <Option value="assigned ">{t('EMPLOYEES.ASSIGNED')}</Option>
                   <Option value="off">{t('EMPLOYEES.OFF')}</Option>
                 </Select>
               </Item>
@@ -791,13 +791,14 @@ const CreateEmployee = () => {
                           margin: '10px 0',
                         }}
                       />
-                      <Space
+                      <Space.Compact
                         style={{
-                          padding: '0 8px 5px',
+                          padding: '0 8px 4px',
+                          width: '100%',
                         }}
                       >
                         <Input
-                          style={{ width: '500px' }}
+                          style={{ borderRadius: '12px 0 0 12px' }}
                           size="large"
                           placeholder={t('EMPLOYEES.POSITION')}
                           ref={inputRef}
@@ -809,10 +810,12 @@ const CreateEmployee = () => {
                           type="text"
                           icon={<PlusOutlined />}
                           onClick={addItem}
+                          className="button ant-btn-primary"
+                          style={{ height: 40 }}
                         >
                           {t('EMPLOYEES.ADD_POSITION')}
                         </Button>
-                      </Space>
+                      </Space.Compact>
                     </>
                   )}
                   options={items.map((item) => ({
@@ -910,6 +913,7 @@ const CreateEmployee = () => {
                                 />
 
                                 <Input
+                                placeholder={t('EMPLOYEES.ADD_SKILL')}
                                   size="large"
                                   value={inputSkill}
                                   ref={inputRef}
@@ -920,10 +924,12 @@ const CreateEmployee = () => {
                                   type="text"
                                   icon={<PlusOutlined />}
                                   onClick={addSkillToServer}
+                                  className="button ant-btn-primary"
                                   style={{
                                     width: '100%',
                                     paddingLeft: '0px',
                                     paddingRight: '0px',
+                                    marginTop: '8px'
                                   }}
                                 >
                                   {t('EMPLOYEES.ADD_SKILL')}

@@ -7,10 +7,11 @@ import 'echarts/lib/component/grid';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/dataZoom';
 import { axiosInstance } from '../../../config/axios';
-
+import { useTranslation } from 'react-i18next';
 const LineChart = () => {
   const chartRef = useRef(null);
   const [dataChart, setDataChart] = useState();
+  const { t, i18n } = useTranslation();
 
   async function countObjectsByYear(data) {
     const counts = data.reduce((accumulator, currentValue) => {
@@ -41,7 +42,7 @@ const LineChart = () => {
     setDataChart(incomeArray);
   }
 
-  // Gọi hàm để tạo mảng incomeArray
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +55,20 @@ const LineChart = () => {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const updateChart = () => {
+      if (chartRef.current) {
+        const chartInstance = echarts.getInstanceByDom(chartRef.current);
+        if (chartInstance) {
+          const option = chartInstance.getOption();
+          option.yAxis[0].name = t('TABLE.INCOME');
+          chartInstance.setOption(option);
+        }
+      }
+    };
 
+    updateChart();
+  }, [t]);
   useEffect(() => {
     if (dataChart) {
       const rawData = dataChart;
@@ -129,7 +143,7 @@ const LineChart = () => {
         nameLocation: 'middle',
       },
       yAxis: {
-        name: 'Income',
+        name: t('TABLE.INCOME'),
       },
       series: seriesList,
     };

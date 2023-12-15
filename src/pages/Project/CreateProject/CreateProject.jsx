@@ -3,16 +3,16 @@ import {
   Card,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
-  Radio,
   Row,
   Select,
   Space,
   Typography,
 } from 'antd';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
@@ -41,6 +41,9 @@ const CreateProject = () => {
   const [employeesSelection, setEmployeesSelection] = useState();
   const [members, setMembers] = useState([emptyMember]);
   const schema = Schema();
+
+  const [technologies, setTechnologies] = useState();
+
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_create', route: '/projects/create' },
@@ -53,8 +56,8 @@ const CreateProject = () => {
     //UI render 1 row member
     members: members,
     dateRange: { startDate: '', endDate: '' },
-    status: 'pending',
-    technical: '',
+    status: 'progress',
+    technical: [],
   };
 
   const yupSync = {
@@ -70,7 +73,9 @@ const CreateProject = () => {
       const allProjects = await axiosInstance
         .get('projects')
         .then((res) => res.data);
-      const isSameName = allProjects.find((project) => project.name === name);
+      const isSameName = allProjects.find(
+        (project) => project.name.toLowerCase() === name.toLowerCase(),
+      );
       if (!isSameName) {
         const managerName = employeesSelection.find(
           (e) => e.id === value.manager,
@@ -88,7 +93,7 @@ const CreateProject = () => {
         });
         let description = value.description.trim().replace(/  +/g, ' ');
         let status = value.status;
-        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let technical = value.technical;
         let startDate = value.dateRange.startDate;
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
@@ -142,6 +147,14 @@ const CreateProject = () => {
             2,
           );
         }
+      } else {
+        Toast(
+          'warning',
+          t('TOAST.DUPLICATE_FIELD', {
+            field: t('PROJECTS.NAME'),
+          }),
+          2,
+        );
       }
     },
   });
@@ -150,6 +163,11 @@ const CreateProject = () => {
       await axiosInstance.get('employees').then((res) => {
         const employeesSelection = res.data.filter((em) => !em.deletedAt);
         setEmployeesSelection(employeesSelection);
+      });
+
+      await axiosInstance.get('technology').then((res) => {
+        const items = res.data.map((item) => item.name);
+        setTechnologies(items);
       });
     };
     fetchData();
@@ -160,6 +178,51 @@ const CreateProject = () => {
     return employeesSelection?.filter(
       (option) => !selectedOptions.includes(option.id),
     );
+  };
+
+  const [newTech, setNewTech] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const inputRef = useRef(null);
+  const onTechChange = (event) => {
+    setNewTech(event.target.value);
+
+    if (event.target.value.trim().replace(/  +/g, ' ') !== '') {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
+  const addItem = async (e) => {
+    e.preventDefault();
+    const trimmedNewTech = newTech.trim().replace(/  +/g, ' ');
+    const isExist = technologies.some(
+      (t) => t.toLowerCase() === trimmedNewTech.toLowerCase(),
+    );
+    if (isExist) {
+      setNewTech('');
+      Toast('error', t('TOAST.CREATED_ERROR_SAME_TECH'), 2);
+      return;
+    }
+
+    if (trimmedNewTech !== '' && !isExist) {
+      await axiosInstance
+        .post('technology', { name: trimmedNewTech })
+        .then((res) => {});
+
+      setTechnologies([...technologies, newTech]);
+      setNewTech('');
+      setIsDisabled(true);
+      setTimeout(() => {
+        inputRef.current?.focus();
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('PROJECTS.TECHNICAL').toLowerCase(),
+          }),
+          2,
+        );
+      }, 0);
+    }
   };
   return (
     <div id="project_create">
@@ -172,19 +235,12 @@ const CreateProject = () => {
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px', 
+          borderRadius: '30px',
         }}
       >
         <Card
           className="card-create-project"
           title={t('BREADCRUMB.PROJECTS_CREATE').toUpperCase()}
-          style={
-            {
-              // maxHeight: '80vh',
-              // maxWidth: '100%',
-              // overflowY: 'auto',
-            }
-          }
         >
           <Formik initialValues={initialValues} validationSchema={schema}>
             {({ values }) => (
@@ -270,17 +326,6 @@ const CreateProject = () => {
                     <Form.Item
                       name="description"
                       label={t('PROJECTS.DESCRIPTION')}
-                      // help={
-                      //   formik.errors.description &&
-                      //   formik.touched.description && (
-                      //     <div className="text-danger">
-                      //       {formik.errors.description}
-                      //     </div>
-                      //   )
-                      // }
-                      // validateFirst
-                      // rules={[yupSync]}
-                      // hasFeedback
                     >
                       <TextArea
                         rows={4}
@@ -348,32 +393,58 @@ const CreateProject = () => {
                       ]}
                       hasFeedback
                     >
-                      <Input
+                      <Select
+                        mode="multiple"
+                        onChange={(value) => {
+                          formik.setFieldValue('technical', value);
+                        }}
+                        allowClear
                         placeholder={t('PROJECTS.TECHNICAL')}
-                        onChange={formik.handleChange}
+                        dropdownRender={(menu) => (
+                          <>
+                            {menu}
+                            <Divider
+                              style={{
+                                margin: '8px 0',
+                              }}
+                            />
+                            <Space.Compact
+                              style={{
+                                padding: '0 8px 4px',
+                                width: '100%',
+                              }}
+                            >
+                              <Input
+                                style={{
+                                  borderRadius: '12px 0 0 12px',
+                                }}
+                                placeholder={t('VALIDATE.PLACEHOLDER', {
+                                  name: t(
+                                    'PROJECTS.TECHNICAL',
+                                  ).toLocaleLowerCase(),
+                                })}
+                                ref={inputRef}
+                                value={newTech}
+                                onChange={onTechChange}
+                                onKeyDown={(e) => e.stopPropagation()}
+                              />
+                              <Button
+                                type="text"
+                                icon={<PlusOutlined />}
+                                onClick={addItem}
+                                className="button ant-btn-primary"
+                                disabled={isDisabled}
+                              >
+                                {t('BUTTON.ADD')}
+                              </Button>
+                            </Space.Compact>
+                          </>
+                        )}
+                        options={technologies?.map((item) => ({
+                          label: item,
+                          value: item,
+                        }))}
                       />
-                    </Form.Item>
-                    <Form.Item
-                      label={t('PROJECTS.STATUS')}
-                      className="label-required"
-                    >
-                      <Radio.Group
-                        name="status"
-                        value={formik.values.status}
-                        onChange={(e) =>
-                          formik.setFieldValue('status', e.target.value)
-                        }
-                      >
-                        <Radio value="pending">
-                          {t('PROJECTS.STATUS_PENDING')}
-                        </Radio>
-                        <Radio value="progress">
-                          {t('PROJECTS.STATUS_IN_PROGRESS')}
-                        </Radio>
-                        <Radio value="completed">
-                          {t('PROJECTS.STATUS_COMPLETED')}
-                        </Radio>
-                      </Radio.Group>
                     </Form.Item>
                   </Col>
                 </Row>
