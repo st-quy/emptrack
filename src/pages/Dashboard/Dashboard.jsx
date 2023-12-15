@@ -1,13 +1,12 @@
 import { Card, Col, Row, Space, Statistic, Typography } from 'antd';
-import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
-import './Dashboard.scss';
-import LineChart from '../../components/charts/LineChart/LineChart';
-import WorkingPieChart from '../../components/charts/PieChart/WorkingPieChart';
-import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
 import { useEffect } from 'react';
-import TableProgress from '../../components/molecules/TableProgress/TableProgress';
-import { useTranslation } from 'react-i18next';
 import CountUp from 'react-countup';
+import { useTranslation } from 'react-i18next';
+import LineChart from '../../components/charts/LineChart/LineChart';
+import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
+import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
+import TableProgress from '../../components/molecules/TableProgress/TableProgress';
+import './Dashboard.scss';
 
 const Dashboard = () => {
   const { t } = useTranslation();

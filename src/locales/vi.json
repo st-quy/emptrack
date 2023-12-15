@@ -29,7 +29,8 @@
     "RESET": "Đặt lại",
     "SORT_ASC": "Nhấn để sắp xếp",
     "SORT_DESC": "Nhấn để sắp xếp",
-    "SORT_CANCEL": "Nhấn để hủy Sắp xếp"
+    "SORT_CANCEL": "Nhấn để hủy Sắp xếp",
+    "ADD": "Thêm"
   },
   "TABLE": {
     "ACTIONS": "Hành động",
@@ -231,6 +232,7 @@
     "CREATED_ERROR": "{{field}} thêm không thành công",
     "UPDATED_SUCCESS": "Cập nhật {{field}} thành công",
     "CREATED_ERROR_SAME_NAME": "Tên dự án đã tồn tại",
+    "CREATED_ERROR_SAME_TECH": "Công nghệ đã tồn tại",
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",
     "LOGIN_ERROR": "Đăng nhập thất bại",

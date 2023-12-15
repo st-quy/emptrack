@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
   Radio,
@@ -13,7 +14,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
@@ -46,6 +47,8 @@ const ProjectUpdate = () => {
   const [dataTracking, setDataTracking] = useState([]);
   const [membersHistory, setMemberHistory] = useState([]);
   const schema = Schema();
+  const [technologies, setTechnologies] = useState();
+
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_details', route: `/projects/details/${id}` },
@@ -80,6 +83,11 @@ const ProjectUpdate = () => {
               };
             }),
           );
+        });
+
+        await axiosInstance.get('technology').then((res) => {
+          const items = res.data.map((item) => item.name);
+          setTechnologies(items);
         });
       } catch (error) {
         console.log('error');
@@ -137,7 +145,9 @@ const ProjectUpdate = () => {
       const allProjects = await axiosInstance
         .get('projects')
         .then((res) => res.data.filter((p) => p.id !== id));
-      const isSameName = allProjects.find((project) => project.name === name);
+      const isSameName = allProjects.find(
+        (project) => project.name.toLowerCase() === name.toLowerCase(),
+      );
       if (!isSameName) {
         const managerName = employeesSelection.find(
           (e) => e.id === value.manager,
@@ -156,7 +166,7 @@ const ProjectUpdate = () => {
         });
         let description = value.description.trim().replace(/  +/g, ' ');
         let status = value.status;
-        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let technical = value.technical;
         let startDate = value.dateRange.startDate;
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
@@ -219,6 +229,51 @@ const ProjectUpdate = () => {
     return employeesSelection?.filter(
       (option) => !selectedOptions.includes(option.id),
     );
+  };
+
+  const [newTech, setNewTech] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const inputRef = useRef(null);
+  const onTechChange = (event) => {
+    setNewTech(event.target.value);
+
+    if (event.target.value.trim().replace(/  +/g, ' ') !== '') {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
+  const addItem = async (e) => {
+    e.preventDefault();
+    const trimmedNewTech = newTech.trim().replace(/  +/g, ' ');
+    const isExist = technologies.some(
+      (t) => t.toLowerCase() === trimmedNewTech.toLowerCase(),
+    );
+    if (isExist) {
+      setNewTech('');
+      Toast('error', t('TOAST.CREATED_ERROR_SAME_TECH'), 2);
+      return;
+    }
+
+    if (trimmedNewTech !== '' && !isExist) {
+      await axiosInstance
+        .post('technology', { name: trimmedNewTech })
+        .then((res) => {});
+
+      setTechnologies([...technologies, newTech]);
+      setNewTech('');
+      setIsDisabled(true);
+      setTimeout(() => {
+        inputRef.current?.focus();
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('PROJECTS.TECHNICAL').toLowerCase(),
+          }),
+          2,
+        );
+      }, 0);
+    }
   };
   return (
     <div id="project_update">
@@ -399,7 +454,7 @@ const ProjectUpdate = () => {
                             </div>
                           )
                         }
-                        initialValue={values.technical}
+                        // initialValue={values.technical}
                         validateFirst
                         rules={[
                           yupSync,
@@ -409,9 +464,58 @@ const ProjectUpdate = () => {
                         ]}
                         hasFeedback
                       >
-                        <Input
+                        <Select
+                          defaultValue={values.technical}
+                          mode="multiple"
+                          onChange={(value) => {
+                            formik.setFieldValue('technical', value);
+                          }}
+                          allowClear
                           placeholder={t('PROJECTS.TECHNICAL')}
-                          onChange={formik.handleChange}
+                          dropdownRender={(menu) => (
+                            <>
+                              {menu}
+                              <Divider
+                                style={{
+                                  margin: '8px 0',
+                                }}
+                              />
+                              <Space.Compact
+                                style={{
+                                  padding: '0 8px 4px',
+                                  width: '100%',
+                                }}
+                              >
+                                <Input
+                                  style={{
+                                    borderRadius: '12px 0 0 12px',
+                                  }}
+                                  placeholder={t('VALIDATE.PLACEHOLDER', {
+                                    name: t(
+                                      'PROJECTS.TECHNICAL',
+                                    ).toLocaleLowerCase(),
+                                  })}
+                                  ref={inputRef}
+                                  value={newTech}
+                                  onChange={onTechChange}
+                                  onKeyDown={(e) => e.stopPropagation()}
+                                />
+                                <Button
+                                  type="text"
+                                  icon={<PlusOutlined />}
+                                  onClick={addItem}
+                                  className="button ant-btn-primary"
+                                  disabled={isDisabled}
+                                >
+                                  {t('BUTTON.ADD')}
+                                </Button>
+                              </Space.Compact>
+                            </>
+                          )}
+                          options={technologies?.map((item) => ({
+                            label: item,
+                            value: item,
+                          }))}
                         />
                       </Form.Item>
                       <Form.Item
