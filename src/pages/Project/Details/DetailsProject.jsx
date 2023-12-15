@@ -60,20 +60,29 @@ const DetailsProject = () => {
   }
 
   const options = [
-    { label: 'reactjs', value: 'ReactJS', color: 'green' },
-    { label: 'php', value: 'PHP', color: 'purple' },
-    { label: 'mongodb', value: 'MongoDB', color: 'blue' },
-    { label: 'postgresql', value: 'PostgreSQL', color: 'orange' },
-    { label: 'git', value: 'Git', color: 'volcano' },
-    { label: 'docker', value: 'Docker', color: 'geekblue' },
-    { label: 'aws', value: 'AWS', color: 'purple' },
-    { label: 'kubernetes', value: 'Kubernetes', color: 'volcano' },
-    { label: 'laravel', value: 'Laravel', color: 'purple' },
-    { label: 'javascript', value: 'Javascript', color: 'blue' },
-    { label: 'vuejs', value: 'VueJS', color: 'blue' },
-    { label: 'nodejs', value: 'NodeJS', color: 'purple' },
-    { label: 'typescript', value: 'TypeScript', color: 'volcano' },
-    { label: 'mysql', value: 'MySQL', color: 'orange' },
+    { label: 'fullstack', value: 'fullstack', color: 'green' },
+    { label: 'devops', value: 'devops', color: 'blue' },
+    { label: 'backend', value: 'backend', color: 'orange' },
+    { label: 'frontend', value: 'frontend', color: 'geekblue' },
+    { label: 'BA', value: 'BA', color: 'cyan' },
+    { label: 'tester', value: 'tester', color: 'volcano' },
+    { label: 'PO', value: 'product owner', color: 'geekblue' },
+    { label: 'SM', value: 'scrum master', color: 'purple' },
+
+    { label: 'reactjs', value: 'ReactJS', color: 'pink' },
+    { label: 'php', value: 'PHP', color: 'maroon' },
+    { label: 'mongodb', value: 'MongoDB', color: 'peachpuff' },
+    { label: 'postgresql', value: 'PostgreSQL', color: 'goldenrod' },
+    { label: 'git', value: 'Git', color: 'darkviolet' },
+    { label: 'docker', value: 'Docker', color: 'cyan' },
+    { label: 'aws', value: 'AWS', color: 'sandybrown' },
+    { label: 'kubernetes', value: 'Kubernetes', color: 'darkred' },
+    { label: 'laravel', value: 'Laravel', color: 'hotpink' },
+    { label: 'javascript', value: 'Javascript', color: 'indigo' },
+    { label: 'vuejs', value: 'VueJS', color: 'khaki' },
+    { label: 'nodejs', value: 'NodeJS', color: 'olivedrab' },
+    { label: 'typescript', value: 'TypeScript', color: 'teal' },
+    { label: 'mysql', value: 'MySQL', color: 'crimson' },
   ];
   return (
     <div id="details-project">

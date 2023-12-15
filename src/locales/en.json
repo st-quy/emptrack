@@ -29,7 +29,8 @@
     "RESET": "Reset",
     "SORT_ASC": "Click to sort",
     "SORT_DESC": "Click to sort",
-    "SORT_CANCEL": "Click to cancel sorting"
+    "SORT_CANCEL": "Click to cancel sorting",
+    "ADD": "Add"
   },
   "TABLE": {
     "ACTIONS": "Actions",
@@ -242,6 +243,7 @@
     "CREATED_ERROR": "{{field}} could not be created",
     "UPDATED_SUCCESS": "Updated {{field}} successfully",
     "CREATED_ERROR_SAME_NAME": "Project name already exists",
+    "CREATED_ERROR_SAME_TECH": "Technology already exists",
     "DELETED_SUCCESS": "Deleted {{field}} successfully",
     "LOGIN_SUCCESS": "Login successfully",
     "LOGIN_ERROR": "Login error",
