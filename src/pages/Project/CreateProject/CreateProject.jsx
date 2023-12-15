@@ -148,7 +148,13 @@ const CreateProject = () => {
           );
         }
       } else {
-        Toast('error', t('TOAST.CREATED_ERROR_SAME_NAME'), 3);
+        Toast(
+          'warning',
+          t('TOAST.DUPLICATE_FIELD', {
+            field: t('PROJECTS.NAME'),
+          }),
+          2,
+        );
       }
     },
   });

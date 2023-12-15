@@ -101,7 +101,7 @@ const ProjectList = () => {
     },
   };
   useEffect(() => {
-    document.title = 'EMP | PROJECTS';
+    document.title = 'EMP | Projects';
   }, []);
 
   const showDrawer = (record) => {
@@ -421,6 +421,7 @@ const ProjectList = () => {
             }
             scroll={{ y: 'calc(100vh - 400px)' }}
             pagination={false}
+            size="small"
           />
           <Pagination {...paginationOptions} />
         </Card>

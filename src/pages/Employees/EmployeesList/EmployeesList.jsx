@@ -62,7 +62,7 @@ const EmployeesList = () => {
     },
   };
   useEffect(() => {
-    document.title = 'EMP | EMPLOYEES';
+    document.title = 'EMP | Employees';
   }, []);
 
   useEffect(() => {

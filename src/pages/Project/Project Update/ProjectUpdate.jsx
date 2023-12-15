@@ -40,9 +40,12 @@ const ProjectUpdate = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [employeesSelection, setEmployeesSelection] = useState();
+  const [employeesSelection, setEmployeesSelection] = useState([]);
+  const [preMembers, sePretMembers] = useState([]);
   const [members, setMembers] = useState([emptyMember]);
   const [project, setProject] = useState(null);
+  const [dataTracking, setDataTracking] = useState([]);
+  const [membersHistory, setMemberHistory] = useState([]);
   const schema = Schema();
   const [technologies, setTechnologies] = useState();
 
@@ -51,10 +54,13 @@ const ProjectUpdate = () => {
     { key: 'projects_details', route: `/projects/details/${id}` },
     { key: 'projects_update', route: `/projects/update/${id}` },
   ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
+        await axiosInstance.get('tracking').then((res) => {
+          setDataTracking(res.data);
+        });
+
         await axiosInstance.get('employees').then((res) => {
           const employeesSelection = res.data.filter((em) => !em.deletedAt);
           setEmployeesSelection(employeesSelection);
@@ -62,9 +68,11 @@ const ProjectUpdate = () => {
 
         await axiosInstance.get(`projects/${id}`).then((res) => {
           setProject(res.data);
+          sePretMembers(res.data.member);
           setMembers(
             res.data.member.map((mem) => {
               return {
+                name: mem.name,
                 member: mem.id,
                 role: mem.role.map((m) => {
                   return {
@@ -87,6 +95,30 @@ const ProjectUpdate = () => {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const result = [];
+    if (employeesSelection && employeesSelection.length > 0) {
+      preMembers.forEach((item) => {
+        const found = members.some((obj) => obj.member === item.id);
+        if (!found) {
+          result.push(`${item.name} Leave Project`);
+        }
+      });
+      members.forEach((item) => {
+        if (item.member) {
+          const nameMember = employeesSelection.find(
+            (e) => e.id === item.member,
+          ).name;
+          const found = preMembers.some((obj) => obj.id === item.member);
+          if (!found) {
+            result.push(`${nameMember} Join Project`);
+          }
+        }
+      });
+      setMemberHistory(result);
+    }
+  }, [members]);
 
   const initialValues = {
     name: project?.name,
@@ -139,29 +171,43 @@ const ProjectUpdate = () => {
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
         try {
-          await axiosInstance.patch(`projects/${id}`, {
-            member,
-            name,
-            description,
-            status,
-            technical,
-            startDate,
-            endDate,
-            manager,
-          });
-          //show notif
-          Toast(
-            'success',
-            t('TOAST.UPDATED_SUCCESS', {
-              field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-            }),
-            2,
-          );
-
-          //Redirect to details page
-          setTimeout(() => {
-            navigate(`/projects/details/${id}`);
-          }, 2000);
+          const idTracking =
+            dataTracking &&
+            dataTracking.find((item) => item.project.name === project?.name);
+          await axiosInstance
+            .patch(`projects/${id}`, {
+              member,
+              name,
+              description,
+              status,
+              technical,
+              startDate,
+              endDate,
+              manager,
+            })
+            .then(async (response) => {
+              if (idTracking) {
+                await axiosInstance.patch(`tracking/${idTracking.id}`, {
+                  history: [
+                    ...idTracking.history,
+                    {
+                      time: new Date(),
+                      value: membersHistory,
+                    },
+                  ],
+                });
+              }
+              Toast(
+                'success',
+                t('TOAST.UPDATED_SUCCESS', {
+                  field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+                }),
+                2,
+              );
+              setTimeout(() => {
+                navigate(`/projects/details/${id}`);
+              }, 2000);
+            });
         } catch (error) {
           Toast(
             'error',
@@ -538,7 +584,11 @@ const ProjectUpdate = () => {
                                   {employeesSelection &&
                                     getAvailableOptions(index).map((e, i) => {
                                       return (
-                                        <option key={i} value={e.id}>
+                                        <option
+                                          key={i}
+                                          value={e.id}
+                                          name={e.value}
+                                        >
                                           {e.name}
                                         </option>
                                       );
@@ -607,7 +657,6 @@ const ProjectUpdate = () => {
                           <Button
                             onClick={() => {
                               arrayHelpers.push(emptyMember);
-
                               setMembers((prev) => [...prev, emptyMember]);
                               formik.setFieldValue(`members`, [...members]);
                             }}

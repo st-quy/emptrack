@@ -9,7 +9,7 @@ const TimelineHistory = ({ data }) => {
       setDataTimeLine(
         data.history.map((item) => {
           return {
-            label: moment(item.time).format('DD/MM/YYYY HH:mm'),
+            label: moment(item.time).format('DD/MM/YYYY HH:mm:ss'),
             children: item.value.map((val) => <p>{val}</p>),
           };
         }),
@@ -23,12 +23,7 @@ const TimelineHistory = ({ data }) => {
 
   return (
     <>
-      <Timeline
-        pending="Recording..."
-        reverse={true}
-        mode={'left'}
-        items={dataTimeLine}
-      />
+      <Timeline reverse={true} mode={'left'} items={dataTimeLine} />
     </>
   );
 };
