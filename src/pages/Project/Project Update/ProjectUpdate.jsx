@@ -198,15 +198,32 @@ const ProjectUpdate = () => {
   const addItem = async (e) => {
     e.preventDefault();
     const trimmedNewTech = newTech.trim().replace(/  +/g, ' ');
-    if (trimmedNewTech !== '') {
+    const isExist = technologies.some(
+      (t) => t.toLowerCase() === trimmedNewTech.toLowerCase(),
+    );
+    if (isExist) {
+      setNewTech('');
+      Toast('error', t('TOAST.CREATED_ERROR_SAME_TECH'), 2);
+      return;
+    }
+
+    if (trimmedNewTech !== '' && !isExist) {
       await axiosInstance
-        .post('technology', { name: newTech })
+        .post('technology', { name: trimmedNewTech })
         .then((res) => {});
 
       setTechnologies([...technologies, newTech]);
       setNewTech('');
+      setIsDisabled(true);
       setTimeout(() => {
         inputRef.current?.focus();
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('PROJECTS.TECHNICAL').toLowerCase(),
+          }),
+          2,
+        );
       }, 0);
     }
   };
