@@ -112,7 +112,7 @@ function DetailEmployees() {
                       <Form.Item
                         label={t('EMPLOYEES.DESCRIPTION')}
                         name="description"
-                        labelCol={{ span: 24 }}
+                        
                         wrapperCol={{ span: 24 }}
                       >
                         <TextArea
