@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
   Row,
@@ -11,7 +12,7 @@ import {
   Typography,
 } from 'antd';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
@@ -40,6 +41,9 @@ const CreateProject = () => {
   const [employeesSelection, setEmployeesSelection] = useState();
   const [members, setMembers] = useState([emptyMember]);
   const schema = Schema();
+
+  const [technologies, setTechnologies] = useState();
+
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_create', route: '/projects/create' },
@@ -53,7 +57,7 @@ const CreateProject = () => {
     members: members,
     dateRange: { startDate: '', endDate: '' },
     status: 'progress',
-    technical: '',
+    technical: [],
   };
 
   const yupSync = {
@@ -87,7 +91,7 @@ const CreateProject = () => {
         });
         let description = value.description.trim().replace(/  +/g, ' ');
         let status = value.status;
-        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let technical = value.technical;
         let startDate = value.dateRange.startDate;
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
@@ -150,6 +154,11 @@ const CreateProject = () => {
         const employeesSelection = res.data.filter((em) => !em.deletedAt);
         setEmployeesSelection(employeesSelection);
       });
+
+      await axiosInstance.get('technology').then((res) => {
+        const items = res.data.map((item) => item.name);
+        setTechnologies(items);
+      });
     };
     fetchData();
   }, []);
@@ -159,6 +168,34 @@ const CreateProject = () => {
     return employeesSelection?.filter(
       (option) => !selectedOptions.includes(option.id),
     );
+  };
+
+  const [newTech, setNewTech] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const inputRef = useRef(null);
+  const onTechChange = (event) => {
+    setNewTech(event.target.value);
+
+    if (event.target.value.trim().replace(/  +/g, ' ') !== '') {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
+  const addItem = async (e) => {
+    e.preventDefault();
+    const trimmedNewTech = newTech.trim().replace(/  +/g, ' ');
+    if (trimmedNewTech !== '') {
+      await axiosInstance
+        .post('technology', { name: newTech })
+        .then((res) => {});
+
+      setTechnologies([...technologies, newTech]);
+      setNewTech('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
   };
   return (
     <div id="project_create">
@@ -329,9 +366,57 @@ const CreateProject = () => {
                       ]}
                       hasFeedback
                     >
-                      <Input
+                      <Select
+                        mode="multiple"
+                        onChange={(value) => {
+                          formik.setFieldValue('technical', value);
+                        }}
+                        allowClear
                         placeholder={t('PROJECTS.TECHNICAL')}
-                        onChange={formik.handleChange}
+                        dropdownRender={(menu) => (
+                          <>
+                            {menu}
+                            <Divider
+                              style={{
+                                margin: '8px 0',
+                              }}
+                            />
+                            <Space.Compact
+                              style={{
+                                padding: '0 8px 4px',
+                                width: '100%',
+                              }}
+                            >
+                              <Input
+                                style={{
+                                  borderRadius: '12px 0 0 12px',
+                                }}
+                                placeholder={t('VALIDATE.PLACEHOLDER', {
+                                  name: t(
+                                    'PROJECTS.TECHNICAL',
+                                  ).toLocaleLowerCase(),
+                                })}
+                                ref={inputRef}
+                                value={newTech}
+                                onChange={onTechChange}
+                                onKeyDown={(e) => e.stopPropagation()}
+                              />
+                              <Button
+                                type="text"
+                                icon={<PlusOutlined />}
+                                onClick={addItem}
+                                className="button ant-btn-primary"
+                                disabled={isDisabled}
+                              >
+                                {t('BUTTON.ADD')}
+                              </Button>
+                            </Space.Compact>
+                          </>
+                        )}
+                        options={technologies?.map((item) => ({
+                          label: item,
+                          value: item,
+                        }))}
                       />
                     </Form.Item>
                   </Col>

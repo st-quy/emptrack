@@ -29,7 +29,8 @@
     "RESET": "Đặt lại",
     "SORT_ASC": "Nhấn để sắp xếp",
     "SORT_DESC": "Nhấn để sắp xếp",
-    "SORT_CANCEL": "Nhấn để hủy Sắp xếp"
+    "SORT_CANCEL": "Nhấn để hủy Sắp xếp",
+    "ADD": "Thêm"
   },
   "TABLE": {
     "ACTIONS": "Hành động",

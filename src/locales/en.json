@@ -29,7 +29,8 @@
     "RESET": "Reset",
     "SORT_ASC": "Click to sort",
     "SORT_DESC": "Click to sort",
-    "SORT_CANCEL": "Click to cancel sorting"
+    "SORT_CANCEL": "Click to cancel sorting",
+    "ADD": "Add"
   },
   "TABLE": {
     "ACTIONS": "Actions",
