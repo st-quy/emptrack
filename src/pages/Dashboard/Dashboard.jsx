@@ -43,7 +43,7 @@ const Dashboard = () => {
                       <Typography
                         style={{ fontSize: '20px', paddingTop: '10px' }}
                       >
-                        Total Employees
+                        {t('TITLE.TOTAL_EMPLOYEES')}
                       </Typography>
                       <Statistic
                         style={{ fontSize: '30px' }}
@@ -53,7 +53,10 @@ const Dashboard = () => {
                       />
                     </Space>
                   </Card>
-                  <Card className="card-dob w-100" title="Birthday Buddies">
+                  <Card
+                    className="card-dob w-100"
+                    title={t('TABLE.BIRTHDATE_BUDDIES')}
+                  >
                     <Space
                       direction="horizontal"
                       align="start"
@@ -88,10 +91,7 @@ const Dashboard = () => {
               </Col>
             </Row>
             <Row className="w-100">
-              <Card
-                className="card-dashboard w-100"
-                title="Income of ST United Company"
-              >
+              <Card className="card-dashboard w-100" title={t('TITLE.INCOME')}>
                 <LineChart idChart="line-chart" />
               </Card>
             </Row>

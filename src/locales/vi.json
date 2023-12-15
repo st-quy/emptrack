@@ -64,7 +64,17 @@
     "PAGE": "Trang",
     "HISTORY": "Lịch Sử",
     "DELETE": "Xóa",
-    "VIEW": "Xem"
+    "VIEW": "Xem",
+    "TEAM_MANAGER": "Quản lý team",
+    "END_DATE": "Ngày kết thúc",
+    "STATUS": "Trạng thái",
+    "PROGRESS": "Tiến độ",
+    "BIRTHDATE_BUDDIES": "Sinh nhật sắp tới",
+    "INCOME": "Thu nhập",
+    "YEAR": "Năm",
+    "ACCESS_FROM": "Truy cập từ",
+    "JOINED": "Tham gia",
+    "READY_JOIN": "Sắp tham gia"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -157,7 +167,8 @@
     "INCOME": "Thu nhập của ST United",
     "STATISTIC_WORK": "Thống kê theo công việc",
     "STATISTIC_POSITION": "Thống kê theo vị trí",
-    "STATISTIC_COMPANY": "Biến động công ty"
+    "STATISTIC_COMPANY": "Biến động công ty",
+    "TOTAL_EMPLOYEES": "Tổng nhân viên"
   },
   "USERS": {
     "NAME": "Tên",
