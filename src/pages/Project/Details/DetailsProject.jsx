@@ -44,10 +44,12 @@ const DetailsProject = () => {
 
   function tagRender(props) {
     const { label, value, closable, onClose } = props;
+    const colorTech = options.find((item) => item.value === value);
+    const randomColor =
+      options[Math.floor(Math.random() * options.length)].color;
     return (
       <Tag
-        color={options.find((item) => item.value === value).color}
-        // color={'orange'}
+        color={colorTech ? colorTech.color : randomColor}
         closable={closable}
         onClose={onClose}
         style={{ marginRight: 3 }}
@@ -66,28 +68,43 @@ const DetailsProject = () => {
     { label: 'tester', value: 'tester', color: 'volcano' },
     { label: 'PO', value: 'product owner', color: 'geekblue' },
     { label: 'SM', value: 'scrum master', color: 'purple' },
+
+    { label: 'reactjs', value: 'ReactJS', color: 'pink' },
+    { label: 'php', value: 'PHP', color: 'maroon' },
+    { label: 'mongodb', value: 'MongoDB', color: 'peachpuff' },
+    { label: 'postgresql', value: 'PostgreSQL', color: 'goldenrod' },
+    { label: 'git', value: 'Git', color: 'darkviolet' },
+    { label: 'docker', value: 'Docker', color: 'cyan' },
+    { label: 'aws', value: 'AWS', color: 'sandybrown' },
+    { label: 'kubernetes', value: 'Kubernetes', color: 'darkred' },
+    { label: 'laravel', value: 'Laravel', color: 'hotpink' },
+    { label: 'javascript', value: 'Javascript', color: 'indigo' },
+    { label: 'vuejs', value: 'VueJS', color: 'khaki' },
+    { label: 'nodejs', value: 'NodeJS', color: 'olivedrab' },
+    { label: 'typescript', value: 'TypeScript', color: 'teal' },
+    { label: 'mysql', value: 'MySQL', color: 'crimson' },
   ];
   return (
     <div id="details-project">
-      {project ? (
-        <>
-          <Space className="w-100 justify-content-between">
-            <Breadcrumb
-              items={[
-                { key: 'projects' },
-                { key: 'projects_details', route: `/projects/details/${id}` },
-              ]}
-            />
-            <Button onClick={() => navigate(`/projects/update/${id}`)}>
-              {t('BREADCRUMB.PROJECTS_UPDATE')}
-            </Button>
-          </Space>
+      <Space className="w-100 justify-content-between">
+        <Breadcrumb
+          items={[
+            { key: 'projects' },
+            { key: 'projects_details', route: `/projects/details/${id}` },
+          ]}
+        />
+        <Button onClick={() => navigate(`/projects/update/${id}`)}>
+          {t('BREADCRUMB.PROJECTS_UPDATE')}
+        </Button>
+      </Space>
 
-          <Card
-            className="card-detail-project"
-            title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
-            style={{ borderRadius: '30px' }}
-          >
+      <Card
+        className="card-detail-project"
+        title={t('BREADCRUMB.PROJECTS_DETAILS').toUpperCase()}
+        style={{ borderRadius: '30px ' }}
+      >
+        {project ? (
+          <>
             <Form
               labelCol={{
                 sm: { span: 24 },
@@ -140,13 +157,18 @@ const DetailsProject = () => {
                       disabled
                     />
                   </Form.Item>
-                  <Form.Item
-                    name="technical"
-                    label={t('PROJECTS.TECHNICAL')}
-                    initialValue={project?.technical}
-                  >
-                    <Input disabled />
+
+                  <Form.Item label={t('PROJECTS.TECHNICAL')}>
+                    {project?.technical.map((technical) =>
+                      tagRender({
+                        label: capitalizeFLetter(technical),
+                        value: technical,
+                        closable: false,
+                        onClose: false,
+                      }),
+                    )}
                   </Form.Item>
+
                   <Form.Item label={t('PROJECTS.STATUS')}>
                     <Radio.Group name="status" value={project?.status}>
                       <Radio value="pending">
@@ -165,7 +187,6 @@ const DetailsProject = () => {
               <Typography.Title level={5}>
                 {t('PROJECTS.MEMBER_LIST')}:
               </Typography.Title>
-
               {project?.member.map((member, index) => (
                 <Row className="w-100" gutter={16} key={index}>
                   <Col span={12}>
@@ -195,11 +216,11 @@ const DetailsProject = () => {
                 </Row>
               ))}
             </Form>
-          </Card>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+          </>
+        ) : (
+          <SpinLoading />
+        )}
+      </Card>
     </div>
   );
 };

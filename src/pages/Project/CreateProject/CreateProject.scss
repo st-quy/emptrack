@@ -22,17 +22,15 @@
     border: 1px solid #d9d9d9;
     border-radius: 6px;
     height: 38px;
+    cursor: pointer;
   }
+
   .css-13cymwt-control {
     border-color: #d9d9d9;
     border-width: 1px;
     border-radius: 6px;
-    // min-height: 31.33px;
+    cursor: pointer;
   }
-  // .css-t3ipsp-control {
-  //   min-height: 31.33px !important;
-  //   max-height: 31.33px !important;
-  // }
   .css-1i837h3-ValueContainer2,
   .css-art2ul-ValueContainer2 {
     padding: 0;
@@ -73,5 +71,10 @@
     font-family: SimSun, sans-serif;
     line-height: 1;
     content: '*';
+  }
+  .card-create-project .ant-card-body {
+    height: 500px;
+    overflow: auto;
+    border-radius: 30px 30px 30px 30px;
   }
 }

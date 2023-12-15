@@ -9,14 +9,16 @@ import {
   Select,
   Space,
   Typography,
+  Divider,
   Upload,
 } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import Card from 'antd/es/card/Card';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,7 +32,6 @@ import ValidationSchema from './ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 const { Item } = Form;
 const { Option } = Select;
-import roleList from '../../Project/CreateProject/rolelist';
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -58,11 +59,14 @@ const CreateEmployee = () => {
       position: '',
       lineManager: '',
       address: '',
-      skills: [{ skillname: '', exp: '', addonAfter: 'years' }],
+      skills: [{ skillname: null, exp: '', addonAfter: 'years' }],
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-      const formattedBirth = moment(values.birth).format('DD-MM-YYYY');
+      const day = values.birth.$D;
+      const month = values.birth.$M + 1;
+      const year = values.birth.$y;
+      const formattedBirth = `${day}-${month}-${year}`;
       if (values.skills.length === 0) {
         return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
       } else if (fileList.length > 0) {
@@ -94,8 +98,63 @@ const CreateEmployee = () => {
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
+      console.log(values);
     },
   });
+  const [items, setItems] = useState([]);
+  const [position, setPosition] = useState('');
+  const [listSkills, setListSkills] = useState([]);
+  const [inputSkill, setInputSkill] = useState('');
+  const inputRef = useRef(null);
+  const onPositionChange = (event) => {
+    setPosition(event.target.value);
+  };
+  const onSkillChange = (event) => {
+    setInputSkill(event.target.value);
+  };
+  const addItem = (e) => {
+    const trimmedInputPosition = position.trim();
+    if (trimmedInputPosition !== '') {
+      e.preventDefault();
+      axiosInstance
+        .post('position', { name: position })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+      setItems([...items, position]);
+      setPosition('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    } else {
+      return Toast('error', t('EMPLOYEE_VALIDATION.ADD_POSITION'), 2);
+    }
+  };
+
+  const addSkillToServer = (e) => {
+    const trimmedInputSkill = inputSkill.trim();
+    if (trimmedInputSkill !== '') {
+      e.preventDefault();
+      axiosInstance
+        .post('skill', { name: inputSkill })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+      setListSkills([...listSkills, inputSkill]);
+      setInputSkill('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    } else {
+      return Toast('error', t('EMPLOYEE_VALIDATION.ADD_POSITION'), 2);
+    }
+  };
 
   const breadcrumbItems = [
     { key: 'EMPLOYEES', route: '/employees' },
@@ -183,7 +242,7 @@ const CreateEmployee = () => {
   const addSkill = () => {
     formik.setFieldValue('skills', [
       ...formik.values.skills,
-      { skillname: '', exp: '' },
+      { skillname: null, exp: '', addonAfter: 'years' },
     ]);
   };
 
@@ -212,7 +271,32 @@ const CreateEmployee = () => {
         });
     };
 
+    const getPosition = async () => {
+      axiosInstance
+        .get('position')
+        .then((response) => {
+          const items = response.data.map((item) => item.name);
+          setItems(items);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
+    const getSkill = async () => {
+      axiosInstance
+        .get('skill')
+        .then((response) => {
+          const items = response.data.map((item) => item.name);
+          setListSkills(items);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
+
     generateCode();
+    getPosition();
+    getSkill();
   }, []);
 
   return (
@@ -224,17 +308,18 @@ const CreateEmployee = () => {
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
-      <div
+      {/* <div
         className="details-card" 
               style={{
           maxHeight: '80vh',
           maxWidth: '100%',
           overflowY: 'auto',
-          borderRadius: '30px'
-          
+          borderRadius: '30px',
         }}
-      >
-        <Card title={t('EMPLOYEES.CREATE')} className="card">
+      > */}
+        <Card  title={t('EMPLOYEES.CREATE')} className="card-create-employees"
+        style={{borderRadius: '30px'}}>
+          
           <Form form={form}>
             <Row gutter={[16, 0]}>
               {/* CODE EMPLOYEE */}
@@ -568,25 +653,6 @@ const CreateEmployee = () => {
                 <Form.Item
                   label={t('EMPLOYEES.DESCRIPTION')}
                   name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter the description',
-                    },
-                  ]}
-                  hasFeedback
-                  validateStatus={
-                    formik.errors.description && formik.touched.description
-                      ? 'error'
-                      : formik.touched.description
-                      ? 'success'
-                      : ''
-                  }
-                  help={
-                    formik.errors.description &&
-                    formik.touched.description &&
-                    formik.errors.description
-                  }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
@@ -685,8 +751,11 @@ const CreateEmployee = () => {
                     placeholder={t('EMPLOYEES.STATUS')}
                     style={{ width: '100%' }}
                   >
-                    <Option value="active">{t('EMPLOYEES.ACTIVE')}</Option>
-                    <Option value="unactive">{t('EMPLOYEES.UNACTIVE')}</Option>
+                    <Option value="unassigned">
+                      {t('EMPLOYEES.UNASSIGNED')}
+                    </Option>
+                    <Option value="assigned ">{t('EMPLOYEES.ASSIGNED')}</Option>
+                    <Option value="off">{t('EMPLOYEES.OFF')}</Option>
                   </Select>
                 </Item>
               </Col>
@@ -719,23 +788,47 @@ const CreateEmployee = () => {
                 >
                   <Select
                     size="large"
-                    value={formik.values.position}
                     placeholder={t('EMPLOYEES.POSITION')}
                     onChange={(value) => {
                       formik.setFieldValue('position', value);
                     }}
-                    onBlur={formik.handleBlur}
-                    style={{ width: '100%' }}
-                  >
-                    {roleList &&
-                      roleList.map((e, index) => {
-                        return (
-                          <Option key={index} value={e.value}>
-                            {e.label}
-                          </Option>
-                        );
-                      })}
-                  </Select>
+                    dropdownRender={(menu) => (
+                      <>
+                        {menu}
+                        <Divider
+                          style={{
+                            margin: '10px 0',
+                          }}
+                        />
+                        <Space
+                          style={{
+                            padding: '0 8px 5px',
+                          }}
+                        >
+                          <Input
+                            style={{ width: '500px' }}
+                            size="large"
+                            placeholder={t('EMPLOYEES.POSITION')}
+                            ref={inputRef}
+                            value={position}
+                            onChange={onPositionChange}
+                            onKeyDown={(e) => e.stopPropagation()}
+                          />
+                          <Button
+                            type="text"
+                            icon={<PlusOutlined />}
+                            onClick={addItem}
+                          >
+                            {t('EMPLOYEES.ADD_POSITION')}
+                          </Button>
+                        </Space>
+                      </>
+                    )}
+                    options={items.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                  />
                 </Item>
               </Col>
               {/* LINE_MANAGER EMPLOYEE */}
@@ -743,20 +836,6 @@ const CreateEmployee = () => {
                 <Item
                   label={t('EMPLOYEES.LINE_MANAGER')}
                   name="lineManager"
-                  required
-                  hasFeedback
-                  validateStatus={
-                    formik.errors.lineManager && formik.touched.lineManager
-                      ? 'error'
-                      : formik.touched.lineManager
-                      ? 'success'
-                      : ''
-                  }
-                  help={
-                    formik.errors.lineManager &&
-                    formik.touched.lineManager &&
-                    formik.errors.lineManager
-                  }
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                 >
@@ -781,127 +860,172 @@ const CreateEmployee = () => {
                   </Select>
                 </Item>
               </Col>
+
               {/* SKILLS EMPLOYEE */}
-
-              <Form.Item
-                label={t('EMPLOYEES.SKILLS')}
-                required
-                labelCol={{ span: 24 }}
-                wrapperCol={{ span: 24 }}
-              >
-                <Button onClick={addSkill} className="buttonSkills btn-skills">
-                  {t('EMPLOYEES.ADD_SKILL')}
-                </Button>
-                <Row>
-                  {formik.values.skills.map((skill, index) => (
-                    <Col key={index}>
-                      <div
-                        style={{
-                          marginRight: '10px',
-                          marginBottom: '10px',
-                        }}
-                      >
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].skillname
-                              : ''
-                          }
-                          hasFeedback
+              <Row>
+                <Form.Item label={t('EMPLOYEES.SKILLS')} required>
+                  <Button
+                    onClick={addSkill}
+                    className="buttonSkills btn-skills"
+                  >
+                    {t('EMPLOYEES.ADD_SKILL')}
+                  </Button>
+                </Form.Item>
+                <Col span={24} style={{ display: 'flex', width: '100%' }}>
+                  <Space wrap className="w-100">
+                    {formik.values.skills.map((skill, index) => (
+                      <Col key={index}>
+                        <div
+                          style={{
+                            marginRight: '10px',
+                            marginBottom: '10px',
+                          }}
                         >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.SKILL_NAME')}
-                            name={`skills[${index}].skillname`}
-                            value={formik.values.skills[index].skillname}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                        </Form.Item>
-
-                        <Form.Item
-                          validateStatus={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? 'error'
-                              : ''
-                          }
-                          help={
-                            formik.errors.skills &&
-                            formik.errors.skills[index] &&
-                            formik.touched.skills &&
-                            formik.touched.skills[index]
-                              ? formik.errors.skills[index].exp
-                              : ''
-                          }
-                          hasFeedback
-                        >
-                          <Input
-                            size="large"
-                            placeholder={t('EMPLOYEES.EXP')}
-                            name={`skills[${index}].exp`}
-                            value={formik.values.skills[index].exp}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            type="number"
-                            style={{
-                              webkitAppearance: 'none',
-                              MozAppearance: 'textfield',
-                            }}
-                            min={1}
-                            max={30}
-                            addonAfter={
-                              <Select
-                                defaultValue="years"
-                                style={{ width: 70 }}
-                                onChange={(value) => {
-                                  formik.setFieldValue(
-                                    `skills[${index}].addonAfter`,
-                                    value,
-                                  );
-                                }}
-                              >
-                                {selectAfterOptions.map((option) => (
-                                  <Option
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </Option>
-                                ))}
-                              </Select>
+                          <Form.Item
+                            style={{ width: '200px' }}
+                            validateStatus={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? 'error'
+                                : ''
                             }
-                          />
-                        </Form.Item>
+                            help={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? formik.errors.skills[index].skillname
+                                : ''
+                            }
+                            hasFeedback
+                          >
+                            <Select
+                              size="large"
+                              placeholder={t('EMPLOYEES.SKILL_NAME')}
+                              name={`skills[${index}].skillname`}
+                              value={formik.values.skills[index].skillname}
+                              onChange={(value) => {
+                                formik.setFieldValue(
+                                  `skills[${index}].skillname`,
+                                  value,
+                                );
+                              }}
+                              dropdownRender={(menu) => (
+                                <>
+                                  {menu}
+                                  <Divider
+                                    style={{
+                                      margin: '10px 0',
+                                    }}
+                                  />
 
-                        <Button
-                          onClick={() => removeSkill(index)}
-                          className="buttonSkills btn-skills"
-                        >
-                          {t('EMPLOYEES.REMOVE_SKILL')}
-                        </Button>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </Form.Item>
+                                  <Input
+                                    size="large"
+                                    value={inputSkill}
+                                    ref={inputRef}
+                                    onChange={onSkillChange}
+                                    onKeyDown={(e) => e.stopPropagation()}
+                                  />
+                                  <Button
+                                    type="text"
+                                    icon={<PlusOutlined />}
+                                    onClick={addSkillToServer}
+                                    style={{
+                                      width: '100%',
+                                      paddingLeft: '0px',
+                                      paddingRight: '0px',
+                                    }}
+                                  >
+                                    {t('EMPLOYEES.ADD_SKILL')}
+                                  </Button>
+                                </>
+                              )}
+                              options={listSkills.map((item) => ({
+                                label: item,
+                                value: item,
+                              }))}
+                            />
+                          </Form.Item>
+
+                          <Form.Item
+                            validateStatus={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? 'error'
+                                : ''
+                            }
+                            help={
+                              formik.errors.skills &&
+                              formik.errors.skills[index] &&
+                              formik.touched.skills &&
+                              formik.touched.skills[index]
+                                ? formik.errors.skills[index].exp
+                                : ''
+                            }
+                            hasFeedback
+                          >
+                            <Input
+                              size="large"
+                              placeholder={t('EMPLOYEES.EXP')}
+                              name={`skills[${index}].exp`}
+                              value={formik.values.skills[index].exp}
+                              onChange={formik.handleChange}
+                              type="number"
+                              style={{
+                                webkitAppearance: 'none',
+                                MozAppearance: 'textfield',
+                              }}
+                              min={1}
+                              max={30}
+                              addonAfter={
+                                <Select
+                                  style={{ width: 70 }}
+                                  name={`skills[${index}].addonAfter`}
+                                  value={
+                                    formik.values.skills[index].addonAfter ||
+                                    'years'
+                                  }
+                                  onChange={(value) => {
+                                    formik.setFieldValue(
+                                      `skills[${index}].addonAfter`,
+                                      value,
+                                    );
+                                  }}
+                                >
+                                  {selectAfterOptions.map((option) => (
+                                    <Option
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </Option>
+                                  ))}
+                                </Select>
+                              }
+                            />
+                          </Form.Item>
+
+                          <Button
+                            onClick={() => removeSkill(index)}
+                            className="buttonSkills btn-skills"
+                          >
+                            {t('EMPLOYEES.REMOVE_SKILL')}
+                          </Button>
+                        </div>
+                      </Col>
+                    ))}
+                  </Space>
+                </Col>
+              </Row>
             </Row>
           </Form>
+          
         </Card>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

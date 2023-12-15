@@ -3,6 +3,7 @@ import {
   Card,
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
   Radio,
@@ -13,7 +14,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { Field, FieldArray, Formik, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
@@ -39,19 +40,27 @@ const ProjectUpdate = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [employeesSelection, setEmployeesSelection] = useState();
+  const [employeesSelection, setEmployeesSelection] = useState([]);
+  const [preMembers, sePretMembers] = useState([]);
   const [members, setMembers] = useState([emptyMember]);
   const [project, setProject] = useState(null);
+  const [dataTracking, setDataTracking] = useState([]);
+  const [membersHistory, setMemberHistory] = useState([]);
   const schema = Schema();
+  const [technologies, setTechnologies] = useState();
+
   const breadcrumbItems = [
     { key: 'projects' },
     { key: 'projects_details', route: `/projects/details/${id}` },
     { key: 'projects_update', route: `/projects/update/${id}` },
   ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
+        await axiosInstance.get('tracking').then((res) => {
+          setDataTracking(res.data);
+        });
+
         await axiosInstance.get('employees').then((res) => {
           const employeesSelection = res.data.filter((em) => !em.deletedAt);
           setEmployeesSelection(employeesSelection);
@@ -59,19 +68,26 @@ const ProjectUpdate = () => {
 
         await axiosInstance.get(`projects/${id}`).then((res) => {
           setProject(res.data);
+          sePretMembers(res.data.member);
           setMembers(
             res.data.member.map((mem) => {
               return {
+                name: mem.name,
                 member: mem.id,
                 role: mem.role.map((m) => {
                   return {
                     value: m,
-                    label: m,
+                    label: m[0].toUpperCase() + m.slice(1),
                   };
                 }),
               };
             }),
           );
+        });
+
+        await axiosInstance.get('technology').then((res) => {
+          const items = res.data.map((item) => item.name);
+          setTechnologies(items);
         });
       } catch (error) {
         console.log('error');
@@ -79,6 +95,30 @@ const ProjectUpdate = () => {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const result = [];
+    if (employeesSelection && employeesSelection.length > 0) {
+      preMembers.forEach((item) => {
+        const found = members.some((obj) => obj.member === item.id);
+        if (!found) {
+          result.push(`${item.name} Leave Project`);
+        }
+      });
+      members.forEach((item) => {
+        if (item.member) {
+          const nameMember = employeesSelection.find(
+            (e) => e.id === item.member,
+          ).name;
+          const found = preMembers.some((obj) => obj.id === item.member);
+          if (!found) {
+            result.push(`${nameMember} Join Project`);
+          }
+        }
+      });
+      setMemberHistory(result);
+    }
+  }, [members]);
 
   const initialValues = {
     name: project?.name,
@@ -105,7 +145,9 @@ const ProjectUpdate = () => {
       const allProjects = await axiosInstance
         .get('projects')
         .then((res) => res.data.filter((p) => p.id !== id));
-      const isSameName = allProjects.find((project) => project.name === name);
+      const isSameName = allProjects.find(
+        (project) => project.name.toLowerCase() === name.toLowerCase(),
+      );
       if (!isSameName) {
         const managerName = employeesSelection.find(
           (e) => e.id === value.manager,
@@ -124,34 +166,48 @@ const ProjectUpdate = () => {
         });
         let description = value.description.trim().replace(/  +/g, ' ');
         let status = value.status;
-        let technical = value.technical.replace(/[ ]+/g, ' ').trim();
+        let technical = value.technical;
         let startDate = value.dateRange.startDate;
         let endDate = value.dateRange.endDate;
         let manager = [{ name: managerName, id: value.manager }];
         try {
-          await axiosInstance.patch(`projects/${id}`, {
-            member,
-            name,
-            description,
-            status,
-            technical,
-            startDate,
-            endDate,
-            manager,
-          });
-          //show notif
-          Toast(
-            'success',
-            t('TOAST.UPDATED_SUCCESS', {
-              field: t('BREADCRUMB.PROJECTS').toLowerCase(),
-            }),
-            2,
-          );
-
-          //Redirect to details page
-          setTimeout(() => {
-            navigate(`/projects/details/${id}`);
-          }, 2000);
+          const idTracking =
+            dataTracking &&
+            dataTracking.find((item) => item.project.name === project?.name);
+          await axiosInstance
+            .patch(`projects/${id}`, {
+              member,
+              name,
+              description,
+              status,
+              technical,
+              startDate,
+              endDate,
+              manager,
+            })
+            .then(async (response) => {
+              if (idTracking) {
+                await axiosInstance.patch(`tracking/${idTracking.id}`, {
+                  history: [
+                    ...idTracking.history,
+                    {
+                      time: new Date(),
+                      value: membersHistory,
+                    },
+                  ],
+                });
+              }
+              Toast(
+                'success',
+                t('TOAST.UPDATED_SUCCESS', {
+                  field: t('BREADCRUMB.PROJECTS').toLowerCase(),
+                }),
+                2,
+              );
+              setTimeout(() => {
+                navigate(`/projects/details/${id}`);
+              }, 2000);
+            });
         } catch (error) {
           Toast(
             'error',
@@ -174,25 +230,70 @@ const ProjectUpdate = () => {
       (option) => !selectedOptions.includes(option.id),
     );
   };
+
+  const [newTech, setNewTech] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const inputRef = useRef(null);
+  const onTechChange = (event) => {
+    setNewTech(event.target.value);
+
+    if (event.target.value.trim().replace(/  +/g, ' ') !== '') {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
+  const addItem = async (e) => {
+    e.preventDefault();
+    const trimmedNewTech = newTech.trim().replace(/  +/g, ' ');
+    const isExist = technologies.some(
+      (t) => t.toLowerCase() === trimmedNewTech.toLowerCase(),
+    );
+    if (isExist) {
+      setNewTech('');
+      Toast('error', t('TOAST.CREATED_ERROR_SAME_TECH'), 2);
+      return;
+    }
+
+    if (trimmedNewTech !== '' && !isExist) {
+      await axiosInstance
+        .post('technology', { name: trimmedNewTech })
+        .then((res) => {});
+
+      setTechnologies([...technologies, newTech]);
+      setNewTech('');
+      setIsDisabled(true);
+      setTimeout(() => {
+        inputRef.current?.focus();
+        Toast(
+          'success',
+          t('TOAST.CREATED_SUCCESS', {
+            field: t('PROJECTS.TECHNICAL').toLowerCase(),
+          }),
+          2,
+        );
+      }, 0);
+    }
+  };
   return (
     <div id="project_update">
-      {project ? (
-        <>
-          <Space className="w-100 justify-content-between">
-            <Breadcrumb items={breadcrumbItems} />
-            <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
-          </Space>
+      <Space className="w-100 justify-content-between">
+        <Breadcrumb items={breadcrumbItems} />
+        <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
+      </Space>
 
-          <Card
-            className="card-create-project"
-            title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
-            style={{
-              // maxHeight: '80vh',
-              // maxWidth: '100%',
-              // overflowY: 'auto',
-              borderRadius: '30px',
-            }}
-          >
+      <Card
+        className="card-update-project"
+        title={t('BREADCRUMB.PROJECTS_UPDATE').toUpperCase()}
+        style={{
+          // maxHeight: '80vh',
+          // maxWidth: '100%',
+          // overflowY: 'auto',
+          borderRadius: '30px',
+        }}
+      >
+        {project ? (
+          <>
             <Formik initialValues={initialValues} validationSchema={schema}>
               {({ values }) => (
                 <Form
@@ -353,7 +454,7 @@ const ProjectUpdate = () => {
                             </div>
                           )
                         }
-                        initialValue={values.technical}
+                        // initialValue={values.technical}
                         validateFirst
                         rules={[
                           yupSync,
@@ -363,9 +464,58 @@ const ProjectUpdate = () => {
                         ]}
                         hasFeedback
                       >
-                        <Input
+                        <Select
+                          defaultValue={values.technical}
+                          mode="multiple"
+                          onChange={(value) => {
+                            formik.setFieldValue('technical', value);
+                          }}
+                          allowClear
                           placeholder={t('PROJECTS.TECHNICAL')}
-                          onChange={formik.handleChange}
+                          dropdownRender={(menu) => (
+                            <>
+                              {menu}
+                              <Divider
+                                style={{
+                                  margin: '8px 0',
+                                }}
+                              />
+                              <Space.Compact
+                                style={{
+                                  padding: '0 8px 4px',
+                                  width: '100%',
+                                }}
+                              >
+                                <Input
+                                  style={{
+                                    borderRadius: '12px 0 0 12px',
+                                  }}
+                                  placeholder={t('VALIDATE.PLACEHOLDER', {
+                                    name: t(
+                                      'PROJECTS.TECHNICAL',
+                                    ).toLocaleLowerCase(),
+                                  })}
+                                  ref={inputRef}
+                                  value={newTech}
+                                  onChange={onTechChange}
+                                  onKeyDown={(e) => e.stopPropagation()}
+                                />
+                                <Button
+                                  type="text"
+                                  icon={<PlusOutlined />}
+                                  onClick={addItem}
+                                  className="button ant-btn-primary"
+                                  disabled={isDisabled}
+                                >
+                                  {t('BUTTON.ADD')}
+                                </Button>
+                              </Space.Compact>
+                            </>
+                          )}
+                          options={technologies?.map((item) => ({
+                            label: item,
+                            value: item,
+                          }))}
                         />
                       </Form.Item>
                       <Form.Item
@@ -434,7 +584,11 @@ const ProjectUpdate = () => {
                                   {employeesSelection &&
                                     getAvailableOptions(index).map((e, i) => {
                                       return (
-                                        <option key={i} value={e.id}>
+                                        <option
+                                          key={i}
+                                          value={e.id}
+                                          name={e.value}
+                                        >
                                           {e.name}
                                         </option>
                                       );
@@ -503,7 +657,6 @@ const ProjectUpdate = () => {
                           <Button
                             onClick={() => {
                               arrayHelpers.push(emptyMember);
-
                               setMembers((prev) => [...prev, emptyMember]);
                               formik.setFieldValue(`members`, [...members]);
                             }}
@@ -519,11 +672,11 @@ const ProjectUpdate = () => {
                 </Form>
               )}
             </Formik>
-          </Card>
-        </>
-      ) : (
-        <SpinLoading />
-      )}
+          </>
+        ) : (
+          <SpinLoading />
+        )}
+      </Card>
     </div>
   );
 };
