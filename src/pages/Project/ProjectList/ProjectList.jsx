@@ -90,7 +90,7 @@ const ProjectList = () => {
     current: currentPage,
     pageSize: pageSize,
     showSizeChanger: true,
-    showTotal: (total) => t('TABLE.TOTAL_EMPLOYEES', { total }),
+    showTotal: (total) => t('TABLE.TOTAL', { total }),
     className: 'my-3',
     onChange: (page, pageSize) => {
       setCurrentPage(page);
@@ -212,7 +212,6 @@ const ProjectList = () => {
       render: (id, record, index) => {
         ++index;
         return (currentPage - 1) * pageSize + index;
-        ;
       },
     },
     {
