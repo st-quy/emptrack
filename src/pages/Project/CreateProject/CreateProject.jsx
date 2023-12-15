@@ -73,7 +73,9 @@ const CreateProject = () => {
       const allProjects = await axiosInstance
         .get('projects')
         .then((res) => res.data);
-      const isSameName = allProjects.find((project) => project.name === name);
+      const isSameName = allProjects.find(
+        (project) => project.name.toLowerCase() === name.toLowerCase(),
+      );
       if (!isSameName) {
         const managerName = employeesSelection.find(
           (e) => e.id === value.manager,
@@ -145,6 +147,8 @@ const CreateProject = () => {
             2,
           );
         }
+      } else {
+        Toast('error', t('TOAST.CREATED_ERROR_SAME_NAME'), 3);
       }
     },
   });
