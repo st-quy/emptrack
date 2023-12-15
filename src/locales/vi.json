@@ -283,7 +283,9 @@
     "ADDRESS": "Địa chỉ",
     "ID": "STT",
     "ADD_POSITION": "Thêm chức vụ",
-    "SKILLS_LIST": "Danh sách kĩ năng"
+    "SKILLS_LIST": "Danh sách kĩ năng",
+    "YEARS": "Năm",
+    "MONTHS": "Tháng"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",

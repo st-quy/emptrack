@@ -41,8 +41,8 @@ const CreateEmployee = () => {
   const { t } = useTranslation();
 
   const selectAfterOptions = [
-    { value: 'years', label: 'years' },
-    { value: 'months', label: 'months' },
+    { value: 'years', label: t('EMPLOYEES.YEARS') },
+    { value: 'months', label: t('EMPLOYEES.MONTHS') },
   ];
 
   const formik = useFormik({

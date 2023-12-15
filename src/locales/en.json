@@ -283,7 +283,9 @@
     "ADDRESS": "Address",
     "ID": "No.",
     "ADD_POSITION": "Add position",
-    "SKILLS_LIST": "Skills list"
+    "SKILLS_LIST": "Skills list",
+    "YEARS": "Years",
+    "MONTHS": "Months"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",
