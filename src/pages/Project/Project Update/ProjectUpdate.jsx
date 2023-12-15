@@ -465,7 +465,7 @@ const ProjectUpdate = () => {
                         hasFeedback
                       >
                         <Select
-                          defaultValue={values.technical}
+                          defaultValue={values.technical.map(t => t[0].toUpperCase() + t.slice(1))}
                           mode="multiple"
                           onChange={(value) => {
                             formik.setFieldValue('technical', value);
