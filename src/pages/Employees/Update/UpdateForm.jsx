@@ -23,59 +23,50 @@ import dayjs from 'dayjs';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import ImgCrop from 'antd-img-crop';
-
-
-
-
-
-
-
 const { Item } = Form;
 const { Option } = Select;
 
-const skillDatas = {
+const skillData = {
   skillname:'',
   exp:'',
 };
+
 
 const UpdateForm = () => {
   const { TextArea } = Input;
   const { t } = useTranslation();
   const {id} = useParams();
   const [employeesData, setEmployeesData] = useState();
-  const [skillData, setSkillData] = useState(skillDatas);
+  const [skillData, setSkillData] = useState();
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [showModal, setShowModal] = useState(false);
-
+  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const handlePic = async ({ fileList }) => {
     try {
       const formData = new FormData();
       formData.append('file', fileList[0].originFileObj);
       formData.append('upload_preset', 'hvmlst6p');
       formData.append('cloud_name', 'do32v7ajg');
-
+  
       const response = await axios.post(
         'https://api.cloudinary.com/v1_1/do32v7ajg/image/upload',
-        formData,
+        formData
       );
       const imageUrl = response.data.secure_url;
-
-      const updatedFileList = fileList.map((file) => {
-        if (file.uid === fileList[0].uid) {
-          return {
-            ...file,
-            status: 'done',
-            url: imageUrl,
-            public_id: response.data.public_id,
-          };
-        }
-        return file;
-      });
-
+  
+      const updatedFileList = [
+        ...fileList.map((file) => ({
+          ...file,
+          status: 'done',
+          url: imageUrl,
+          public_id: response.data.public_id,
+        })),
+      ];
+  
       setFileList(updatedFileList);
-
-      handleRemove(employeesData.avatar)
+      setUploadedImageUrl(imageUrl);
+      handleRemove(employeesData.avatar);
     } catch (error) {
       console.error('Lỗi khi tải lên ảnh:', error);
     }
@@ -125,9 +116,9 @@ const UpdateForm = () => {
       try {
         await axiosInstance.get(`employees/${id}`)
         .then((response) => {
+          console.log(response.data);
           setEmployeesData(response.data);
-          setSkillData(response.data);
-       
+          setSkillData(response.data.skills);
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -136,7 +127,7 @@ const UpdateForm = () => {
     fetchData();
   }, []);
  
- 
+
 
   const breadcrumbItems = [
     { key: 'employees', route: '/employees' },
@@ -154,8 +145,9 @@ const UpdateForm = () => {
 
     return Promise.resolve();
   };
+
   const handleUpdate = () => { 
-    axios.patch(`employees/${id}`,{ skillData })
+    axiosInstance.patch(`employees/${id}`,{ skillData})
       .then(response => {
         console.log('Data updated successfully:', response.data);
       })
@@ -178,10 +170,10 @@ const UpdateForm = () => {
     }));
   };
   const handleAddSkill = () => {
-    setSkillData((prevData) => ({
-      ...prevData,
-      skills: [...prevData.skills, { skillname: '', exp: '' }],
-    }));
+    // setSkillData((prevData) => ({
+    //   ...prevData,
+    //   skills: [...prevData.skills, { skillname: '', exp: '' }],
+    // }));
   };
   
   const handleChangeSkill = (index, field, value) => {
@@ -195,12 +187,13 @@ const UpdateForm = () => {
   };
   
   const RemoveSkill = (index) => {
-    console.log('RemoveSkill:', { index });
-    setSkillData((prevData) => {
-      const updatedSkills = [...prevData.skills];
-      updatedSkills.splice(index, 1);
-      return { ...prevData, skills: updatedSkills };
-    });
+
+    // console.log('RemoveSkill:', { index });
+    // setSkillData((prevData) => {
+    //   const updatedSkills = [...prevData.skills];
+    //   updatedSkills.splice(index, 1);
+    //   return { ...prevData, skills: updatedSkills };
+    // });
   };
   
   
@@ -309,7 +302,7 @@ const UpdateForm = () => {
             <Col span={12}>
                 <Form.Item
                   label={t('EMPLOYEES.PHONE')}
-                  name="phone"  
+                  name="phone" 
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}       
                   rules={[
@@ -385,8 +378,8 @@ const UpdateForm = () => {
                     size="large"
                     placeholder={t('Địa chỉ')}    
                     defaultValue={employeesData.address}   
-                    onChange={handleChange}
-                    name="address"      
+                    onChange={(e) => handleChange('address', e.target.value)}
+                    name="address1"      
                   />
                 </Form.Item>
               </Col>
@@ -484,20 +477,28 @@ const UpdateForm = () => {
       <div>
               <ImgCrop rotationSlider>
               <Upload
-          listType="picture-card"
-          fileList={fileList}
-          onChange={handlePic}
-          onPreview={handlePreview}
-          onRemove={handleRemove}   
-        >    
-          {fileList.length === 0 &&  (
-            <img
-              src={employeesData?.avatar[0].url}
-              style={{ padding: '0 20px', width: '150%' }}
-              alt="Uploaded Image"         
-            />
-          )} 
-               </Upload>
+                      listType="picture-card"
+                      fileList={fileList}
+                      onChange={handlePic}
+                      onPreview={handlePreview}
+                      onRemove={handleRemove}
+                    >    
+                      {uploadedImageUrl ? (
+                        <img
+                          src={uploadedImageUrl}
+                          style={{ padding: '0 20px', width: '150%' }}
+                          alt="Uploaded Image"         
+                        />
+                      ) : (
+                        employeesData?.avatar[0]?.url && (
+                          <img
+                            src={employeesData.avatar[0].url}
+                            style={{ padding: '0 20px', width: '150%' }}
+                            alt="Uploaded Image"         
+                          />
+                        )
+                      )}
+                    </Upload>
                 </ImgCrop>
                       </div>   
                       <Modal
@@ -506,12 +507,11 @@ const UpdateForm = () => {
                         onCancel={handlePreviewCancel}                       
                       >
                         <img
-                          src={previewImage}                        
+                          src={uploadedImageUrl}                        
                           alt="Preview"
                           style={{ width: '100%', maxHeight: '550px' }}
                         />
-                      </Modal>
-                    
+                      </Modal>                
           </div>
 
           
@@ -530,7 +530,7 @@ const UpdateForm = () => {
              <Col span={12}>
                 <Item
                   label={t('EMPLOYEES.IS_MANAGER')}
-                  name="is_manager"
+                  name="isManager"
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
                   rules={[
@@ -545,7 +545,7 @@ const UpdateForm = () => {
                     placeholder={t('EMPLOYEES.IS_MANAGER')}
                     style={{ width: '100%' }}
                     defaultValue={employeesData.isManager}
-                    onChange={(value) => handleChange('is_manager', value)}
+                    onChange={(value) => handleChange('isManager', value)}
                     name="is_manager1"
                   >
                     <Option value={true}>{t('EMPLOYEES.YES')}</Option>
@@ -632,55 +632,51 @@ const UpdateForm = () => {
                 </Item>
               </Col>   
               <Col span={12}>
-  <Form.Item
-    label={t('EMPLOYEES.SKILLS')}
-    labelCol={{ span: 24 }}
-    name="skills"
-    wrapperCol={{ span: 24 }}
-    rules={[
-      {
-        required: true,
-        message: 'Vui lòng nhập kỹ năng',
-      },
-    ]}
-   
- 
-  >
- {skillData.skills.map((skillData, index) => (
-  <div key={index}>
-    <Input
-      size="large"
-      name={`skills[${index}].skillname`}
-      placeholder={t('EMPLOYEES.SKILL_NAME')}
-      value={skillData.skillname}
-      onChange={(e) => handleChangeSkill(index, 'skillname', e.target.value)}
-    
-     
-    />
-    <Input
-      size="large"
-      placeholder={t('EMPLOYEES.EXP')}
-      name={`skills[${index}].exp`}
-      value={skillData.exp}
-      onChange={(e) => handleChangeSkill(index, 'exp', e.target.value)}
-
-          />
-             <Button type="primary" onClick={() => RemoveSkill(index)}>
-              Xóa kỹ năng
-             </Button>
-           </div>
-        ))}
-          <Button type="primary" onClick={handleAddSkill}>
-          Thêm kỹ năng
-        </Button>
-  </Form.Item>  
+          <Form.Item
+            label={t('EMPLOYEES.SKILLS')}
+            labelCol={{ span: 24 }}
+            name="skills"
+            wrapperCol={{ span: 24 }}
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập kỹ năng',
+              },
+            ]}
+          >
+        {skillData.map((skillData, index) => (
+          <div key={index}>
+            <Input
+              size="large"
+              name={`skills[${index}].skillname`}
+              placeholder={t('EMPLOYEES.SKILL_NAME')}
+              value={skillData.skillname}
+              onChange={(e) => handleChangeSkill(index, 'skillname', e.target.value)}
+            />
+            <Input
+              size="large"
+              placeholder={t('EMPLOYEES.EXP')}
+              name={`skills[${index}].exp`}
+              value={skillData.exp}
+              onChange={(e) => handleChangeSkill(index, 'exp', e.target.value)}
+            />
+                    <Button type="primary" onClick={() => RemoveSkill(index) }>
+                      Xóa kỹ năng
+                    </Button>
+                  </div>
+                ))}
+                  <Button type="primary" onClick={handleAddSkill}>
+                  Thêm kỹ năng
+                </Button>
+          </Form.Item>  
 </Col>
             </Row>
           </Form>
         </Card>
         </>
       }
-    </div>
+    </div> 
+
   );
 };
 export default UpdateForm;
