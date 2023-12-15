@@ -12,35 +12,7 @@ const conicColors = {
   Pending: '#ffe58f',
   Complete: '#ffccc7',
 };
-const columns = [
-  {
-    title: 'Team Manager',
-    dataIndex: 'manager',
-  },
-  {
-    title: 'Progress',
-    dataIndex: 'progress',
-    width: 200,
-    render: (record) => <Progress percent={record} strokeColor={twoColors} />,
-  },
-  {
-    title: 'End Date',
-    dataIndex: 'endDate',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    render: (record) => {
-      return (
-        <Badge
-          key={`${record}-sdsds`}
-          color={conicColors[record]}
-          text={record}
-        />
-      );
-    },
-  },
-];
+
 const data = [
   {
     key: '1',
@@ -104,6 +76,39 @@ const TableProgress = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const { t } = useTranslation();
+  const columns = [
+    {
+      title: t('TABLE.TEAM_MANAGER'),
+      dataIndex: 'manager',
+    },
+    {
+      title: t('TABLE.PROGRESS'),
+      dataIndex: 'progress',
+      width: 200,
+      render: (record) => <Progress percent={record} strokeColor={twoColors} />,
+    },
+    {
+      title: t('TABLE.END_DATE'),
+      dataIndex: 'endDate',
+    },
+    {
+      title: t('TABLE.STATUS'),
+      dataIndex: 'status',
+      render: (record) => {
+        return (
+          <Badge
+            key={`${record}-sdsds`}
+            color={conicColors[record]}
+            text={record === 'pending'
+            ? t('PROJECTS.STATUS_PENDING')
+            : record === 'complete'
+            ? t('PROJECTS.STATUS_COMPLETED')
+            : t('PROJECTS.STATUS_IN_PROGRESS')}
+          />
+        );
+      },
+    },
+  ];
   return (
     <>
       <Table
@@ -117,6 +122,9 @@ const TableProgress = () => {
         pagination={false}
       />
       <Pagination
+        locale={{
+          items_per_page: `/ ${t('TABLE.PAGE')}`
+        }}
         total={data.length}
         current={currentPage}
         pageSize={pageSize}

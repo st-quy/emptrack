@@ -65,7 +65,17 @@
     "PAGE": "Page",
     "HISTORY": "History",
     "DELETE": "Delete",
-    "VIEW": "View"
+    "VIEW": "View",
+    "TEAM_MANAGER": "Team Manager",
+    "END_DATE": "End Date",
+    "STATUS": "Status",
+    "PROGRESS": "Progress",
+    "BIRTHDATE_BUDDIES": "Birthdate buddies",
+    "INCOME": "Income",
+    "YEAR": "Year",
+    "ACCESS_FROM": "Access from",
+    "JOINED": "Joined",
+    "READY_JOIN": "Ready to join"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -159,7 +169,8 @@
     "INCOME": "Income of ST United Company",
     "STATISTIC_WORK": "Statistics by Work",
     "STATISTIC_POSITION": "Statistics by Position",
-    "STATISTIC_COMPANY": "Company fluctuations"
+    "STATISTIC_COMPANY": "Company fluctuations",
+    "TOTAL_EMPLOYEES": "Total employees"
   },
   "USERS": {
     "NAME": "Name",
@@ -272,7 +283,9 @@
     "ADDRESS": "Address",
     "ID": "No.",
     "ADD_POSITION": "Add position",
-    "SKILLS_LIST": "Skills list"
+    "SKILLS_LIST": "Skills list",
+    "YEARS": "Years",
+    "MONTHS": "Months"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",
