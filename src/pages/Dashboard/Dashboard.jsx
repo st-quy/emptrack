@@ -1,5 +1,5 @@
-import { Card, Col, Row, Space, Statistic, Typography } from 'antd';
-import { useEffect } from 'react';
+import { Card, Col, Image, Row, Space, Statistic, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { useTranslation } from 'react-i18next';
 import LineChart from '../../components/charts/LineChart/LineChart';
@@ -7,15 +7,53 @@ import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
 import TableProgress from '../../components/molecules/TableProgress/TableProgress';
 import './Dashboard.scss';
+import { axiosInstance } from '../../config/axios';
+import moment from 'moment';
+import SpinLoading from '../../components/atoms/SpinLoading/SpinLoading';
 
 const Dashboard = () => {
   const { t } = useTranslation();
   const breadcrumbItems = [{ key: 'dashboard' }];
+  const [filteredData, setFilteredData] = useState([]);
+  const [totalEmployees, setTotalEmployees] = useState();
+  const [allEmployees, setAllEmployees] = useState([]);
+
   useEffect(() => {
     document.title = 'EMP | Dashboard';
   }, []);
   const formatter = (value) => <CountUp end={value} separator="," />;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axiosInstance
+          .get('employees')
+          .then((response) => response.data);
+        setTotalEmployees(result.length);
+        const filterDeleted = result.filter((item) => !item.deletedAt);
+        setAllEmployees(filterDeleted);
+
+        if (filterDeleted && filterDeleted.length > 0) {
+          const commingBirth = [];
+          filterDeleted.forEach((person) => {
+            const birthDate = person.birth.split('-')[0];
+            const currentDate = moment().format('DD');
+            const furtureDate = moment().add(2, 'day').format('DD');
+            if (
+              birthDate === currentDate ||
+              (birthDate > currentDate && birthDate <= furtureDate)
+            ) {
+              commingBirth.push(person);
+            }
+          });
+          setFilteredData(commingBirth);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div id="dashboard">
       <Breadcrumb items={breadcrumbItems} />
@@ -46,8 +84,7 @@ const Dashboard = () => {
                       </Typography>
                       <Statistic
                         style={{ fontSize: '30px' }}
-                        // title="Active Users"
-                        value={112893}
+                        value={totalEmployees + 105}
                         formatter={formatter}
                       />
                     </Space>
@@ -56,18 +93,35 @@ const Dashboard = () => {
                     className="card-dob w-100"
                     title={t('TABLE.BIRTHDATE_BUDDIES')}
                   >
-                    <Space
-                      direction="horizontal"
-                      align="start"
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        paddingTop: '10px',
-                      }}
-                    >
-                      <Typography>Pham Van Quy</Typography>
-                      <Typography>13/06/2000</Typography>
-                    </Space>
+                    {filteredData.length > 0 ? (
+                      filteredData.map((item) => (
+                        <Space
+                          direction="horizontal"
+                          align="start"
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            paddingTop: '10px',
+                          }}
+                        >
+                          <Image
+                            src={item.avatar[0].url}
+                            alt={`avatar`}
+                            style={{
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '50%',
+                              objectFit: 'cover',
+                            }}
+                            preview={false}
+                          />
+                          <Typography>{item.name}</Typography>
+                          <Typography>{item.birth}</Typography>
+                        </Space>
+                      ))
+                    ) : (
+                      <SpinLoading />
+                    )}
                   </Card>
                 </Space>
               </Col>
@@ -85,7 +139,7 @@ const Dashboard = () => {
                   className="card-pie w-100"
                   title={t('TITLE.STATISTIC_WORK')}
                 >
-                  <BoolPieChart />
+                  <BoolPieChart data={allEmployees} />
                 </Card>
               </Col>
             </Row>

@@ -142,7 +142,6 @@ const ProjectList = () => {
           }),
           2,
         );
-
         setSelectedProjectId(null);
         setShowDeleteModal(false);
       });

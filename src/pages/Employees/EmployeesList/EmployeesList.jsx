@@ -155,7 +155,9 @@ const EmployeesList = () => {
             2,
           );
           setData(data.filter((item) => item.id !== selectedEmployeesId));
-
+          setFilteredData(
+            data.filter((item) => item.id !== selectedEmployeesId),
+          );
           setSelectedEmployeesId(null);
           setShowDeleteModal(false);
         });
@@ -307,19 +309,28 @@ const EmployeesList = () => {
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
-              backgroundColor: status === 'active' ? 'green' : 'red',
+              backgroundColor:
+                status === 'Unassigned'
+                  ? 'green'
+                  : status === 'progress'
+                  ? 'orange'
+                  : 'gray',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
             }}
           >
-            {status}
+            {status === 'pending'
+              ? t('PROJECTS.STATUS_PENDING')
+              : status === 'progress'
+              ? t('PROJECTS.STATUS_IN_PROGRESS')
+              : t('PROJECTS.STATUS_COMPLETED')}
           </span>
         </Tooltip>
       ),
-      onFilter: (value, record) => record.status === value,
       sorter: (a, b) => a.status.localeCompare(b.status),
+      onFilter: (value, record) => record.status === value,
     },
   ];
 
@@ -362,12 +373,16 @@ const EmployeesList = () => {
               }}
               options={[
                 {
-                  value: 'active',
-                  label: t('PROJECTS.STATUS_ACTIVE'),
+                  value: 'pending',
+                  label: t('EMPLOYEES.STATUS_PENDING'),
                 },
                 {
-                  value: 'inactive',
-                  label: t('PROJECTS.STATUS_INACTIVE'),
+                  value: 'progress',
+                  label: t('EMPLOYEES.STATUS_PROGRESS'),
+                },
+                {
+                  value: 'completed',
+                  label: t('EMPLOYEES.STATUS_COMPLETED'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {

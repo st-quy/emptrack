@@ -31,17 +31,18 @@ const LineChart = () => {
     const counts = await countObjectsByYear(data);
     const incomeArray = [
       ['Income', 'Company', 'Year'],
-      [5, 'ST United', 2019],
-      [8, 'ST United', 2020],
+      [9, 'ZeroT Solution', 2019],
+      [31, 'ZeroT Solution', 2020],
+      [40, 'ZeroT Solution', 2021],
+      [25, 'ZeroT Solution', 2022],
     ];
 
     for (const year in counts) {
-      incomeArray.push([counts[year], 'ST United', parseInt(year)]);
+      incomeArray.push([counts[year], 'ZeroT Solution', parseInt(year)]);
     }
 
     setDataChart(incomeArray);
   }
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +78,7 @@ const LineChart = () => {
   }, [dataChart]);
 
   const run = (_rawData) => {
-    const companys = ['ST United'];
+    const companys = ['ZeroT Solution'];
     const datasetWithFilters = [];
     const seriesList = [];
 

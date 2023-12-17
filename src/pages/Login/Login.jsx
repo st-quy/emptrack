@@ -42,7 +42,9 @@ const Login = () => {
   const handleClick = () => {
     signInWithPopup(auth, provider).then((data) => {
       if (data.user.email === import.meta.env.VITE_APP_EMAIL) {
-        setToken(data.user.accessToken);
+        navigate('/');
+        Toast('success', t('TOAST.LOGIN_SUCCESS'));
+        return setToken(data.user.accessToken);
       } else {
         return openNotificationWithIcon('error', `${t('LOGIN.ERROR')}`);
       }
