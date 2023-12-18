@@ -155,7 +155,9 @@ const EmployeesList = () => {
             2,
           );
           setData(data.filter((item) => item.id !== selectedEmployeesId));
-
+          setFilteredData(
+            data.filter((item) => item.id !== selectedEmployeesId),
+          );
           setSelectedEmployeesId(null);
           setShowDeleteModal(false);
         });
@@ -307,19 +309,28 @@ const EmployeesList = () => {
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
-              backgroundColor: status === 'active' ? 'green' : 'red',
+              backgroundColor:
+                status === 'assigned'
+                  ? '#87d068'
+                  : status === 'unassigned'
+                    ? '#ffe58f'
+                    : '#ffccc7',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
             }}
           >
-            {status}
+            {status === 'off'
+              ? t('EMPLOYEES.STATUS_OFF')
+              : status === 'unassigned'
+                ? t('EMPLOYEES.STATUS_UNASSIGNED')
+                : t('EMPLOYEES.STATUS_ASSIGNED')}
           </span>
         </Tooltip>
       ),
-      onFilter: (value, record) => record.status === value,
       sorter: (a, b) => a.status.localeCompare(b.status),
+      onFilter: (value, record) => record.status === value,
     },
   ];
 
@@ -356,18 +367,22 @@ const EmployeesList = () => {
                 });
               }}
             />
-            <Select
+           <Select
               style={{
                 width: 200,
               }}
               options={[
                 {
-                  value: 'active',
-                  label: t('PROJECTS.STATUS_ACTIVE'),
+                  value: 'assigned',
+                  label: t('EMPLOYEES.STATUS_ASSIGNED'),
                 },
                 {
-                  value: 'inactive',
-                  label: t('PROJECTS.STATUS_INACTIVE'),
+                  value: 'unassigned',
+                  label: t('EMPLOYEES.STATUS_UNASSIGNED'),
+                },
+                {
+                  value: 'off',
+                  label: t('EMPLOYEES.STATUS_OFF'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
@@ -400,7 +415,7 @@ const EmployeesList = () => {
                   )
                 : []
             }
-            scroll={{ y: 'calc(100vh - 370px)' }}
+            scroll={{ y: 'calc(100vh - 370px)', x :'calc(100vh - 200px)'}}
             pagination={false}
             size="small"
           />

@@ -131,9 +131,7 @@ const CreateEmployee = () => {
       e.preventDefault();
       axiosInstance
         .post('position', { name: position })
-        .then((response) => {
-          console.log(response.data);
-        })
+        .then((response) => {})
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
         });
@@ -153,9 +151,7 @@ const CreateEmployee = () => {
       e.preventDefault();
       axiosInstance
         .post('skill', { name: inputSkill })
-        .then((response) => {
-          console.log(response.data);
-        })
+        .then((response) => {})
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
         });

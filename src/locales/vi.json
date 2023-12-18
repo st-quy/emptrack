@@ -285,7 +285,10 @@
     "ADD_POSITION": "Thêm chức vụ",
     "SKILLS_LIST": "Danh sách kĩ năng",
     "YEARS": "Năm",
-    "MONTHS": "Tháng"
+    "MONTHS": "Tháng",
+    "STATUS_UNASSIGNED": "Chưa giao việc",
+    "STATUS_ASSIGNED": "Đã giao việc",
+    "STATUS_OFF": "Đã nghỉ "
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
