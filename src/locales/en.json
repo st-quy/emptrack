@@ -213,7 +213,8 @@
     "STATUS_COMPLETED": "Completed",
     "TECHNICAL": "Technical",
     "LIST": "List projects",
-    "ROLE": "Role"
+    "ROLE": "Role",
+    "PROGRESS":"Progress"
   },
   "ROLE": {
     "ADMIN": "Admin",

@@ -214,7 +214,8 @@
     "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
     "LIST": "Danh sách dự án",
-    "STATUS_ACTIVE": "đang hoạt động"
+    "STATUS_ACTIVE": "đang hoạt động",
+    "PROGRESS":"Quá trình"
   },
   "ROLE": {
     "ADMIN": "Quản trị viên",
