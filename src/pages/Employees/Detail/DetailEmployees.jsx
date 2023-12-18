@@ -1,30 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import { useNavigate, useParams } from 'react-router-dom';
-import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
-import Button from '../../../components/atoms/Button/Button';
-import { useTranslation } from 'react-i18next';
-import Card from 'antd/es/card/Card';
-import { axiosInstance } from '../../../config/axios';
-import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
-import dayjs from 'dayjs';
-import TextArea from 'antd/es/input/TextArea';
-import './DetailEmployees.scss';
 import { EyeOutlined } from '@ant-design/icons';
 import {
   Col,
   DatePicker,
+  Divider,
   Form,
   Input,
+  Progress,
   Row,
   Select,
   Space,
-  Typography,
   Tabs,
-  Progress,
-  Divider,
   Tag,
+  Typography,
 } from 'antd';
+import Card from 'antd/es/card/Card';
+import TextArea from 'antd/es/input/TextArea';
+import dayjs from 'dayjs';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from '../../../components/atoms/Button/Button';
+import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
+import { axiosInstance } from '../../../config/axios';
+import CreateCV from './CreateCV';
+import './DetailEmployees.scss';
+
 const { Item } = Form;
 const { Option } = Select;
 const dateFormat = 'DD/MM/YYYY';
@@ -85,9 +87,12 @@ function DetailEmployees() {
               },
             ]}
           />
-          <Button onClick={() => navigate(`/employees/update/${id}`)}>
-            {t('BREADCRUMB.EMPLOYEES_UPDATE')}
-          </Button>
+          <div>
+            <Button onClick={() => navigate(`/employees/update/${id}`)}>
+              {t('BREADCRUMB.EMPLOYEES_UPDATE')}
+            </Button>
+            <CreateCV id={id} />
+          </div>
         </Space>
 
         <Card
