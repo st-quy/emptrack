@@ -3,59 +3,60 @@
     // {
     //   color: black !important; 
     // }
-
-   .ant-input-disabled, .ant-input[disabled],  .ant-select-selection-item,  .ant-input.ant-input-disabled.ant-input-lg,
-   .ant-picker.ant-picker-large.ant-picker-disabled, .ant-picker .ant-picker-input >input-disabled, .ant-picker .ant-picker-input >input[disabled]
-   {
-    color: black !important; 
-
-   }
-   .ant-col.ant-form-item-label label::after{
-      content: '';
-   }
-   .ant-col.ant-col-12{
-      margin-top: 5px;
-   }
-
-.styleAvatar{
-  position: relative;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  left: 50%;
-  transform:translateX(-50%);
-  margin-top: 13px;
-
+    .ant-input-disabled,
+    .ant-input[disabled],
+    .ant-select-selection-item,
+    .ant-input.ant-input-disabled.ant-input-lg,
+    .ant-picker.ant-picker-large.ant-picker-disabled,
+    .ant-picker .ant-picker-input>input-disabled,
+    .ant-picker .ant-picker-input>input[disabled] {
+        color: black !important;
+    }
+    .ant-col.ant-form-item-label label::after {
+        content: '';
+    }
+    .ant-col.ant-col-12 {
+        margin-top: 5px;
+    }
+    .styleAvatar {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 13px;
+    }
+    .employee-details-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .card-scroll-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        /* Thêm padding để tránh ảnh hưởng đến việc cuộn của card */
+    }
 }
-.employee-details-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+
+#employee_details_container {
+    height: 100vh; // Adjust the height as needed
+    overflow: hidden;
 }
 
-.card-scroll-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px; /* Thêm padding để tránh ảnh hưởng đến việc cuộn của card */
-}
-  }
-  #employee_details_container {
-  height: 100vh; // Adjust the height as needed
-  overflow: hidden;
-  }
-  .details-scroll-container {
+.details-scroll-container {
     height: 80vh;
     overflow-y: auto;
-  }
-  
-  // .details-card {
-  //   border-radius: 30px;
-  // }
-  
-  .card-detail-employees .ant-card-body {
-    height: 500px;
+}
+
+// .details-card {
+//   border-radius: 30px;
+// }
+.card-detail-employees .ant-card-body {
+    height: calc(100vh - 300px);
     overflow: auto;
-  }
+}
