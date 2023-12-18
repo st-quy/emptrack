@@ -65,7 +65,17 @@
     "PAGE": "Page",
     "HISTORY": "History",
     "DELETE": "Delete",
-    "VIEW": "View"
+    "VIEW": "View",
+    "TEAM_MANAGER": "Team Manager",
+    "END_DATE": "End Date",
+    "STATUS": "Status",
+    "PROGRESS": "Progress",
+    "BIRTHDATE_BUDDIES": "Birthdate buddies",
+    "INCOME": "Quantity",
+    "YEAR": "Year",
+    "ACCESS_FROM": "Access from",
+    "JOINED": "Joined",
+    "READY_JOIN": "Ready to join"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -156,10 +166,11 @@
     "SCHEDULE": "Schedule",
     "Action": "Action",
     "AVATAR": "Avatar",
-    "INCOME": "Income of ST United Company",
+    "INCOME": "New hire growth each year",
     "STATISTIC_WORK": "Statistics by Work",
     "STATISTIC_POSITION": "Statistics by Position",
-    "STATISTIC_COMPANY": "Company fluctuations"
+    "STATISTIC_COMPANY": "Company fluctuations",
+    "TOTAL_EMPLOYEES": "Total employees"
   },
   "USERS": {
     "NAME": "Name",
@@ -184,6 +195,7 @@
   "PROJECTS": {
     "COMFIRM_DELETE_PROJECT": "Are you sure you want to delete this project ?",
     "BASIC_INFORMATION": "Basic Information",
+    "PROJECT_INFORMATION": "Project History",
     "MEMBER_LIST": "List members",
     "NAME": "Project name",
     "MANAGER": "Project manager",
@@ -272,7 +284,10 @@
     "ADDRESS": "Address",
     "ID": "No.",
     "ADD_POSITION": "Add position",
-    "SKILLS_LIST": "Skills list"
+    "SKILLS_LIST": "Skills list",
+    "YEARS": "Years",
+    "MONTHS": "Months",
+    "STATUS_PENDING": "Pending "
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",

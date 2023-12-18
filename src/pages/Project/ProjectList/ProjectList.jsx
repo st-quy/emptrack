@@ -142,7 +142,6 @@ const ProjectList = () => {
           }),
           2,
         );
-
         setSelectedProjectId(null);
         setShowDeleteModal(false);
       });
@@ -419,7 +418,7 @@ const ProjectList = () => {
                   )
                 : []
             }
-            scroll={{ y: 'calc(100vh - 400px)' }}
+            scroll={{ y: 'calc(100vh - 370px)', x :'calc(100vh - 200px)'}}
             pagination={false}
             size="small"
           />

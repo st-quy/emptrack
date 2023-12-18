@@ -65,7 +65,17 @@
     "PAGE": "Trang",
     "HISTORY": "Lịch Sử",
     "DELETE": "Xóa",
-    "VIEW": "Xem"
+    "VIEW": "Xem",
+    "TEAM_MANAGER": "Quản lý team",
+    "END_DATE": "Ngày kết thúc",
+    "STATUS": "Trạng thái",
+    "PROGRESS": "Tiến độ",
+    "BIRTHDATE_BUDDIES": "Sinh nhật sắp tới",
+    "INCOME": "Số Lượng",
+    "YEAR": "Năm",
+    "ACCESS_FROM": "Truy cập từ",
+    "JOINED": "Tham gia",
+    "READY_JOIN": "Sắp tham gia"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -155,10 +165,11 @@
     "SCHEDULE": "Lịch trình",
     "Action": "Tuỳ chỉnh",
     "AVATAR": "ảnh",
-    "INCOME": "Thu nhập của ST United",
+    "INCOME": "Tăng trưởng nhân viên mới theo từng năm",
     "STATISTIC_WORK": "Thống kê theo công việc",
     "STATISTIC_POSITION": "Thống kê theo vị trí",
-    "STATISTIC_COMPANY": "Biến động công ty"
+    "STATISTIC_COMPANY": "Biến động công ty",
+    "TOTAL_EMPLOYEES": "Tổng nhân viên"
   },
   "USERS": {
     "NAME": "Tên",
@@ -184,6 +195,7 @@
   "PROJECTS": {
     "COMFIRM_DELETE_PROJECT": "Bạn có chắc chắn muốn xóa dự án này ?",
     "BASIC_INFORMATION": "Thông tin cơ bản",
+    "PROJECT_INFORMATION": "Lịch sử dự án",
     "MEMBER_LIST": "Danh sách thành viên",
     "NAME": "Tên dự án",
     "MANAGER": "Quản lý dự án",
@@ -201,7 +213,8 @@
     "STATUS_IN_PROGRESS": "Đang thực hiện",
     "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
-    "LIST": "Danh sách dự án"
+    "LIST": "Danh sách dự án",
+    "STATUS_ACTIVE": "đang hoạt động"
   },
   "ROLE": {
     "ADMIN": "Quản trị viên",
@@ -272,7 +285,10 @@
     "ADDRESS": "Địa chỉ",
     "ID": "STT",
     "ADD_POSITION": "Thêm chức vụ",
-    "SKILLS_LIST": "Danh sách kĩ năng"
+    "SKILLS_LIST": "Danh sách kĩ năng",
+    "YEARS": "Năm",
+    "MONTHS": "Tháng",
+    "STATUS_ACTIVE": "đang hoạt động"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",

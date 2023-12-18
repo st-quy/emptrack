@@ -60,3 +60,32 @@
     height: calc(100vh - 300px);
     overflow: auto;
 }
+
+.card-project {
+    width: 300px;
+    height: 270px;
+    // background-color: #fee4cb;
+    border-radius: 20% !important;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    .ant-card-body {
+        height: 250px;
+        overflow: hidden;
+        margin-top: 10px;
+        // align-items: center;
+        // justify-content: center;
+    }
+    #row-first {
+        display: flex;
+        justify-content: space-between;
+    }
+    #row-second {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        #title-project {
+            font-size: 22px;
+            font-weight: bold;
+        }
+    }
+}

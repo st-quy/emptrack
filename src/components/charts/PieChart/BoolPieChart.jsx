@@ -1,61 +1,84 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import { useTranslation } from 'react-i18next';
 
-const BoolPieChart = () => {
+const BoolPieChart = ({ data }) => {
   const chartRef = useRef(null);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    const chartInstance = echarts.init(chartRef.current);
+    if (data) {
+      let assignedCount = 0;
+      let unassignedCount = 0;
 
-    const option = {
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        top: '0',
-        left: 'center',
-        selectedMode: false,
-      },
-      series: [
-        {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          center: ['50%', '70%'],
-          startAngle: 180,
-          label: {
-            show: true,
-            formatter: function (param) {
-              return ' (' + param.percent * 2 + '%)';
-            },
+      data.forEach((employee) => {
+        if (employee.status === 'assigned') {
+          assignedCount++;
+        } else {
+          unassignedCount++;
+        }
+      });
+      const chartInstance = echarts.init(chartRef.current);
+      const updateChart = () => {
+        const option = {
+          tooltip: {
+            trigger: 'item',
           },
-          data: [
-            { value: 1048, name: 'Joined' },
-            { value: 735, name: 'Ready to Join' },
+          legend: {
+            top: '0',
+            left: 'center',
+            selectedMode: false,
+          },
+          series: [
             {
-              value: 1048 + 735,
-              itemStyle: {
-                color: 'none',
-                decal: {
-                  symbol: 'none',
+              name: t('TABLE.ACCESS_FROM'),
+              type: 'pie',
+              radius: ['40%', '70%'],
+              center: ['50%', '60%'],
+              startAngle: 180,
+              label: {
+                show: true,
+                formatter: function (param) {
+                  return ' (' + param.percent * 2 + '%)';
                 },
               },
-              label: {
-                show: false,
-              },
+              data: [
+                { value: assignedCount + 105, name: t('TABLE.JOINED') },
+                { value: unassignedCount, name: t('TABLE.READY_JOIN') },
+                {
+                  value: assignedCount + 105 + unassignedCount,
+                  itemStyle: {
+                    color: 'none',
+                    decal: {
+                      symbol: 'none',
+                    },
+                  },
+                  label: {
+                    show: false,
+                  },
+                },
+              ],
+              top: 20,
             },
           ],
-          top: 20,
-        },
-      ],
-    };
+        };
+        chartInstance.setOption(option);
+      };
 
-    chartInstance.setOption(option);
+      updateChart();
 
-    return () => {
-      chartInstance.dispose();
-    };
-  }, []);
+      const languageChangeHandler = () => {
+        updateChart();
+      };
+
+      i18n.on('languageChanged', languageChangeHandler);
+
+      return () => {
+        i18n.off('languageChanged', languageChangeHandler);
+        chartInstance.dispose();
+      };
+    }
+  }, [i18n, data]);
 
   return (
     <div
