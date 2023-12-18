@@ -288,7 +288,10 @@
     "SKILLS_LIST": "Skills list",
     "YEARS": "Years",
     "MONTHS": "Months",
-    "STATUS_PENDING": "Pending "
+    "STATUS_PENDING": "Pending",
+    "STATUS_UNASSIGNED": "Unassigned",
+        "STATUS_ASSIGNED": "Assigned",
+        "STATUS_OFF": "Off"
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Employee code must start with DL and 3 digits",

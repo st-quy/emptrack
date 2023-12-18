@@ -310,22 +310,22 @@ const EmployeesList = () => {
           <span
             style={{
               backgroundColor:
-                status === 'Unassigned'
-                  ? 'green'
-                  : status === 'progress'
-                  ? 'orange'
-                  : 'gray',
+                status === 'assigned'
+                  ? '#87D068'
+                  : status === 'unassigned'
+                  ? '#FFE58F'
+                  : '#FFCCC7',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
               display: 'inline-block',
             }}
           >
-            {status === 'pending'
-              ? t('PROJECTS.STATUS_PENDING')
-              : status === 'progress'
-              ? t('PROJECTS.STATUS_IN_PROGRESS')
-              : t('PROJECTS.STATUS_COMPLETED')}
+            {status === 'off'
+              ? t('EMPLOYEES.STATUS_OFF')
+              : status === 'unassigned'
+              ? t('EMPLOYEES.STATUS_UNASSIGNED')
+              : t('EMPLOYEES.STATUS_ASSIGNED')}
           </span>
         </Tooltip>
       ),
@@ -373,16 +373,16 @@ const EmployeesList = () => {
               }}
               options={[
                 {
-                  value: 'pending',
-                  label: t('EMPLOYEES.STATUS_PENDING'),
+                  value: 'assigned',
+                  label: t('EMPLOYEES.STATUS_ASSIGNED'),
                 },
                 {
-                  value: 'progress',
-                  label: t('EMPLOYEES.STATUS_PROGRESS'),
+                  value: 'unassigned',
+                  label: t('EMPLOYEES.STATUS_UNASSIGNED'),
                 },
                 {
-                  value: 'completed',
-                  label: t('EMPLOYEES.STATUS_COMPLETED'),
+                  value: 'off',
+                  label: t('EMPLOYEES.STATUS_OFF'),
                 },
               ]}
               placeholder={t('TEXT_SEARCH.SELECT', {
@@ -415,7 +415,7 @@ const EmployeesList = () => {
                   )
                 : []
             }
-            scroll={{ y: 'calc(100vh - 370px)' }}
+            scroll={{ y: 'calc(100vh - 370px)', x: 'calc(100vh - 200px)' }}
             pagination={false}
             size="small"
           />

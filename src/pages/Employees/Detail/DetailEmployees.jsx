@@ -346,11 +346,14 @@ function DetailEmployees() {
                                   placeholder={t('EMPLOYEES.STATUS')}
                                   style={{ width: '100%' }}
                                 >
-                                  <Option value="active">
-                                    {t('EMPLOYEES.ACTIVE')}
+                                  <Option value="assigned">
+                                    {t('EMPLOYEES.STATUS_ASSIGNED')}
                                   </Option>
-                                  <Option value="unactive">
-                                    {t('EMPLOYEES.UNACTIVE')}
+                                  <Option value="unassigned">
+                                    {t('EMPLOYEE.STATUS_UNASSIGNED')}
+                                  </Option>
+                                  <Option value="off">
+                                    {t('EMPLOYEES.STATUS_OFF')}
                                   </Option>
                                 </Select>
                               </Item>
