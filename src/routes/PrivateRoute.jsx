@@ -8,6 +8,7 @@ import { ProtectedRoute } from './ProtectedRoute/ProtectedRoute.jsx';
 
 // Define routes accessible only to authenticated users
 import DetailEmployees from '../pages/Employees/Detail/DetailEmployees.jsx';
+import UpdateEmployee from '../pages/Employees/UpdateEmployee/UpdateEmployee.jsx';
 import DetailsProject from '../pages/Project/Details/DetailsProject';
 import ProjectUpdate from '../pages/Project/Project Update/ProjectUpdate.jsx';
 const PrivateRoute = [
@@ -37,6 +38,10 @@ const PrivateRoute = [
           {
             path: 'details/:id',
             element: <DetailEmployees />,
+          },
+          {
+            path: 'update/:id',
+            element: <UpdateEmployee />,
           },
         ],
       },

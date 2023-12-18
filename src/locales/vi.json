@@ -71,7 +71,7 @@
     "STATUS": "Trạng thái",
     "PROGRESS": "Tiến độ",
     "BIRTHDATE_BUDDIES": "Sinh nhật sắp tới",
-    "INCOME": "Số Lượng",
+    "INCOME": "Thu nhập",
     "YEAR": "Năm",
     "ACCESS_FROM": "Truy cập từ",
     "JOINED": "Tham gia",
@@ -195,7 +195,6 @@
   "PROJECTS": {
     "COMFIRM_DELETE_PROJECT": "Bạn có chắc chắn muốn xóa dự án này ?",
     "BASIC_INFORMATION": "Thông tin cơ bản",
-    "PROJECT_INFORMATION": "Lịch sử dự án",
     "MEMBER_LIST": "Danh sách thành viên",
     "NAME": "Tên dự án",
     "MANAGER": "Quản lý dự án",
@@ -214,7 +213,7 @@
     "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
     "LIST": "Danh sách dự án",
-    "STATUS_ACTIVE": "đang hoạt động",
+    "PROJECT_INFORMATION": "Lịch sử dự án",
     "PROGRESS":"Quá trình"
   },
   "ROLE": {
@@ -289,10 +288,9 @@
     "SKILLS_LIST": "Danh sách kĩ năng",
     "YEARS": "Năm",
     "MONTHS": "Tháng",
-    "STATUS_ACTIVE": "đang hoạt động",
     "STATUS_UNASSIGNED": "Chưa giao việc",
-        "STATUS_ASSIGNED": "Đã giao việc",
-        "STATUS_OFF": "Đã nghỉ "
+    "STATUS_ASSIGNED": "Đã giao việc",
+    "STATUS_OFF": "Đã nghỉ "
   },
   "EMPLOYEE_VALIDATION": {
     "CODE_MATCH": "Mã nhân viên phải bắt đầu bằng DL và 3 chữ số",
@@ -307,7 +305,6 @@
     "STATUS_REQUIRED": "Vui lòng chọn trạng thái",
     "IS_MANAGER_REQUIRED": "Bạn có phải người quản lí không?",
     "POSITION_REQUIRED": "Vui lòng chọn chức vụ",
-    "BIRTH_MAX": "Ngày sinh không được lớn hơn ngày hiện tại",
     "BIRTH_REQUIRED": "Vui lòng chọn ngày sinh",
     "CITIZEN_CARD_REQUIRED": "Vui lòng nhập số căn cước",
     "CITIZEN_CARD_MATCH": "Số căn cước bắt buộc phải 10 số",
@@ -320,7 +317,9 @@
     "SKILL": "Vui lòng nhập tối thiểu 1 kĩ năng",
     "EMAIL_INVALID": "Email phải bao gồm kí tự @",
     "ADD_POSITION": "Vui lòng nhập tên chức vụ trước khi thêm",
-    "ADD_SKILL": "Vui lòng nhập tên kĩ năng trước khi thêm"
+    "ADD_SKILL": "Vui lòng nhập tên kĩ năng trước khi thêm",
+    "DUPLICATE_EMAIL": "Email đã tồn tại",
+    "DUPLICATE_CITIZEN": "Số căn cước đã tồn tại"
   },
   "DRAWER": {
     "TITLE": "Theo dõi lịch sử"

@@ -302,19 +302,16 @@ const EmployeesList = () => {
       align: 'center',
 
       width: 20,
-      ellipsis: {
-        showTitle: false,
-      },
       render: (status) => (
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
               backgroundColor:
-                status === 'assigned'
-                  ? '#87D068'
+                status === 'off'
+                  ? 'gray'
                   : status === 'unassigned'
-                  ? '#FFE58F'
-                  : '#FFCCC7',
+                  ? 'orange'
+                  : 'green',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
@@ -329,6 +326,9 @@ const EmployeesList = () => {
           </span>
         </Tooltip>
       ),
+      ellipsis: {
+        showTitle: false,
+      },
       sorter: (a, b) => a.status.localeCompare(b.status),
       onFilter: (value, record) => record.status === value,
     },
