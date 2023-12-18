@@ -25,7 +25,6 @@ import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
-import moment from 'moment';
 import './UpdateEmployee.scss';
 import ValidationSchema from '../CreateEmployee/ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
@@ -52,21 +51,19 @@ const UpdateEmployee = () => {
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [employee, setEmployee] = useState([]);
-
+  const [listEmployees, setListEmployees] = useState([]);
   useEffect(() => {
     const getEmployee = async () => {
       axiosInstance
         .get(`employees/${id}`)
         .then((response) => {
           setEmployee(response.data);
-
           setFileList([
             {
               status: 'done',
               url: response.data.avatar[0].url,
             },
           ]);
-          console.log(fileList);
           formik.setValues({
             name: response.data.name || '',
             email: response.data.email || '',
@@ -84,6 +81,7 @@ const UpdateEmployee = () => {
               { skillname: null, exp: '', addonAfter: 'years' },
             ],
           });
+          console.log(dayjs(response.data.birth, dateFormat));
         })
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -96,6 +94,21 @@ const UpdateEmployee = () => {
         .then((response) => {
           const items = response.data.map((item) => item.name);
           setItems(items);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
+
+    const getManager = async () => {
+      axiosInstance
+        .get('employees')
+        .then((response) => {
+          setListEmployees(response.data);
+          const managerEmployees = employeeOptions.filter(
+            (employee) => employee.isManager,
+          );
+          setEmployeeOptions(managerEmployees);
         })
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -115,6 +128,7 @@ const UpdateEmployee = () => {
 
     getEmployee();
     getPosition();
+    getManager();
     getSkill();
   }, []);
 
@@ -138,35 +152,59 @@ const UpdateEmployee = () => {
     skills: [{ skillname: null, exp: '', addonAfter: 'years' }],
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-      if (values.skills.length === 0) {
-        return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
+      if (values.birth === formik.values.birth) {
+        values.birth = dayjs(values.birth, dateFormat).format('DD-MM-YYYY');
+      } else {
+        console.log(values.birth);
+        values.birth = dayjs(values.birth).format('DD-MM-YYYY');
+      }
+
+      const isEmailDuplicate = listEmployees.some((e) => {
+        return e.email === values.email && e.code !== employee.code;
+      });
+
+      const isCitizenDuplicate = listEmployees.some((e) => {
+        return (
+          e.citizen_card === values.citizen_card && e.code !== employee.code
+        );
+      });
+
+      if (isEmailDuplicate) {
+        formik.setFieldError('email', t('EMPLOYEE_VALIDATION.DUPLICATE_EMAIL'));
+        Toast('error', t('EMPLOYEE_VALIDATION.DUPLICATE_EMAIL'), 2);
+      } else if (isCitizenDuplicate) {
+        formik.setFieldError(
+          'citizen_card',
+          t('EMPLOYEE_VALIDATION.DUPLICATE_CITIZEN'),
+        );
+        Toast('error', t('EMPLOYEE_VALIDATION.DUPLICATE_CITIZEN'), 2);
+      } else if (values.skills.length === 0) {
+        Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
       } else if (fileList.length > 0) {
         axiosInstance
           .patch(`employees/${id}`, {
             ...values,
             avatar: fileImg,
           })
-          .then((response) => {
+          .then(() => {
             Toast(
               'success',
-              t('TOAST.CREATED_SUCCESS', {
+              t('TOAST.UPDATED_SUCCESS', {
                 field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
               }),
-              2,
             );
+            setTimeout(() => {
+              formik.resetForm();
+              form.resetFields();
+              navigate(`/employees/details/${id}`);
+            }, 1000);
           })
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
-        formik.resetForm();
-        form.resetFields();
-        setTimeout(() => {
-          navigate('/employees');
-        }, 2000);
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
-      console.log(values);
       console.log('formik', formik.values);
     },
   });
@@ -319,7 +357,7 @@ const UpdateEmployee = () => {
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
       <Card
-        title={t('EMPLOYEES.CREATE')}
+        title={t('BREADCRUMB.EMPLOYEES_UPDATE')}
         className="card-create-employees"
         style={{ borderRadius: '30px' }}
       >
@@ -502,9 +540,6 @@ const UpdateEmployee = () => {
                       style={{ width: '100%' }}
                       format={'DD-MM-YYYY'}
                     />
-                    {/* <DatePicker
-                      defaultValue={dayjs('15-09-1990', dateFormat)}
-                    /> */}
                   </Item>
                 </Col>
                 {/* CITIZEN_CARD EMPLOYEE */}

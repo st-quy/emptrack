@@ -300,7 +300,6 @@
     "STATUS_REQUIRED": "Please select a status",
     "IS_MANAGER_REQUIRED": "Are you a manager?",
     "POSITION_REQUIRED": "Please select a position",
-    "BIRTH_MAX": "Date of Birth cannot be greater than current date",
     "BIRTH_REQUIRED": "Please select Date of Birth",
     "BIRTH_ENOUGH_AGE": "Please choose a Date of Birth greater than 18 years old",
     "CITIZEN_CARD_REQUIRED": "Please enter citizen identification number",
@@ -313,7 +312,9 @@
     "SKILL": "Please enter at least 1 skill",
     "EMAIL_INVALID": "Email must include the @ character",
     "ADD_POSITION": "Please enter a position before adding",
-    "ADD_SKILL": "Please enter a skill before adding"
+    "ADD_SKILL": "Please enter a skill before adding",
+    "DUPLICATE_EMAIL": "Email already exists",
+    "DUPLICATE_CITIZEN": "Citizen card already exists"
   },
   "DRAWER": {
     "TITLE": "History Tracking"
