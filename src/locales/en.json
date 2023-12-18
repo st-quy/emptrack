@@ -166,7 +166,7 @@
     "SCHEDULE": "Schedule",
     "Action": "Action",
     "AVATAR": "Avatar",
-    "INCOME": "Income of ST United Company",
+    "INCOME": "New hire growth each year",
     "STATISTIC_WORK": "Statistics by Work",
     "STATISTIC_POSITION": "Statistics by Position",
     "STATISTIC_COMPANY": "Company fluctuations",
@@ -212,7 +212,9 @@
     "STATUS_COMPLETED": "Completed",
     "TECHNICAL": "Technical",
     "LIST": "List projects",
-    "ROLE": "Role"
+    "ROLE": "Role",
+    "PROJECT_INFORMATION": "Project History",
+    "PROGRESS":"Progress"
   },
   "ROLE": {
     "ADMIN": "Admin",
@@ -318,7 +320,8 @@
     "ADD_POSITION": "Please enter a position before adding",
     "ADD_SKILL": "Please enter a skill before adding",
     "DUPLICATE_EMAIL": "Email already exists",
-    "DUPLICATE_CITIZEN": "Citizen card already exists"
+    "DUPLICATE_CITIZEN": "Citizen card already exists",    
+    "BIRTH_MAX": "Date of Birth cannot be greater than current date"
   },
   "DRAWER": {
     "TITLE": "History Tracking"

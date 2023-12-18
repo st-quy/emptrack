@@ -165,7 +165,7 @@
     "SCHEDULE": "Lịch trình",
     "Action": "Tuỳ chỉnh",
     "AVATAR": "ảnh",
-    "INCOME": "Thu nhập của ST United",
+    "INCOME": "Tăng trưởng nhân viên mới theo từng năm",
     "STATISTIC_WORK": "Thống kê theo công việc",
     "STATISTIC_POSITION": "Thống kê theo vị trí",
     "STATISTIC_COMPANY": "Biến động công ty",
@@ -212,7 +212,9 @@
     "STATUS_IN_PROGRESS": "Đang thực hiện",
     "STATUS_COMPLETED": "Đã hoàn thành",
     "TECHNICAL": "Công nghệ",
-    "LIST": "Danh sách dự án"
+    "LIST": "Danh sách dự án",
+    "PROJECT_INFORMATION": "Lịch sử dự án",
+    "PROGRESS":"Quá trình"
   },
   "ROLE": {
     "ADMIN": "Quản trị viên",
