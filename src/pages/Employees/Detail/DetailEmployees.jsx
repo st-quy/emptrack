@@ -98,7 +98,7 @@ function DetailEmployees() {
           }}
         >
           <Tabs
-            defaultActiveKey="2"
+            defaultActiveKey="1"
             items={[
               {
                 key: '1',
