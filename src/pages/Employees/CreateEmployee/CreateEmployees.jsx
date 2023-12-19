@@ -764,10 +764,12 @@ const CreateEmployee = () => {
                   style={{ width: '100%' }}
                 >
                   <Option value="unassigned">
-                    {t('EMPLOYEES.UNASSIGNED')}
+                    {t('EMPLOYEES.STATUS_UNASSIGNED')}
                   </Option>
-                  <Option value="assigned">{t('EMPLOYEES.ASSIGNED')}</Option>
-                  <Option value="off">{t('EMPLOYEES.OFF')}</Option>
+                  <Option value="assigned">
+                    {t('EMPLOYEES.STATUS_ASSIGNED')}
+                  </Option>
+                  <Option value="off">{t('EMPLOYEES.STATUS_OFF')}</Option>
                 </Select>
               </Item>
             </Col>

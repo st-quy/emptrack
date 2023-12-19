@@ -361,7 +361,7 @@ const EmployeesList = () => {
             <TextSearch
               label={t('EMPLOYEES.NAME')}
               func={(e) => {
-                setSearchParam({ ...searchParam, name: e.target.value });
+                setSearchParam({ ...searchParam,name: e.target.value });
               }}
             />
             <TextSearch

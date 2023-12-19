@@ -98,7 +98,7 @@ function DetailEmployees() {
           }}
         >
           <Tabs
-            defaultActiveKey="2"
+            defaultActiveKey="1"
             items={[
               {
                 key: '1',
@@ -350,8 +350,8 @@ function DetailEmployees() {
                                     {t('EMPLOYEES.STATUS_ASSIGNED')}
                                   </Option>
                                   <Option value="unassigned">
-                        {t('EMPLOYEES.STATUS_UNASSIGNED')}
-                      </Option>
+                                    {t('EMPLOYEES.STATUS_UNASSIGNED')}
+                                  </Option>
                                   <Option value="off">
                                     {t('EMPLOYEES.STATUS_OFF')}
                                   </Option>
