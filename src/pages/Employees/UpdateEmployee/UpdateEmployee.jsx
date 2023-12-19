@@ -72,7 +72,7 @@ const UpdateEmployee = () => {
             birth: response.data.birth || null,
             description: response.data.description || '',
             citizen_card: response.data.citizen_card || '',
-            isManager: response.data.isManager || null,
+            isManager: response.data.isManager || false,
             status: response.data.status || '',
             position: response.data.position || '',
             lineManager: response.data.lineManager || '',
@@ -105,10 +105,11 @@ const UpdateEmployee = () => {
         .get('employees')
         .then((response) => {
           setListEmployees(response.data);
-          const managerEmployees = employeeOptions.filter(
+          const managerEmployees = listEmployees.filter(
             (employee) => employee.isManager,
           );
           setEmployeeOptions(managerEmployees);
+          console.log(employeeOptions);
         })
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -144,7 +145,7 @@ const UpdateEmployee = () => {
     birth: null,
     description: '',
     citizen_card: '',
-    isManager: null,
+    isManager: false,
     status: '',
     position: '',
     lineManager: '',
@@ -799,12 +800,12 @@ const UpdateEmployee = () => {
                       style={{ width: '100%' }}
                     >
                       <Option value="unassigned">
-                        {t('EMPLOYEES.UNASSIGNED')}
+                        {t('EMPLOYEES.STATUS_UNASSIGNED')}
                       </Option>
-                      <Option value="assigned ">
-                        {t('EMPLOYEES.ASSIGNED')}
+                      <Option value="assigned">
+                        {t('EMPLOYEES.STATUS_ASSIGNED')}
                       </Option>
-                      <Option value="off">{t('EMPLOYEES.OFF')}</Option>
+                      <Option value="off">{t('EMPLOYEES.STATUS_OFF')}</Option>
                     </Select>
                   </Item>
                 </Col>

@@ -72,8 +72,14 @@ const EmployeesList = () => {
           .get('employees')
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
+        filterDeleted.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
         setData(filterDeleted);
         setFilteredData(filterDeleted);
+  
         await axiosInstance.get('/projects').then((res) => {
           const filterDeletedProjects = res.data.filter(
             (item) => !item.deletedAt,
@@ -355,7 +361,7 @@ const EmployeesList = () => {
             <TextSearch
               label={t('EMPLOYEES.NAME')}
               func={(e) => {
-                setSearchParam({ ...searchParam, name: e.target.value });
+                setSearchParam({ ...searchParam,name: e.target.value });
               }}
             />
             <TextSearch
