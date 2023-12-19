@@ -42,15 +42,31 @@ const CreateCV = ({ id }) => {
                 typicalProjectString += `\n\nProject Name: ${
                   project.name
                 }\nRole: ${isExist.role.join(', ')} \nDescription: ${
-                  project.description
+                  project.description ? project.description : ''
                 } \nLanguages and Framework: ${project.technical.join(', ')}`;
               }
             });
+
+            const dateString = data?.createdAt;
+            const date = new Date(dateString);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear().toString();
+
+            const formattedDate = `${month}/${year}`;
+
             setTextCV(
-              `${data.name.toUpperCase()}
-            \nAddress: ${data.address}
-            \nEmail: ${data.email}
+              `${data.name.toUpperCase()}\nAddress: ${data.address}\nEmail: ${
+                data.email
+              }
             \n\nWORKING EXPERIENCE
+            \n${formattedDate} - now\n${
+                data.position[0].toUpperCase() + data.position.slice(1)
+              } at DevPlus – Da Nang${
+                data.description ? `\n${data.description}` : ''
+              }
+            \nLanguages and Framework: ${data.skills
+              .map((k) => k.skillname)
+              .join(', ')}
             \n\nTYPICAL PROJECTS
             ${typicalProjectString}
             \n\nTECHNICAL SKILLS/QUALIFICATION\n\n
@@ -240,7 +256,7 @@ const CreateCV = ({ id }) => {
   /* create file */
   const createCV = (id) => {
     var accessToken =
-      'ya29.a0AfB_byAJFMLn5qaUrKw-L2oudfsmWYBnH5KjeNn0PwHsceVaNJGBX9RVa_7Br3CVpRTqKDBtFSGvHE_tEu1byRsRDVMIKEWUVsWpes9tN_7dbgOXdD0qy9SqiZsR2bAvv9-eyUYVzChb9YaFH1c0dlbQWkYkJcyq2YcaCgYKAS0SARESFQHGX2MiMEyx3nHZ-nOovI2zRWbi-w0170';
+      'ya29.a0AfB_byAlc4zzMts1DLazK64tSotvodgcth4dB4uB4QCgLaGUFKJeumuiur4oURMjz2s6c3XDXCFbp4dPczHwJqylSjqQra9amk2aR0yPvqiFozKUeZkJCAf8zTQKxtXmIhNSNMNB2TsG2GgWpr3E-Nzd-islwyHh1uYaCgYKAb8SARESFQHGX2MiWXFZHcKc5OyC_VnfeIbmlg0170';
     var filename =
       dataCV?.name + ' CV, ' + getDateString() + ' ' + getTimeString();
 
@@ -256,6 +272,7 @@ const CreateCV = ({ id }) => {
     })
       .then((res) => res.json())
       .then((document) => {
+        // console.log(document);
         const documentId = document.documentId;
 
         // Step 2: Update the document content
@@ -291,14 +308,67 @@ const CreateCV = ({ id }) => {
                       foregroundColor: {
                         color: {
                           rgbColor: {
-                            red: 0.5,
-                            green: 0.5,
-                            blue: 0.5,
+                            red: 88 / 255,
+                            green: 88 / 255,
+                            blue: 88 / 255,
                           },
                         },
                       },
                     },
                     fields: 'fontSize, foregroundColor',
+                  },
+                },
+                {
+                  updateTextStyle: {
+                    range: {
+                      startIndex: textCV.indexOf('WORKING EXPERIENCE'),
+                      endIndex: textCV.indexOf('WORKING EXPERIENCE') + 46,
+                    },
+                    textStyle: {
+                      bold: true,
+                      fontSize: {
+                        magnitude: 12,
+                        unit: 'PT',
+                      },
+                      foregroundColor: {
+                        color: {
+                          rgbColor: {
+                            red: 0.0,
+                            green: 0.0,
+                            blue: 0.0,
+                          },
+                        },
+                      },
+                    },
+                    fields: 'bold, fontSize, foregroundColor',
+                  },
+                },
+                {
+                  updateTextStyle: {
+                    range: {
+                      startIndex: textCV.indexOf('WORKING EXPERIENCE') + 46,
+                      endIndex:
+                        textCV.indexOf('WORKING EXPERIENCE') +
+                        90 +
+                        dataCV.description.length,
+                    },
+                    textStyle: {
+                      italic: true,
+                      fontSize: {
+                        magnitude: 12,
+                        unit: 'PT',
+                      },
+                      foregroundColor: {
+                        color: {
+                          rgbColor: {
+                            red: 0.0,
+                            green: 0.0,
+                            blue: 0.0,
+                          },
+                        },
+                      },
+                    },
+                    fields: 'italic, fontSize, foregroundColor',
                   },
                 },
                 ...textStyleHeadingRequests,
