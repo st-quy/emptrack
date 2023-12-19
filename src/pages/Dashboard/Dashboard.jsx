@@ -1,15 +1,15 @@
 import { Card, Col, Image, Row, Space, Statistic, Typography } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { useTranslation } from 'react-i18next';
+import SpinLoading from '../../components/atoms/SpinLoading/SpinLoading';
 import LineChart from '../../components/charts/LineChart/LineChart';
 import BoolPieChart from '../../components/charts/PieChart/BoolPieChart';
 import Breadcrumb from '../../components/molecules/Breadcrumb/Breadcrumb';
 import TableProgress from '../../components/molecules/TableProgress/TableProgress';
-import './Dashboard.scss';
 import { axiosInstance } from '../../config/axios';
-import moment from 'moment';
-import SpinLoading from '../../components/atoms/SpinLoading/SpinLoading';
+import './Dashboard.scss';
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -84,7 +84,7 @@ const Dashboard = () => {
                       </Typography>
                       <Statistic
                         style={{ fontSize: '30px' }}
-                        value={totalEmployees + 105}
+                        value={allEmployees.length}
                         formatter={formatter}
                       />
                     </Space>
