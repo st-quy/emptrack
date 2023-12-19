@@ -434,7 +434,7 @@ function DetailEmployees() {
                 ),
               },
               {
-                key: '0',
+                key: '2',
                 label: t('PROJECTS.PROJECT_INFORMATION'),
                 children: (
                   <>

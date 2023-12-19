@@ -84,7 +84,7 @@ const Dashboard = () => {
                       </Typography>
                       <Statistic
                         style={{ fontSize: '30px' }}
-                        value={totalEmployees}
+                        value={totalEmployees + 105}
                         formatter={formatter}
                       />
                     </Space>
