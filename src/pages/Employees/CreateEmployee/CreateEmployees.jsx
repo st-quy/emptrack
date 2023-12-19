@@ -89,11 +89,11 @@ const CreateEmployee = () => {
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
-
+        
         formik.resetForm();
         form.resetFields();
         setTimeout(() => {
-          navigate('/employees');
+          navigate(`/employees`);
         }, 2000);
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
@@ -749,7 +749,7 @@ const CreateEmployee = () => {
                   <Option value="unassigned">
                     {t('EMPLOYEES.UNASSIGNED')}
                   </Option>
-                  <Option value="assigned ">{t('EMPLOYEES.ASSIGNED')}</Option>
+                  <Option value="assigned">{t('EMPLOYEES.ASSIGNED')}</Option>
                   <Option value="off">{t('EMPLOYEES.OFF')}</Option>
                 </Select>
               </Item>
