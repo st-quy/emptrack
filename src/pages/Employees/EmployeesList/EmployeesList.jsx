@@ -72,8 +72,14 @@ const EmployeesList = () => {
           .get('employees')
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
+        filterDeleted.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
         setData(filterDeleted);
         setFilteredData(filterDeleted);
+  
         await axiosInstance.get('/projects').then((res) => {
           const filterDeletedProjects = res.data.filter(
             (item) => !item.deletedAt,
@@ -302,19 +308,16 @@ const EmployeesList = () => {
       align: 'center',
 
       width: 20,
-      ellipsis: {
-        showTitle: false,
-      },
       render: (status) => (
         <Tooltip placement="topLeft" title={status}>
           <span
             style={{
               backgroundColor:
-                status === 'assigned'
-                  ? '#87d068'
+                status === 'off'
+                  ? 'gray'
                   : status === 'unassigned'
-                    ? '#ffe58f'
-                    : '#ffccc7',
+                  ? 'orange'
+                  : 'green',
               color: 'white',
               padding: '3px 8px',
               borderRadius: '4px',
@@ -324,11 +327,14 @@ const EmployeesList = () => {
             {status === 'off'
               ? t('EMPLOYEES.STATUS_OFF')
               : status === 'unassigned'
-                ? t('EMPLOYEES.STATUS_UNASSIGNED')
-                : t('EMPLOYEES.STATUS_ASSIGNED')}
+              ? t('EMPLOYEES.STATUS_UNASSIGNED')
+              : t('EMPLOYEES.STATUS_ASSIGNED')}
           </span>
         </Tooltip>
       ),
+      ellipsis: {
+        showTitle: false,
+      },
       sorter: (a, b) => a.status.localeCompare(b.status),
       onFilter: (value, record) => record.status === value,
     },
@@ -367,7 +373,7 @@ const EmployeesList = () => {
                 });
               }}
             />
-           <Select
+            <Select
               style={{
                 width: 200,
               }}
@@ -415,7 +421,7 @@ const EmployeesList = () => {
                   )
                 : []
             }
-            scroll={{ y: 'calc(100vh - 370px)', x :'calc(100vh - 200px)'}}
+            scroll={{ y: 'calc(100vh - 370px)', x: 'calc(100vh - 200px)' }}
             pagination={false}
             size="small"
           />

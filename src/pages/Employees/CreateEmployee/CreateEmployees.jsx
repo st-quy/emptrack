@@ -3,7 +3,6 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   Modal,
   Row,
   Select,
@@ -26,7 +25,7 @@ import Button from '../../../components/atoms/Button/Button';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
-import moment from 'moment';
+
 import './CreateEmployees.scss';
 import ValidationSchema from './ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
@@ -63,11 +62,28 @@ const CreateEmployee = () => {
     },
     validationSchema: ValidationSchema(),
     onSubmit: (values) => {
-      const day = values.birth.$D;
-      const month = values.birth.$M + 1;
+      const day = values.birth.$D.toString().padStart(2, '0');
+      const month = (values.birth.$M + 1).toString().padStart(2, '0');
       const year = values.birth.$y;
       const formattedBirth = `${day}-${month}-${year}`;
-      if (values.skills.length === 0) {
+      const isEmailDuplicate = employeesList.some((e) => {
+        return e.email === values.email;
+      });
+
+      const isCitizenDuplicate = employeesList.some((e) => {
+        return e.citizen_card === values.citizen_card;
+      });
+
+      if (isEmailDuplicate) {
+        formik.setFieldError('email', t('EMPLOYEE_VALIDATION.DUPLICATE_EMAIL'));
+        Toast('error', t('EMPLOYEE_VALIDATION.DUPLICATE_EMAIL'), 2);
+      } else if (isCitizenDuplicate) {
+        formik.setFieldError(
+          'citizen_card',
+          t('EMPLOYEE_VALIDATION.DUPLICATE_CITIZEN'),
+        );
+        Toast('error', t('EMPLOYEE_VALIDATION.DUPLICATE_CITIZEN'), 2);
+      } else if (values.skills.length === 0) {
         return Toast('error', t('EMPLOYEE_VALIDATION.SKILL'), 2);
       } else if (fileList.length > 0) {
         axiosInstance
@@ -77,24 +93,22 @@ const CreateEmployee = () => {
             code,
             avatar: fileImg,
           })
-          .then((response) => {
+          .then(() => {
             Toast(
               'success',
               t('TOAST.CREATED_SUCCESS', {
                 field: t('BREADCRUMB.EMPLOYEES').toLowerCase(),
               }),
-              2,
             );
+            setTimeout(() => {
+              formik.resetForm();
+              form.resetFields();
+              navigate('/employees');
+            }, 1000);
           })
           .catch((error) => {
             console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
           });
-        
-        formik.resetForm();
-        form.resetFields();
-        setTimeout(() => {
-          navigate(`/employees`);
-        }, 2000);
       } else {
         Toast('error', t('EMPLOYEE_VALIDATION.AVATAR'));
       }
@@ -161,6 +175,7 @@ const CreateEmployee = () => {
   const [showModal, setShowModal] = useState(false);
   const [code, setCode] = useState('');
   const [employeeOptions, setEmployeeOptions] = useState([]);
+  const [employeesList, setEmployeesList] = useState([]);
   const [uploading, setUploading] = useState(false);
 
   const handlePic = async ({ fileList }) => {
@@ -247,6 +262,16 @@ const CreateEmployee = () => {
     formik.setFieldValue('skills', newSkills);
   };
   useEffect(() => {
+    const getAllEmployees = () => {
+      axiosInstance
+        .get('employees')
+        .then((response) => {
+          setEmployeesList(response.data);
+        })
+        .catch((error) => {
+          console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+    };
     const generateCode = async () => {
       axiosInstance
         .get('employees')
@@ -290,6 +315,7 @@ const CreateEmployee = () => {
     };
 
     generateCode();
+    getAllEmployees();
     getPosition();
     getSkill();
   }, []);
@@ -303,15 +329,6 @@ const CreateEmployee = () => {
         <Breadcrumb items={breadcrumbItems} />
         <Button onClick={formik.handleSubmit}>{t('BUTTON.SAVE')}</Button>
       </Space>
-      {/* <div
-        className="details-card" 
-              style={{
-          maxHeight: '80vh',
-          maxWidth: '100%',
-          overflowY: 'auto',
-          borderRadius: '30px',
-        }}
-      > */}
       <Card
         title={t('EMPLOYEES.CREATE')}
         className="card-create-employees"

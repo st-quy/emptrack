@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumb from '../../../components/molecules/Breadcrumb/Breadcrumb';
 import Button from '../../../components/atoms/Button/Button';
@@ -9,6 +10,7 @@ import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
 import dayjs from 'dayjs';
 import TextArea from 'antd/es/input/TextArea';
 import './DetailEmployees.scss';
+import { EyeOutlined } from '@ant-design/icons';
 import {
   Col,
   DatePicker,
@@ -31,15 +33,32 @@ function DetailEmployees() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
-  const [employees, setEmployees] = useState();
+  const [employees, setEmployees] = useState(null);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const employeeData = await axiosInstance
-        .get(`employees/${id}`)
-        .then((res) => res.data);
-      setEmployees(employeeData);
+      try {
+        const employeeData = await axiosInstance
+          .get(`employees/${id}`)
+          .then((res) => res.data);
+        setEmployees(employeeData);
+
+        const allProjects = await axiosInstance
+          .get('/projects')
+          .then((res) => res.data);
+
+        allProjects.forEach((project) => {
+          var isExist = project.member.find((m) => m.id === id);
+          if (isExist) {
+            setProjects((prev) => [...prev, project]);
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
+
     fetchData();
   }, [id]);
 
@@ -66,7 +85,7 @@ function DetailEmployees() {
               },
             ]}
           />
-          <Button onClick={() => navigate('/employees/update')}>
+          <Button onClick={() => navigate(`/employees/update/${id}`)}>
             {t('BREADCRUMB.EMPLOYEES_UPDATE')}
           </Button>
         </Space>
@@ -330,11 +349,11 @@ function DetailEmployees() {
                                   <Option value="assigned">
                                     {t('EMPLOYEES.STATUS_ASSIGNED')}
                                   </Option>
+                                  <Option value="unassigned">
+                        {t('EMPLOYEES.STATUS_UNASSIGNED')}
+                      </Option>
                                   <Option value="off">
                                     {t('EMPLOYEES.STATUS_OFF')}
-                                  </Option>
-                                  <Option value="unassigned">
-                                    {t('EMPLOYEES.STATUS_UNASSIGNED')}
                                   </Option>
                                 </Select>
                               </Item>
@@ -419,76 +438,139 @@ function DetailEmployees() {
                 label: t('PROJECTS.PROJECT_INFORMATION'),
                 children: (
                   <>
-                    <Card className="card-project">
-                      <Space
-                        direction="horizontal"
-                        className="w-100"
-                        id="row-first"
-                      >
-                        <Typography>June 13, 2023</Typography>
-                        <Typography
-                          style={{ fontSize: '26px', fontWeight: 'bold' }}
-                        >
-                          :
-                        </Typography>
+                    <Row
+                      gutter={[16, 16]}
+                      justify={{
+                        xs: 'center',
+                        sm: 'center',
+                        md: 'center',
+                        lg: 'start',
+                        xl: 'start',
+                      }}
+                    >
+                      {projects.map((project) => {
+                        const startDate = moment(
+                          project.startDate,
+                          'DD/MM/YYYY',
+                        );
+                        const endDate = moment(project.endDate, 'DD/MM/YYYY');
+                        const today = moment();
+                        // Check if the project is completed
+                        const isCompleted = project.status === 'completed';
 
-                        {/* <PushpinFilled style={{ fontSize: '24px' }} /> */}
-                      </Space>
-                      <Space direction="vertical" id="row-second">
-                        <Typography id="title-project">EMP Tracking</Typography>
-                        <Typography>sdsdsd</Typography>
-                      </Space>
-                      <Space direction="vertical" id="row-third" size={1}>
-                        <Typography>Progress</Typography>
-                        <Progress
-                          percent={50}
-                          status="active"
-                          strokeColor={{
-                            from: '#108ee9',
-                            to: '#87d068',
-                          }}
-                          showInfo={false}
-                          style={{ width: '230px' }}
-                        />
-                        <Typography
-                          className="w-100"
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                          }}
-                        >
-                          50%
-                        </Typography>
-                        <Divider
-                          style={{
-                            fontSize: '5px',
-                            color: 'black',
-                            width: '100%',
-                            margin: 0,
-                          }}
-                        />
-                        <Row
-                          className="w-100"
-                          style={{
-                            marginTop: '15px',
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Tag
-                            color="#87d068"
-                            style={{
-                              width: 'fit-content',
-                              display: 'flex',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            In Progress
-                          </Tag>
-                        </Row>
-                      </Space>
-                    </Card>
+                        // Calculate progress based on the project status
+                        const progress = isCompleted
+                          ? 100
+                          : Math.round(
+                              (today.diff(startDate, 'days') /
+                                endDate.diff(startDate, 'days')) *
+                                100,
+                            );
+                        return (
+                          <Col key={project.id} md={12} lg={8} xl={6}>
+                            {' '}
+                            <Card
+                              className="card-project"
+                              style={{ margin: '15px' }}
+                            >
+                              <Space
+                                direction="horizontal"
+                                className="w-100"
+                                id="row-first"
+                              >
+                                <Typography>{project.startDate}</Typography>
+                                <Typography
+                                  style={{
+                                    fontSize: '26px',
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  <Button
+                                    icon={<EyeOutlined />}
+                                    onClick={() =>
+                                      navigate(
+                                        `/projects/details/${project.id}`,
+                                      )
+                                    }
+                                  />
+                                </Typography>
+                              </Space>
+                              <Space direction="vertical" id="row-second">
+                                <Typography id="title-project">
+                                  {project.name}
+                                </Typography>
+                                <Typography>{project.description}</Typography>
+                              </Space>
+                              <Space
+                                direction="vertical"
+                                id="row-third"
+                                size={1}
+                              >
+                                <Typography>
+                                  {t('PROJECTS.PROGRESS')}
+                                </Typography>
+                                <Progress
+                                  percent={progress}
+                                  status={isCompleted ? 'success' : 'active'}
+                                  strokeColor={{
+                                    from: '#108ee9',
+                                    to: '#87d068',
+                                  }}
+                                  showInfo={false}
+                                  style={{ width: '230px' }}
+                                />
+                                <Typography
+                                  className="w-100"
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                  }}
+                                >
+                                  {progress}%
+                                </Typography>
+                                <Divider
+                                  style={{
+                                    fontSize: '5px',
+                                    color: 'black',
+                                    width: '100%',
+                                    margin: 0,
+                                  }}
+                                />
+                                <Row
+                                  style={{
+                                    marginTop: '15px',
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <Tag
+                                    color={
+                                      project.status === 'progress'
+                                        ? 'orange'
+                                        : project.status === 'completed'
+                                        ? 'green'
+                                        : 'gray'
+                                    }
+                                    style={{
+                                      width: 'fit-content',
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                    }}
+                                  >
+                                    {project.status === 'pending'
+                                      ? t('PROJECTS.STATUS_PENDING')
+                                      : project.status === 'progress'
+                                      ? t('PROJECTS.STATUS_IN_PROGRESS')
+                                      : t('PROJECTS.STATUS_COMPLETED')}
+                                  </Tag>
+                                </Row>
+                              </Space>
+                            </Card>
+                          </Col>
+                        );
+                      })}
+                    </Row>
                   </>
                 ),
               },

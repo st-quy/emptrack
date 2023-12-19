@@ -11,67 +11,8 @@ const twoColors = {
 const conicColors = {
   progress: '#87d068',
   pending: '#ffe58f',
-  complete: '#ffccc7',
+  completed: '#ffccc7',
 };
-
-// const data = [
-//   {
-//     key: '1',
-//     manager: 'John Brown',
-//     progress: 10,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'On Progress',
-//   },
-//   {
-//     key: '2',
-//     manager: 'John Brown',
-//     progress: 23,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'On Progress',
-//   },
-//   {
-//     key: '3',
-//     manager: 'John Brown',
-//     progress: 44,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'Pending',
-//   },
-//   {
-//     key: '4',
-//     manager: 'John Brown',
-//     progress: 22,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'Complete',
-//   },
-//   {
-//     key: '5',
-//     manager: 'John Brown',
-//     progress: 44,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'Complete',
-//   },
-//   {
-//     key: '6',
-//     manager: 'John Brown',
-//     progress: 77,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'Complete',
-//   },
-//   {
-//     key: '7',
-//     manager: 'John Brown',
-//     progress: 99,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'On Progress',
-//   },
-//   {
-//     key: '8',
-//     manager: 'John Brown',
-//     progress: 0,
-//     endDate: moment(new Date()).format('DD/MM/YYYY'),
-//     status: 'Pending',
-//   },
-// ];
 
 const TableProgress = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -98,21 +39,20 @@ const TableProgress = () => {
     {
       title: t('TABLE.STATUS'),
       dataIndex: 'status',
-      render: (record) => {
-        return (
-          <Badge
-            key={`${record}-sdsds`}
-            color={conicColors[record]}
-            text={
-              record === 'pending'
-                ? t('PROJECTS.STATUS_PENDING')
-                : record === 'complete'
-                ? t('PROJECTS.STATUS_COMPLETED')
-                : t('PROJECTS.STATUS_IN_PROGRESS')
-            }
-          />
-        );
-      },
+      render: (record) => (
+        
+        <Badge
+          key={`${record}-sdsds`}
+          color={conicColors[record]}
+          text={
+            record === 'pending'
+              ? t('PROJECTS.STATUS_PENDING')
+              : record === 'completed'
+              ? t('PROJECTS.STATUS_COMPLETED')
+              : t('PROJECTS.STATUS_IN_PROGRESS')
+          }
+        />
+      ),
     },
   ];
 

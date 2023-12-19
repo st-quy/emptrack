@@ -118,6 +118,11 @@ const ProjectList = () => {
           .get('projects')
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
+        filterDeleted.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
         setFilteredData(filterDeleted);
         setData(filterDeleted);
       } catch (error) {
