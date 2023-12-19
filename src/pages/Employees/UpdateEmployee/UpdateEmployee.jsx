@@ -109,6 +109,7 @@ const UpdateEmployee = () => {
             (e) => e.isManager && !e.deletedAt,
           );
           setEmployeeOptions(managerEmployees);
+          console.log(employeeOptions);
         })
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
