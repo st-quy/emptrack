@@ -72,7 +72,7 @@ const UpdateEmployee = () => {
             birth: response.data.birth || null,
             description: response.data.description || '',
             citizen_card: response.data.citizen_card || '',
-            isManager: response.data.isManager || null,
+            isManager: response.data.isManager || false,
             status: response.data.status || '',
             position: response.data.position || '',
             lineManager: response.data.lineManager || '',
@@ -105,7 +105,7 @@ const UpdateEmployee = () => {
         .get('employees')
         .then((response) => {
           setListEmployees(response.data);
-          const managerEmployees = employeeOptions.filter(
+          const managerEmployees = listEmployees.filter(
             (employee) => employee.isManager,
           );
           setEmployeeOptions(managerEmployees);
@@ -144,7 +144,7 @@ const UpdateEmployee = () => {
     birth: null,
     description: '',
     citizen_card: '',
-    isManager: null,
+    isManager: false,
     status: '',
     position: '',
     lineManager: '',

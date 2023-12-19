@@ -350,7 +350,7 @@ function DetailEmployees() {
                                     {t('EMPLOYEES.STATUS_ASSIGNED')}
                                   </Option>
                                   <Option value="unassigned">
-                                    {t('EMPLOYEE.STATUS_UNASSIGNED')}
+                                    {t('EMPLOYEES.STATUS_UNASSIGNED')}
                                   </Option>
                                   <Option value="off">
                                     {t('EMPLOYEES.STATUS_OFF')}
