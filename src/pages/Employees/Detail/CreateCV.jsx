@@ -1,22 +1,28 @@
 import { FileTextOutlined } from '@ant-design/icons';
+import { gapi } from 'gapi-script';
 import { useEffect, useState } from 'react';
 import Button from '../../../components/atoms/Button/Button';
 import { axiosInstance } from '../../../config/axios';
+
+const CLIENT_ID =
+  '152682156074-fq1afatnt37fovivqhho9pq5pvmj0i7u.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyBSSnXEekYrz - L - cMPyrP5ST1Qwz66dFRA';
+const SCOPES = 'https://www.googleapis.com/auth/drive';
 
 const CreateCV = ({ id }) => {
   const [dataCV, setDataCV] = useState();
   const [textCV, setTextCV] = useState('');
 
-  // useEffect(() => {
-  //   function start() {
-  //     gapi.client.init({
-  //       apiKey: ALI_KEY,
-  //       clientId: CLIENT_ID,
-  //       scope: SCOPES,
-  //     });
-  //   }
-  //   gapi.load('client:auth2', start);
-  // });
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        scope: SCOPES,
+      });
+    }
+    gapi.load('client:auth2', start);
+  });
 
   useEffect(() => {
     axiosInstance(`employees/${id}`)
@@ -233,7 +239,99 @@ const CreateCV = ({ id }) => {
 
   /* create file */
   const createCV = (id) => {
-    console.log('Create CV for id ', id);
+    var accessToken =
+      'ya29.a0AfB_byAJFMLn5qaUrKw-L2oudfsmWYBnH5KjeNn0PwHsceVaNJGBX9RVa_7Br3CVpRTqKDBtFSGvHE_tEu1byRsRDVMIKEWUVsWpes9tN_7dbgOXdD0qy9SqiZsR2bAvv9-eyUYVzChb9YaFH1c0dlbQWkYkJcyq2YcaCgYKAS0SARESFQHGX2MiMEyx3nHZ-nOovI2zRWbi-w0170';
+    var filename =
+      dataCV?.name + ' CV, ' + getDateString() + ' ' + getTimeString();
+
+    fetch('https://docs.googleapis.com/v1/documents', {
+      method: 'POST',
+      headers: new Headers({
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({
+        title: filename,
+      }),
+    })
+      .then((res) => res.json())
+      .then((document) => {
+        const documentId = document.documentId;
+
+        // Step 2: Update the document content
+        fetch(
+          `https://docs.googleapis.com/v1/documents/${documentId}:batchUpdate`,
+          {
+            method: 'POST',
+            headers: new Headers({
+              Authorization: 'Bearer ' + accessToken,
+              'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify({
+              requests: [
+                {
+                  insertText: {
+                    location: {
+                      index: 1, // Start at the beginning of the document
+                    },
+                    text: textCV,
+                  },
+                },
+                {
+                  updateTextStyle: {
+                    range: {
+                      startIndex: 1,
+                      endIndex: textCV.length + 1, // Add 1 to endIndex to include the newline character
+                    },
+                    textStyle: {
+                      fontSize: {
+                        magnitude: 12,
+                        unit: 'PT',
+                      },
+                      foregroundColor: {
+                        color: {
+                          rgbColor: {
+                            red: 0.5,
+                            green: 0.5,
+                            blue: 0.5,
+                          },
+                        },
+                      },
+                    },
+                    fields: 'fontSize, foregroundColor',
+                  },
+                },
+                ...textStyleHeadingRequests,
+                ...textStyleTitleProjectRequests,
+                {
+                  insertTable: {
+                    endOfSegmentLocation: {
+                      segmentId: '',
+                    },
+                    columns: 2,
+                    rows: dataCV.skills.length + 1,
+                  },
+                },
+                ...tableCommands,
+              ],
+            }),
+          },
+        )
+          .then((res) => res.json())
+          .then(() => {
+            // Step 3: Open the document in a new tab
+            window.open(
+              'https://docs.google.com/document/d/' + documentId + '/edit',
+              '_blank',
+            );
+          })
+          .catch((error) => {
+            console.error('Error updating document content:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error creating document:', error);
+      });
   };
 
   return (
