@@ -262,6 +262,10 @@ const UpdateEmployee = () => {
 
   const breadcrumbItems = [
     { key: 'EMPLOYEES', route: '/employees' },
+    {
+      key: 'EMPLOYEES_DETAILS',
+      route: `/employees/details/${id}`,
+    },
     { key: 'EMPLOYEES_UPDATE', route: `/employees/update/${id}` },
   ];
   const handlePic = async ({ fileList }) => {
