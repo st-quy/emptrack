@@ -281,7 +281,7 @@ const CreateEmployee = () => {
           const newCode =
             dl + (employees.length + 1).toString().padStart(2, '0');
           const filteredEmployees = employees.filter(
-            (employee) => employee.isManager,
+            (employee) => employee.isManager && !employee.deletedAt,
           );
           setEmployeeOptions(filteredEmployees);
           setCode(newCode);

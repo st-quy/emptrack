@@ -79,7 +79,7 @@ const EmployeesList = () => {
         });
         setData(filterDeleted);
         setFilteredData(filterDeleted);
-  
+
         await axiosInstance.get('/projects').then((res) => {
           const filterDeletedProjects = res.data.filter(
             (item) => !item.deletedAt,
@@ -96,11 +96,16 @@ const EmployeesList = () => {
   const searchData = (data, searchParams) => {
     const { name, email, isManager, position, status } = searchParams;
 
-    const filteredData = filter(data, (item) => {
-      const isNameMatched = !name || item.name.includes(name);
-      const isEmailMatched = !email || item.email.includes(email);
-      // const isManagerMatched = !isManager || item.isManager === isManager;
-      const isPositionMatched = !position || item.position.includes(position);
+    const filteredData = data.filter((item) => {
+      const lowercaseName = item.name.toLowerCase();
+      const lowercaseEmail = item.email.toLowerCase();
+      const lowercasePosition = item.position.toLowerCase();
+
+      const isNameMatched = !name || lowercaseName.includes(name.toLowerCase());
+      const isEmailMatched =
+        !email || lowercaseEmail.includes(email.toLowerCase());
+      const isPositionMatched =
+        !position || lowercasePosition.includes(position.toLowerCase());
       const isStatusMatched = !status || item.status === status;
 
       return (
@@ -361,7 +366,7 @@ const EmployeesList = () => {
             <TextSearch
               label={t('EMPLOYEES.NAME')}
               func={(e) => {
-                setSearchParam({ ...searchParam,name: e.target.value });
+                setSearchParam({ ...searchParam, name: e.target.value });
               }}
             />
             <TextSearch

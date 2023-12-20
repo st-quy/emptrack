@@ -81,7 +81,6 @@ const UpdateEmployee = () => {
               { skillname: null, exp: '', addonAfter: 'years' },
             ],
           });
-          console.log(dayjs(response.data.birth, dateFormat));
         })
         .catch((error) => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
@@ -105,8 +104,9 @@ const UpdateEmployee = () => {
         .get('employees')
         .then((response) => {
           setListEmployees(response.data);
-          const managerEmployees = listEmployees.filter(
-            (employee) => employee.isManager,
+          const employees = response.data;
+          const managerEmployees = employees.filter(
+            (e) => e.isManager && !e.deletedAt,
           );
           setEmployeeOptions(managerEmployees);
           console.log(employeeOptions);
@@ -126,7 +126,6 @@ const UpdateEmployee = () => {
           console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
         });
     };
-
     getEmployee();
     getPosition();
     getManager();
@@ -901,12 +900,13 @@ const UpdateEmployee = () => {
                       style={{ width: '100%' }}
                     >
                       {employeeOptions &&
-                        employeeOptions.map((employee, index) => {
-                          return (
-                            <Option key={index} value={employee.name}>
-                              {employee.name}
-                            </Option>
-                          );
+                        employeeOptions.map((e, index) => {
+                          if (e.code !== employee.code)
+                            return (
+                              <Option key={index} value={e.name}>
+                                {e.name}
+                              </Option>
+                            );
                         })}
                     </Select>
                   </Item>
