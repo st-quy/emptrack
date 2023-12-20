@@ -312,34 +312,38 @@ const ProjectUpdate = () => {
                 >
                   <Row className="w-100" gutter={16}>
                     <Col span={12}>
-                      <Form.Item
-                        name="name"
-                        label={t('PROJECTS.NAME')}
-                        help={
-                          formik.errors.name &&
-                          formik.touched.name && (
-                            <div className="text-danger">
-                              {formik.errors.name}
-                            </div>
-                          )
-                        }
-                        initialValue={values.name}
-                        validateFirst
-                        rules={[
-                          yupSync,
-                          {
-                            required: true,
-                          },
-                        ]}
-                        hasFeedback
-                      >
-                        <Input
-                          placeholder={t('PROJECTS.NAME')}
-                          value={formik.name}
-                          onChange={formik.handleChange}
-                          autoFocus
-                        />
-                      </Form.Item>
+                    <Form.Item
+                      name="name"
+                      label={t('PROJECTS.NAME')}
+                      help={
+                        formik.errors.name &&
+                        formik.touched.name && (
+                          <div className="text-danger">{formik.errors.name}</div>
+                        )
+                      }
+                      initialValue={values.name}
+                      validateFirst
+                      rules={[
+                        yupSync,
+                        {
+                          required: true,
+                        },
+                      ]}
+                      hasFeedback
+                    >
+                      <Input
+                        placeholder={t('PROJECTS.NAME')}
+                        value={formik.name}
+                        onChange={formik.handleChange}
+                        autoFocus
+                        readOnly
+                        disabled
+                        onMouseDown={(e) => e.preventDefault()}
+                        style={{ fontWeight: 'bold' }} // Đặt độ đậm cho kiểu chữ
+                      />
+                    </Form.Item>
+
+
                       <Form.Item
                         name="manager"
                         label={t('PROJECTS.MANAGER')}

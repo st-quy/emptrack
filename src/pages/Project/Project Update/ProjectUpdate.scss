@@ -79,4 +79,9 @@
     overflow: auto;
     border-radius: 30px;
   }
+  .ant-input.ant-input-disabled
+  {
+    color: rgba(0, 0, 0, 0.88);
+
+  }
 }

@@ -21,15 +21,15 @@ const DropProfile = () => {
   };
 
   const items = [
-    {
-      key: 'profile',
-      label: (
-        <Typography style={{ color: '#121212', fontWeight: 600 }}>
-          {t('DROPDOWN_PROFILE.PROFILE')}
-        </Typography>
-      ),
-      icon: <UserOutlined />,
-    },
+    // {
+    //   key: 'profile',
+    //   label: (
+    //     <Typography style={{ color: '#121212', fontWeight: 600 }}>
+    //       {t('DROPDOWN_PROFILE.PROFILE')}
+    //     </Typography>
+    //   ),
+    //   icon: <UserOutlined />,
+    // },
     {
       key: 'logout',
       label: (

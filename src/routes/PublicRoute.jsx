@@ -10,10 +10,6 @@ const PublicRoute = [
     path: 'service',
     children: [
       {
-        path: '',
-        element: <div>Service</div>,
-      },
-      {
         path: 'log',
         element: <div>Blog</div>,
       },
