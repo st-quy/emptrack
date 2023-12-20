@@ -5,7 +5,7 @@ import {
   TeamOutlined,
 } from '@ant-design/icons';
 import { Card, Layout, Space, Tooltip, Typography } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import DropProfile from '../../components/molecules/DropProfile/DropProfile';
@@ -20,6 +20,12 @@ export const ProtectedRoute = () => {
   const [activeItem, setActiveItem] = useState(
     pathname ? pathname : 'dashboard',
   );
+
+  useEffect(() => {
+    setActiveItem(pathname);
+  }, [pathname]);
+
+  console.log(activeItem);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
@@ -43,11 +49,6 @@ export const ProtectedRoute = () => {
       key: 'projects',
       icon: <AppstoreAddOutlined />,
       label: t('BREADCRUMB.PROJECTS'),
-    },
-    {
-      key: 'devices',
-      icon: <DeploymentUnitOutlined />,
-      label: 'Devices',
     },
   ];
   return (

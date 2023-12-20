@@ -221,7 +221,7 @@ const CreateCV = ({ id }) => {
         location: {
           index: rowIndex + gapCol,
         },
-        text: dataCV.skills[index].exp,
+        text: dataCV.skills[index].exp + ' ',
       },
     });
     // Thêm tên kỹ năng
@@ -256,7 +256,7 @@ const CreateCV = ({ id }) => {
   /* create file */
   const createCV = (id) => {
     var accessToken =
-      'ya29.a0AfB_byBE46tYxcs1t6NqA7pNqrxAE2Oq2Gw8JD_mh_vKI-5mrxBy9RDkjzz9zEqGXxvoBIw8VyslqJ1UFe3DL1dVvcTuvSBXUNihovLKLEw2XfbPP5VPdTzGy-HScPebzTLwgIwO8DKJn6gMPpvwZZT8EzyoM6IIarAaCgYKASISARESFQHGX2Miz5VuaTtps_1UVVXDkYgJmg0170';
+      'ya29.a0AfB_byB_OdSetrhikLV3Gu1_dKdCB8PZTJyaHaNGxVhT_UcuXNH456oUbdKuY1jBpUCJSn_Fri9iQJPA5JUrErPbia8exSBbRIe1F5KJNvXNftxjoaS4Y1IJVJ_92suO0DR-2pNUUrKQbeqMrJseKB8iGzEoB0JpLnEaCgYKAVoSARESFQHGX2MiYmlSEHcG-6du38JlTstyUw0170';
     var filename =
       dataCV?.name + ' CV, ' + getDateString() + ' ' + getTimeString();
 

@@ -14,7 +14,7 @@ const Breadcrumb = ({ items }) => {
       separator={<RightOutlined style={{ fontSize: 10 }} />}
     >
       <Item>
-        <Link to="/">
+        <Link to="/dashboard">
           <HomeOutlined />
         </Link>
       </Item>
