@@ -12,6 +12,7 @@ import {
   Tabs,
   Tag,
   Typography,
+  Empty
 } from 'antd';
 import Card from 'antd/es/card/Card';
 import TextArea from 'antd/es/input/TextArea';
@@ -67,13 +68,18 @@ function DetailEmployees() {
   function capitalizeFLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
   }
+  const [activeTab, setActiveTab] = useState(localStorage.getItem('activeTab') || '1');
+
   const onChange = (key) => {
-    console.log(key);
+    localStorage.setItem('activeTab', key);
+    setActiveTab(key);
   };
   const twoColors = {
     '0%': '#108ee9',
     '100%': '#87d068',
   };
+
+
   return (
     <>
       <div id="employee_details" style={{ height: '100px' }}>
@@ -102,28 +108,28 @@ function DetailEmployees() {
             borderRadius: '30px',
           }}
         >
-          <Tabs
-            defaultActiveKey="1"
-            items={[
-              {
-                key: '1',
-                label: t('PROJECTS.BASIC_INFORMATION'),
-                children: (
-                  <>
-                    {employees ? (
-                      <>
-                        <Form
-                          labelCol={{
-                            sm: { span: 24 },
-                            md: { span: 24 },
-                            lg: { span: 5 },
-                          }}
-                          wrapperCol={{
-                            sm: { span: 24 },
-                            md: { span: 24 },
-                            lg: { span: 19 },
-                          }}
-                          className="p-2"
+            <Tabs
+            activeKey={activeTab}
+              items={[
+                {
+                  key: '1',
+                  label: t('PROJECTS.BASIC_INFORMATION'),
+                  children: (
+                    <>
+                      {employees ? (
+                        <>
+                          <Form
+                            labelCol={{
+                              sm: { span: 24 },
+                              md: { span: 24 },
+                              lg: { span: 5 },
+                            }}
+                            wrapperCol={{
+                              sm: { span: 24 },
+                              md: { span: 24 },
+                              lg: { span: 19 },
+                            }}
+                            className="p-2"
                         >
                           {/* <Typography.Title level={5}>
                             {t('PROJECTS.BASIC_INFORMATION')}
@@ -443,142 +449,163 @@ function DetailEmployees() {
                 label: t('PROJECTS.PROJECT_INFORMATION'),
                 children: (
                   <>
-                    <Row
-                      gutter={[16, 16]}
-                      justify={{
-                        xs: 'center',
-                        sm: 'center',
-                        md: 'center',
-                        lg: 'start',
-                        xl: 'start',
-                      }}
-                    >
-                      {projects.map((project) => {
-                        const startDate = moment(
-                          project.startDate,
-                          'DD/MM/YYYY',
-                        );
-                        const endDate = moment(project.endDate, 'DD/MM/YYYY');
-                        const today = moment();
-                        // Check if the project is completed
-                        const isCompleted = project.status === 'completed';
-
-                        // Calculate progress based on the project status
-                        const progress = isCompleted
-                          ? 100
-                          : Math.round(
-                              (today.diff(startDate, 'days') /
-                                endDate.diff(startDate, 'days')) *
-                                100,
-                            );
-                        return (
-                          <Col key={project.id} md={12} lg={8} xl={6}>
-                            {' '}
-                            <Card
-                              className="card-project"
-                              style={{ margin: '15px' }}
-                            >
-                              <Space
-                                direction="horizontal"
-                                className="w-100"
-                                id="row-first"
-                              >
-                                <Typography>{project.startDate}</Typography>
-                                <Typography
-                                  style={{
-                                    fontSize: '26px',
-                                    fontWeight: 'bold',
-                                  }}
-                                >
-                                  <Button
-                                    icon={<EyeOutlined />}
-                                    onClick={() =>
-                                      navigate(
-                                        `/projects/details/${project.id}`,
-                                      )
-                                    }
-                                  />
-                                </Typography>
-                              </Space>
-                              <Space direction="vertical" id="row-second">
-                                <Typography id="title-project">
-                                  {project.name}
-                                </Typography>
-                                <Typography>{project.description}</Typography>
-                              </Space>
-                              <Space
-                                direction="vertical"
-                                id="row-third"
-                                size={1}
-                              >
-                                <Typography>
-                                  {t('PROJECTS.PROGRESS')}
-                                </Typography>
-                                <Progress
-                                  percent={progress}
-                                  status={isCompleted ? 'success' : 'active'}
-                                  strokeColor={{
-                                    from: '#108ee9',
-                                    to: '#87d068',
-                                  }}
-                                  showInfo={false}
-                                  style={{ width: '230px' }}
-                                />
-                                <Typography
-                                  className="w-100"
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'flex-end',
-                                  }}
-                                >
-                                  {progress}%
-                                </Typography>
-                                <Divider
-                                  style={{
-                                    fontSize: '5px',
-                                    color: 'black',
-                                    width: '100%',
-                                    margin: 0,
-                                  }}
-                                />
-                                <Row
-                                  style={{
-                                    marginTop: '15px',
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                  }}
-                                >
-                                  <Tag
-                                    color={
-                                      project.status === 'progress'
-                                        ? 'orange'
-                                        : project.status === 'completed'
-                                        ? 'green'
-                                        : 'gray'
-                                    }
+                    {projects.length > 0 ? (
+                      <Row
+                        gutter={[16, 16]}
+                        justify={{
+                          xs: 'center',
+                          sm: 'center',
+                          md: 'center',
+                          lg: 'start',
+                          xl: 'start',
+                        }}
+                      >
+                        {projects.map((project) => {
+                          const startDate = moment(project.startDate, 'DD/MM/YYYY');
+                          const endDate = moment(project.endDate, 'DD/MM/YYYY');
+                          const today = moment();
+                          const isCompleted = project.status === 'completed';
+                          const progress = isCompleted
+                            ? 100
+                            : Math.round(
+                                (today.diff(startDate, 'days') /
+                                  endDate.diff(startDate, 'days')) *
+                                  100
+                              );
+              
+                          // Giới hạn mô tả trong 1 dòng và thêm ",..." nếu cần
+                          const truncatedDescription =
+                            project.description.length > 50
+                              ? project.description.substring(0, 50) + ',...'
+                              : project.description;
+              
+                          return (
+                            <Col key={project.id} md={12} lg={8} xl={6}>
+                              <Card className="card-project" style={{ margin: '15px' }}>
+                                <Space direction="horizontal" className="w-100" id="row-first">
+                                  <Typography>{project.startDate}</Typography>
+                                  <Typography
                                     style={{
-                                      width: 'fit-content',
+                                      fontSize: '26px',
+                                      fontWeight: 'bold',
+                                    }}
+                                  >
+                                    <Button
+                                      icon={<EyeOutlined />}
+                                      onClick={() =>
+                                        navigate(`/projects/details/${project.id}`)
+                                      }
+                                    />
+                                  </Typography>
+                                </Space>
+                                <Space direction="vertical" id="row-second">
+                                  <Typography id="title-project">{project.name}</Typography>
+                                  <Typography
+                                    style={{
+                                      overflow: 'hidden',
+                                      whiteSpace: 'nowrap',
+                                      textOverflow: 'ellipsis',
+                                      marginLeft: '8px', // Thụt vào 8px
+              
+                                      width: 'calc(100% - 8px)', // Đảm bảo chiều rộng của phần mô tả không bị giảm đi vì margin
+                                    }}
+                                  >
+                                    {truncatedDescription}
+                                  </Typography>
+                                </Space>
+                                <Space direction="vertical" id="row-third" size={1}>
+                                  <Typography>{t('PROJECTS.PROGRESS')}</Typography>
+                                  <Progress
+                                    percent={progress}
+                                    status={isCompleted ? 'success' : 'active'}
+                                    strokeColor={{
+                                      from: '#108ee9',
+                                      to: '#87d068',
+                                    }}
+                                    showInfo={false}
+                                    style={{ width: '230px' }}
+                                  />
+                                  <Typography
+                                    className="w-100"
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'flex-end',
+                                    }}
+                                  >
+                                    {progress}%
+                                  </Typography>
+                                  <Divider
+                                    style={{
+                                      fontSize: '5px',
+                                      color: 'black',
+                                      width: '100%',
+                                      margin: 0,
+                                    }}
+                                  />
+                                  <Row
+                                    style={{
+                                      marginTop: '15px',
+                                      width: '100%',
                                       display: 'flex',
                                       justifyContent: 'center',
                                     }}
                                   >
-                                    {project.status === 'pending'
-                                      ? t('PROJECTS.STATUS_PENDING')
-                                      : project.status === 'progress'
-                                      ? t('PROJECTS.STATUS_IN_PROGRESS')
-                                      : t('PROJECTS.STATUS_COMPLETED')}
-                                  </Tag>
-                                </Row>
-                              </Space>
-                            </Card>
-                          </Col>
-                        );
-                      })}
-                    </Row>
+                                    <Tag
+                                      color={
+                                        project.status === 'progress'
+                                          ? 'orange'
+                                          : project.status === 'completed'
+                                          ? 'green'
+                                          : 'gray'
+                                      }
+                                      style={{
+                                        width: 'fit-content',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                      }}
+                                    >
+                                      {project.status === 'pending'
+                                        ? t('PROJECTS.STATUS_PENDING')
+                                        : project.status === 'progress'
+                                        ? t('PROJECTS.STATUS_IN_PROGRESS')
+                                        : t('PROJECTS.STATUS_COMPLETED')}
+                                    </Tag>
+                                  </Row>
+                                </Space>
+                              </Card>
+                            </Col>
+                          );
+                        })}
+                      </Row>
+                    ) : (
+                      <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '200px', 
+                        marginTop: '90px',
+                      }}
+                    >
+              <Typography.Text
+                style={{
+                  fontSize: '24px',
+                  color: '#b0b0b0',   
+                  textAlign: 'center',  
+                  marginTop: '20px',     
+                }}
+              >
+              
+                <Empty description={<span>No data</span>} />
+              </Typography.Text>
+
+                    </div>
+                    )}
                   </>
                 ),
               },
+              
+            
             ]}
             onChange={onChange}
           />
