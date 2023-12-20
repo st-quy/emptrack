@@ -263,6 +263,21 @@ const CreateCV = ({ id }) => {
                 ),
               ],
             }),
+            new Paragraph({
+              // heading: HeadingLevel.HEADING_1,
+              children: [
+                new TextRun({
+                  text: 'IMPORTANT CONFIDENTIALITY NOTICE: This document contains confidential and or legally privileged information. ST United reserves all rights hereunder. When distributed or transmitted, it is intended solely for the authorized use of the addressee or intended recipient. Access to this information by anyone else is unauthorized. Disclosure, copying, distribution or any action or omission taken in reliance on it is prohibited and may be unlawful. Please, report any exceptions hereto immediately to hello@stunited.vn',
+                  // bold: true,
+                  size: 20,
+                  color: '333333',
+                }),
+              ],
+              spacing: {
+                line: 400,
+                before: 600,
+              },
+            }),
           ],
         },
       ],
