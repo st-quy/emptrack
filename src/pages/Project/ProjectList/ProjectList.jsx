@@ -55,12 +55,15 @@ const ProjectList = () => {
     const start = moment(startDate, 'DD/MM/YYYY');
     const end = moment(endDate, 'DD/MM/YYYY');
 
-    const filteredData = filter(data, (item) => {
+    const filteredData = data.filter((item) => {
       const isManagerMatched =
         !manager ||
-        item.manager.some((managerItem) => managerItem.name.includes(manager));
+        item.manager.some((managerItem) =>
+          managerItem.name.toLowerCase().includes(manager.toLowerCase()),
+        );
       const isProjectNameMatched =
-        !project_name || item.name.includes(project_name);
+        !project_name ||
+        item.name.toLowerCase().includes(project_name.toLowerCase());
       const isStartDateMatched =
         !startDate || moment(item.startDate, 'DD/MM/YYYY').isSameOrAfter(start);
       const isEndDateMatched =
@@ -423,7 +426,7 @@ const ProjectList = () => {
                   )
                 : []
             }
-            scroll={{ y: 'calc(100vh - 370px)', x :'calc(100vh - 200px)'}}
+            scroll={{ y: 'calc(100vh - 370px)', x: 'calc(100vh - 200px)' }}
             pagination={false}
             size="small"
           />
