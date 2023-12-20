@@ -492,11 +492,24 @@ function DetailEmployees() {
                                   >
                                     <Button
                                       icon={<EyeOutlined />}
-                                      onClick={() =>
-                                        navigate(`/projects/details/${project.id}`)
-                                      }
+                                      onClick={() => navigate(`/projects/details/${project.id}`)}
+                                      style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.3s', 
+                                        boxShadow: '3px 3px 5px #b0b0b0'
+                                        
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        e.target.style.background = '#e6f7ff'; 
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.target.style.background = 'transparent'; 
+                                      }}
                                     />
                                   </Typography>
+
                                 </Space>
                                 <Space direction="vertical" id="row-second">
                                   <Typography id="title-project">{project.name}</Typography>

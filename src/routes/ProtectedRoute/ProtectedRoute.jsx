@@ -25,7 +25,6 @@ export const ProtectedRoute = () => {
     setActiveItem(pathname);
   }, [pathname]);
 
-  console.log(activeItem);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
