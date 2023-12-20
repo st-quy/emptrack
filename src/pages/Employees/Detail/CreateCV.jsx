@@ -316,7 +316,7 @@ const CreateCV = ({ id }) => {
                             new Paragraph({
                               children: [
                                 new TextRun({
-                                  text: s.exp + ' ',
+                                  text: s.exp + ' ' + s.addonAfter,
                                   size: 24,
                                 }),
                               ],
