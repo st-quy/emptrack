@@ -64,6 +64,11 @@ const TableProgress = () => {
           .then((response) => response.data);
         const filterDeleted = result.filter((item) => !item.deletedAt);
         setFilteredData(filterDeleted);
+        filterDeleted.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
         if (filterDeleted && filterDeleted.length > 0) {
           const dataTable = filterDeleted.map((item, index) => {
             const startDate = moment(item.startDate, 'DD/MM/YYYY');
@@ -76,7 +81,10 @@ const TableProgress = () => {
             const daysPassed = today.diff(startDate, 'days');
 
             // Tính phần trăm ngày đã qua
-            const percentage = Math.round((daysPassed / totalDays) * 100);
+            let percentage = Math.round((daysPassed / totalDays) * 100);
+            if (item.status !== 'progress') {
+              percentage = 100;
+            }
             return {
               key: index + 1,
               manager: item.manager[0].name,
@@ -96,7 +104,8 @@ const TableProgress = () => {
 
   return (
     <>
-      <Table
+     <div style={{ overflowY: 'scroll', maxHeight: '450px' }}>
+      <Table 
         columns={columns}
         dataSource={
           data.length > 0
@@ -106,7 +115,8 @@ const TableProgress = () => {
         size="small"
         pagination={false}
       />
-      <Pagination
+      </div>
+      <Pagination 
         locale={{
           items_per_page: `/ ${t('TABLE.PAGE')}`,
         }}

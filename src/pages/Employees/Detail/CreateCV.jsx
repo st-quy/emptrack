@@ -9,6 +9,7 @@ import {
   TableRow,
   TextRun,
   WidthType,
+  AlignmentType
 } from 'docx';
 import { saveAs } from 'file-saver';
 import { useEffect, useState } from 'react';
@@ -70,7 +71,7 @@ const CreateCV = ({ id }) => {
                   text: dataCV?.name,
                   bold: true,
                   size: 30,
-                  color: '333333',
+                  color: '111111',
                 }),
               ],
               spacing: {
@@ -82,7 +83,7 @@ const CreateCV = ({ id }) => {
                 new TextRun({
                   text: 'Address: ' + dataCV?.address,
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -94,7 +95,7 @@ const CreateCV = ({ id }) => {
                 new TextRun({
                   text: 'Email: ' + dataCV?.email,
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -108,7 +109,7 @@ const CreateCV = ({ id }) => {
                   text: 'WORKING EXPERIENCE',
                   bold: true,
                   size: 30,
-                  color: '333333',
+                  color: '111111',
                 }),
               ],
               spacing: {
@@ -122,7 +123,7 @@ const CreateCV = ({ id }) => {
                   text: formattedDate + ' - now',
                   size: 24,
                   bold: true,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -137,7 +138,7 @@ const CreateCV = ({ id }) => {
                     dataCV.position.slice(1) +
                     ' at DevPlus – Da Nang',
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -149,7 +150,7 @@ const CreateCV = ({ id }) => {
                 new TextRun({
                   text: dataCV.description,
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -162,12 +163,12 @@ const CreateCV = ({ id }) => {
                   text: 'Technologies: ',
                   bold: true,
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
                 new TextRun({
                   text: dataCV?.skills.map((k) => k.skillname).join(', '),
                   size: 24,
-                  color: '444444',
+                  color: '333333',
                 }),
               ],
               spacing: {
@@ -181,7 +182,7 @@ const CreateCV = ({ id }) => {
                   text: 'TYPICAL PROJECTS',
                   bold: true,
                   size: 30,
-                  color: '333333',
+                  color: '111111',
                 }),
               ],
               spacing: {
@@ -194,23 +195,40 @@ const CreateCV = ({ id }) => {
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: 'Project Name: ' + t.name,
+                      text: 'Project Name: ',
                       bold: true,
                       size: 24,
-                      color: '444444',
+                      color: '333333',
                       break: 1,
                     }),
                     new TextRun({
-                      text: 'Description: ' + t.description,
+                      text: t.name,
                       size: 24,
-                      color: '444444',
+                      color: '333333',
+                    }),
+                    new TextRun({
+                      text: 'Description: ',
+                      bold: true,
+                      size: 24,
+                      color: '333333',
                       break: 1,
                     }),
                     new TextRun({
-                      text: 'Technical: ' + t.technical.join(', '),
+                      text: t.description,
                       size: 24,
-                      color: '444444',
+                      color: '333333',
+                    }),
+                    new TextRun({
+                      text: 'Technical: ',
+                      bold: true,
+                      size: 24,
+                      color: '333333',
                       break: 1,
+                    }),
+                    new TextRun({
+                      text: t.technical.join(', '),
+                      size: 24,
+                      color: '333333',
                     }),
                   ],
                 }),
@@ -222,7 +240,7 @@ const CreateCV = ({ id }) => {
                   text: 'TECHNICAL SKILLS/QUALIFICATION',
                   bold: true,
                   size: 30,
-                  color: '333333',
+                  color: '111111',
                 }),
               ],
               spacing: {
@@ -239,12 +257,38 @@ const CreateCV = ({ id }) => {
                 new TableRow({
                   children: [
                     new TableCell({
-                      children: [new Paragraph('Skill')],
-                      size: 24,
+                      children: [
+                        new Paragraph({
+                          children: [
+                            new TextRun({
+                              text: 'Skill',
+                              size: 26,
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: {
+                        line: 400,
+                      },
                     }),
                     new TableCell({
-                      children: [new Paragraph('Experience')],
-                      size: 24,
+                      children: [
+                        new Paragraph({
+                          children: [
+                            new TextRun({
+                              text: 'Experience',
+                              size: 26,
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: {
+                        line: 400,
+                      },
                     }),
                   ],
                 }),
@@ -253,10 +297,34 @@ const CreateCV = ({ id }) => {
                     new TableRow({
                       children: [
                         new TableCell({
-                          children: [new Paragraph(s.skillname)],
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: s.skillname,
+                                  size: 24,
+                                }),
+                              ],
+                              spacing: {
+                                line: 400,
+                              },
+                            }),
+                          ],
                         }),
                         new TableCell({
-                          children: [new Paragraph(s.exp + ' ')],
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: s.exp + ' ',
+                                  size: 24,
+                                }),
+                              ],
+                              spacing: {
+                                line: 400,
+                              },
+                            }),
+                          ],
                         }),
                       ],
                     }),
@@ -264,11 +332,9 @@ const CreateCV = ({ id }) => {
               ],
             }),
             new Paragraph({
-              // heading: HeadingLevel.HEADING_1,
               children: [
                 new TextRun({
                   text: 'IMPORTANT CONFIDENTIALITY NOTICE: This document contains confidential and or legally privileged information. ST United reserves all rights hereunder. When distributed or transmitted, it is intended solely for the authorized use of the addressee or intended recipient. Access to this information by anyone else is unauthorized. Disclosure, copying, distribution or any action or omission taken in reliance on it is prohibited and may be unlawful. Please, report any exceptions hereto immediately to hello@stunited.vn',
-                  // bold: true,
                   size: 20,
                   color: '333333',
                 }),
