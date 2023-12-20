@@ -291,7 +291,9 @@
     "MONTHS": "Tháng",
     "STATUS_UNASSIGNED": "Chưa giao việc",
     "STATUS_ASSIGNED": "Đã giao việc",
-    "STATUS_OFF": "Đã nghỉ "
+    "STATUS_OFF": "Đã nghỉ ",
+    "NO_PROJECTS_MESSAGE": "Chưa có dự án"
+
 
   },
   "EMPLOYEE_VALIDATION": {

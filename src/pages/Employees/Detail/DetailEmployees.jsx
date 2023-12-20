@@ -596,7 +596,7 @@ function DetailEmployees() {
                 }}
               >
               
-                <Empty description={<span>No data</span>} />
+                <Empty description={<span>{t('EMPLOYEES.NO_PROJECTS_MESSAGE')}</span>} />
               </Typography.Text>
 
                     </div>
