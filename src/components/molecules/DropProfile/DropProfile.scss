@@ -1,62 +1,57 @@
 .profile-dropdown {
-  user-select: none;
-  cursor: pointer;
-  width: fit-content;
-  float: right;
-  border-radius: 12px;
-  .drop-avatar {
-    margin-right: 9px;
-    color: #121212;
-    @media only screen and (max-width: 768px) {
-      margin-right: 20px;
+    user-select: none;
+    cursor: pointer;
+    width: fit-content;
+    float: right;
+    border-radius: 12px;
+    .drop-avatar {
+        margin-right: 9px;
+        color: #121212;
+        @media only screen and (max-width: 768px) {
+            margin-right: 20px;
+        }
     }
-  }
-  .drop-name {
-    margin-right: 9px;
-    color: #121212;
-    font-weight: 500;
-
-    // @media only screen and (max-width: 768px) {
-    //   display: none;
-    // }
-  }
-  .drop-icon {
-    margin: 0 12px 0 5px;
-    color: #121212;
-    font-weight: 500;
-  }
+    .drop-name {
+        margin-right: 9px;
+        color: #121212;
+        font-weight: 500;
+        // @media only screen and (max-width: 768px) {
+        //   display: none;
+        // }
+    }
+    .drop-icon {
+        margin: 0 12px 0 5px;
+        color: #121212;
+        font-weight: 500;
+    }
 }
 
 .profile-menu {
-  z-index: 99999 !important;
-  .ant-dropdown-menu {
-    width: 220px;
-    height: fit-content;
-    padding: 18px 8px;
-    margin-right: 16px;
-    border-radius: 12px;
-    box-shadow: 0 20px 27px #dddaff;
-
-    li {
-      height: 48px;
-    }
-
-    .item-profile:hover {
-      background: #d2d2f280 !important;
-      .ant-dropdown-menu-item {
+    z-index: 99999 !important;
+    .ant-dropdown-menu {
+        width: 220px;
+        height: fit-content;
+        padding: 18px 8px;
+        margin-right: 16px;
         border-radius: 12px;
-        background: #0c0c6880;
-      }
+        box-shadow: 0 20px 27px #dddaff;
+        li {
+            height: 48px;
+        }
+        .item-profile:hover {
+            background: #d2d2f280 !important;
+            .ant-dropdown-menu-item {
+                border-radius: 12px;
+                background: #0c0c6880;
+            }
+        }
+        .item-signout:hover {
+            background: #d2d2f280 !important;
+            color: #fb303e;
+        }
+        .ant-dropdown-menu-item:hover {
+            border-radius: 12px;
+            background: #d2d2f280;
+        }
     }
-
-    .item-signout:hover {
-      background: #d2d2f280 !important;
-      color: #fb303e;
-    }
-
-    .ant-dropdown-menu-item:hover {
-      border-radius: 12px;
-      background: #d2d2f280;
-    }
-  }
 }

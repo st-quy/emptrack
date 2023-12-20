@@ -1,4 +1,4 @@
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined,SettingOutlined } from '@ant-design/icons';
 import { Dropdown, Row, Space, Switch, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -59,6 +59,7 @@ const DropProfile = () => {
             handleUser(item.key);
           },
         }}
+        
         trigger={['hover']}
         className="profile-dropdown"
         overlayClassName="profile-menu"
@@ -66,7 +67,7 @@ const DropProfile = () => {
         // onOpenChange={() => setActiveItem(!activeItem)}
       >
         <Typography.Text className="drop-name font-bold text-[#5646ff]">
-          Profile
+        <SettingOutlined />
         </Typography.Text>
       </Dropdown>
     </Space>
