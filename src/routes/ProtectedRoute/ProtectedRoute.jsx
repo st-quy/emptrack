@@ -36,7 +36,7 @@ export const ProtectedRoute = () => {
 
   const IMenu = [
     {
-      key: 'dashboard',
+      key: '',
       icon: <HomeOutlined />,
       label: t('BREADCRUMB.DASHBOARD'),
     },
