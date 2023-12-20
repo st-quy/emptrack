@@ -63,7 +63,7 @@ const Dashboard = () => {
             className="card-timeline w-100"
             title={t('CARD.PROJECT_SUMMARY')}
           >
-            <TableProgress/>
+            <TableProgress />
           </Card>
         </Col>
         <Col xs={24} sm={24} md={24} lg={12}>
@@ -120,7 +120,9 @@ const Dashboard = () => {
                         </Space>
                       ))
                     ) : (
-                      <SpinLoading />
+                      <>
+                       {t('TITLE.NO_EMPLOYEEES_HAS_BIRTHDAY')}
+                      </>
                     )}
                   </Card>
                 </Space>

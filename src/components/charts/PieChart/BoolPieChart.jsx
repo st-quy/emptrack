@@ -43,10 +43,10 @@ const BoolPieChart = ({ data }) => {
                 },
               },
               data: [
-                { value: assignedCount + 105, name: t('TABLE.JOINED') },
+                { value: assignedCount, name: t('TABLE.JOINED') },
                 { value: unassignedCount, name: t('TABLE.READY_JOIN') },
                 {
-                  value: assignedCount + 105 + unassignedCount,
+                  value: assignedCount + unassignedCount,
                   itemStyle: {
                     color: 'none',
                     decal: {
