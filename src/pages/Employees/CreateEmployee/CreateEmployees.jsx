@@ -29,6 +29,7 @@ import { axiosInstance } from '../../../config/axios';
 import './CreateEmployees.scss';
 import ValidationSchema from './ValidationSchema';
 import SpinLoading from '../../../components/atoms/SpinLoading/SpinLoading';
+import { forEach } from 'lodash';
 const { Item } = Form;
 const { Option } = Select;
 
@@ -144,7 +145,6 @@ const CreateEmployee = () => {
       return Toast('error', t('EMPLOYEE_VALIDATION.ADD_POSITION'), 2);
     }
   };
-
   const addSkillToServer = (e) => {
     const trimmedInputSkill = inputSkill.trim();
     if (trimmedInputSkill !== '') {
@@ -319,6 +319,14 @@ const CreateEmployee = () => {
     getPosition();
     getSkill();
   }, []);
+
+  const getAvailableOptions = () => {
+    const selectedOptions = formik?.values.skills.map(s => s.skillname)
+
+    return listSkills?.filter(
+      (option) => !selectedOptions.includes(option),
+    );
+  };
 
   return (
     <div id="employees">
@@ -959,7 +967,7 @@ const CreateEmployee = () => {
                                 </Button>
                               </>
                             )}
-                            options={listSkills.map((item) => ({
+                            options={getAvailableOptions().map((item) => ({
                               label: item,
                               value: item,
                             }))}

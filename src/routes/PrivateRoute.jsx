@@ -21,10 +21,6 @@ const PrivateRoute = [
         element: <Dashboard />,
       },
       {
-        path: 'dashboard',
-        element: <Dashboard />,
-      },
-      {
         path: 'employees',
         children: [
           {

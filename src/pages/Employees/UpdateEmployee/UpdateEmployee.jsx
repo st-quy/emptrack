@@ -209,6 +209,14 @@ const UpdateEmployee = () => {
     },
   });
 
+  const getAvailableOptions = () => {
+    const selectedOptions = formik?.values.skills.map(s => s.skillname)
+
+    return listSkills?.filter(
+      (option) => !selectedOptions.includes(option),
+    );
+  };
+
   const onPositionChange = (event) => {
     setPosition(event.target.value);
   };
@@ -993,7 +1001,7 @@ const UpdateEmployee = () => {
                                     </Button>
                                   </>
                                 )}
-                                options={listSkills.map((item) => ({
+                                options={getAvailableOptions().map((item) => ({
                                   label: item,
                                   value: item,
                                 }))}

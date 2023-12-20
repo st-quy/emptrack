@@ -25,7 +25,6 @@ export const ProtectedRoute = () => {
     setActiveItem(pathname);
   }, [pathname]);
 
-  console.log(activeItem);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useAuth();
@@ -36,7 +35,7 @@ export const ProtectedRoute = () => {
 
   const IMenu = [
     {
-      key: 'dashboard',
+      key: '',
       icon: <HomeOutlined />,
       label: t('BREADCRUMB.DASHBOARD'),
     },
