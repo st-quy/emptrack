@@ -214,7 +214,7 @@
     "LIST": "List projects",
     "ROLE": "Role",
     "PROJECT_INFORMATION": "Project History",
-    "PROGRESS":"Progress"
+    "PROGRESS": "Progress"
   },
   "ROLE": {
     "ADMIN": "Admin",
@@ -249,7 +249,8 @@
     "DELETED_SUCCESS": "Deleted {{field}} successfully",
     "LOGIN_SUCCESS": "Login successfully",
     "LOGIN_ERROR": "Login error",
-    "DUPLICATE_FIELD": "{{field}} already exists"
+    "DUPLICATE_FIELD": "{{field}} already exists",
+    "CREATED_CV": "Created CV successfully"
   },
   "EMPLOYEES": {
     "COMFIRM_DELETE_EMPLOYEES": "Are you sure you want to delete this employees ?",
@@ -320,7 +321,7 @@
     "ADD_POSITION": "Please enter a position before adding",
     "ADD_SKILL": "Please enter a skill before adding",
     "DUPLICATE_EMAIL": "Email already exists",
-    "DUPLICATE_CITIZEN": "Citizen card already exists",    
+    "DUPLICATE_CITIZEN": "Citizen card already exists",
     "BIRTH_MAX": "Date of Birth cannot be greater than current date"
   },
   "DRAWER": {

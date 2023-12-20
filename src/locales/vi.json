@@ -214,7 +214,7 @@
     "TECHNICAL": "Công nghệ",
     "LIST": "Danh sách dự án",
     "PROJECT_INFORMATION": "Lịch sử dự án",
-    "PROGRESS":"Quá trình"
+    "PROGRESS": "Quá trình"
   },
   "ROLE": {
     "ADMIN": "Quản trị viên",
@@ -249,7 +249,8 @@
     "DELETED_SUCCESS": "Xóa {{field}} thành công",
     "LOGIN_SUCCESS": "Đăng nhập thành công",
     "LOGIN_ERROR": "Đăng nhập thất bại",
-    "DUPLICATE_FIELD": "{{field}} đã tồn tại"
+    "DUPLICATE_FIELD": "{{field}} đã tồn tại",
+    "CREATED_CV": "Tạo CV thành công"
   },
   "EMPLOYEES": {
     "COMFIRM_DELETE_EMPLOYEES": "Bạn có chắc chắn muốn xóa nhân viên này ?",

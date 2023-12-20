@@ -12,10 +12,13 @@ import {
 } from 'docx';
 import { saveAs } from 'file-saver';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../components/atoms/Button/Button';
+import { Toast } from '../../../components/toast/Toast';
 import { axiosInstance } from '../../../config/axios';
 
 const CreateCV = ({ id }) => {
+  const { t } = useTranslation();
   const [dataCV, setDataCV] = useState();
   const [projects, setProjects] = useState([]);
 
@@ -265,8 +268,9 @@ const CreateCV = ({ id }) => {
       ],
     });
     Packer.toBlob(doc).then((blob) => {
-      saveAs(blob, 'example.docx');
-      console.log('Document created successfully');
+      saveAs(blob, dataCV?.name + '_CV.docx');
+      // console.log('Document created successfully');
+      Toast('success', t('TOAST.CREATED_CV'));
     });
   }
 
